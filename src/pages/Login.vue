@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import HeaderComponent from '@/components/HeaderComponent'
+    import HeaderComponent from '@/components/HeaderComponent/index'
     export default {
         name: "Login",
         components: {HeaderComponent}
