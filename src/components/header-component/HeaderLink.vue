@@ -1,6 +1,6 @@
 <template>
     <div id="headerLink">
-        {{title}}
+        <a href="#">{{title}}</a>
     </div>
 </template>
 
@@ -19,6 +19,18 @@
     align-items: center;
     color: white;
     padding: 0 10px;
-    height: 100%;
+    height: 60px;
+    cursor: pointer;
+    padding: 0px 20px;
+    line-height: 60px;
 }
+#headerLink a{
+    color: white;
+    text-decoration: none;
+}
+#headerLink a:hover{
+    color: #00d7c6;
+    transition: color 0.2s;
+}
+
 </style>
