@@ -13,7 +13,7 @@
         <span>机构管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="1-1">待审核机构</el-menu-item>
+        <el-menu-item index="/admin/audit-pending">待审核机构</el-menu-item>
         <el-menu-item index="1-2">已审核机构</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -73,16 +73,4 @@ export default {
 .el-menu {
   border: 0 !important;
 }
-
-// .el-menu-item {
-//   color: #fff;
-//   &:hover {
-//     color: #333 !important;
-//     background: #fff !important;
-//   }
-// }
-
-// .el-submenu__title {
-//   color: #fff !important;
-// }
 </style>
