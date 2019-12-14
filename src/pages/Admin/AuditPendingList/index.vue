@@ -1,34 +1,26 @@
 <template>
-  <div class="audit-pending__container">
+  <div class="audit-pending-list__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
       <el-breadcrumb-item>待审核机构</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="audit-pending__wrap">
-      <div class="audit-pending__header">
+    <div class="audit-pending-list__wrap">
+      <div class="audit-pending-list__header">
         <el-button type="danger">批量删除</el-button>
         <el-button type="primary">添加机构</el-button>
         <div class="search-input">
-          <el-button
-            style="margin-right:20px;"
-            type="success"
-            icon="el-icon-refresh-right"
-            circle
-            @click="handleRefreshClick"
-          />
           <el-input
             placeholder="请输入要搜索的内容"
             v-model="searchValue"
-            @change="handleSearchChange"
+            @input="handleSearchChange"
             @clear="handleClearClick"
+            prefix-icon="el-icon-search"
             clearable
-          >
-            <el-button slot="append" icon="el-icon-search" @click="handleSearchClick">搜索</el-button>
-          </el-input>
+          />
         </div>
       </div>
-      <div class="audit-pending__table">
+      <div class="audit-pending-list__table">
         <el-table
           ref="multipleTable"
           :data="currentTableData"
@@ -43,7 +35,14 @@
             width="140"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          >
+            <template slot-scope="scope">
+              <router-link
+                class="router-link"
+                :to="`/admin/audit-pending/${scope.row.id}`"
+              >{{scope.row.name}}</router-link>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="province"
             label="省份"
@@ -88,7 +87,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="audit-pending__pagination">
+      <div class="audit-pending-list__pagination">
         <div class="pagination__info">共{{totalTagsCount}}条记录，共{{totalPage}}页，当前显示第{{currentPage}}页</div>
         <el-pagination
           class="pagination__container"
@@ -106,7 +105,7 @@
 
 <script>
 export default {
-  name: "AuditPending",
+  name: "AuditPendingList",
   data() {
     return {
       searchValue: "",
@@ -257,39 +256,34 @@ export default {
     },
     handleSearchChange(val) {
       this.searchValue = val;
-    },
-    handleClearClick() {
-      this.searchValue = "";
-      // const start = (this.currentPage - 1) * 10;
-      // const end = (start + 1) * 10;
-      // this.currentTableData = this.tableData.slice(start, end);
-    },
-    handleRefreshClick() {
-      const start = (this.currentPage - 1) * 10;
-      const end = (start + 1) * 10;
-      this.currentTableData = this.tableData.slice(start, end);
-    },
-    handleSearchClick() {
       if (this.searchValue === "") {
-        this.$message({
-          message: "请输入要搜索的内容",
-          type: "warning",
-          duration: 1500,
-          showClose: true
-        });
+        const start = (this.currentPage - 1) * 10;
+        const end = (start + 1) * 10;
+        this.currentTableData = this.tableData.slice(start, end);
+        this.totalPage = Math.ceil(this.tableData.length / 10);
+        this.totalTagsCount = this.tableData.length;
         return;
       }
 
       this.currentTableData = this.tableData.filter(
         item => item.name === this.searchValue
       );
+      this.currentPage = Math.ceil(this.currentTableData.length / 10) || 1;
+      this.totalPage = Math.ceil(this.currentTableData.length / 10);
+      this.totalTagsCount = this.currentTableData.length;
+    },
+    handleClearClick() {
+      this.searchValue = "";
+      const start = (this.currentPage - 1) * 10;
+      const end = (start + 1) * 10;
+      this.currentTableData = this.tableData.slice(start, end);
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.audit-pending {
+.audit-pending-list {
   &__container {
   }
 
@@ -300,20 +294,8 @@ export default {
     background: #fff;
 
     .search-input {
-      display: flex;
       width: 50%;
       margin-left: auto;
-
-      /deep/ .el-input-group__append {
-        color: #fff;
-        line-height: 39px;
-        border: #409eff 1px solid;
-        background: #409eff;
-
-        &:hover {
-          background: #66b1ff;
-        }
-      }
     }
   }
 
@@ -321,6 +303,17 @@ export default {
     margin-top: 20px;
     padding: 10px;
     background: #fff;
+
+    /deep/ .router-link {
+      // display: block;
+      color: #606266;
+      text-decoration: none;
+      transition: color .3s ease;
+
+      &:hover{
+        color: #1890ff;
+      }
+    }
   }
 
   &__pagination {
