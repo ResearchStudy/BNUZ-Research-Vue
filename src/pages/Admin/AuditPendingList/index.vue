@@ -7,8 +7,8 @@
     </el-breadcrumb>
     <div class="audit-pending-list__wrap">
       <div class="audit-pending-list__header">
-        <el-button type="danger">批量删除</el-button>
-        <el-button type="primary">添加机构</el-button>
+        <el-button type="primary">批量通过</el-button>
+        <el-button type="danger">批量不通过</el-button>
         <div class="search-input">
           <el-input
             placeholder="请输入要搜索的内容"
@@ -29,13 +29,7 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
-          <el-table-column
-            prop="name"
-            label="机构名称"
-            width="140"
-            align="center"
-            show-overflow-tooltip
-          >
+          <el-table-column prop="name" label="机构名称" min-width="200" align="center" show-overflow-tooltip>
             <template slot-scope="scope">
               <router-link
                 class="router-link"
@@ -43,46 +37,37 @@
               >{{scope.row.name}}</router-link>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="province"
-            label="省份"
-            width="140"
-            align="center"
-            show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column prop="city" label="城市" width="140" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column
-            prop="money"
-            label="注册资金"
-            width="140"
-            align="center"
-            show-overflow-tooltip
-          ></el-table-column>
+          <el-table-column prop="province" label="省份" width="120" align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="city" label="城市" width="120"  align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="money" label="注册资金" width="120"  align="center" show-overflow-tooltip></el-table-column>
           <el-table-column
             prop="registerTime"
             label="注册时间"
-            width="200"
+            width="140"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
             prop="applyTime"
             label="申请时间"
-            width="200"
+            width="140"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
             prop="description"
             label="机构简介"
-            width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">通过</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete(scope.$index, scope.row)"
+              >不通过</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -121,7 +106,7 @@ export default {
     this.tableData = [
       {
         id: 1,
-        name: "北师珠",
+        name: "北京师范大学珠海分校",
         province: "广东省",
         city: "珠海",
         money: "200w",
@@ -131,7 +116,7 @@ export default {
       },
       {
         id: 2,
-        name: "北理工",
+        name: "北理工北理工北理工北理工北理工北理工",
         province: "广东省",
         city: "珠海",
         money: "200w",
@@ -147,11 +132,11 @@ export default {
         money: "200w",
         registerTime: "2019-12-08",
         applyTime: "2019-12-12",
-        description: "无"
+        description: "无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无"
       },
       {
         id: 4,
-        name: "中大",
+        name: "中大中大中大中大中大中大中大中大中大中大中大中大",
         province: "广东省",
         city: "珠海",
         money: "200w",
@@ -308,9 +293,9 @@ export default {
       // display: block;
       color: #606266;
       text-decoration: none;
-      transition: color .3s ease;
+      transition: color 0.3s ease;
 
-      &:hover{
+      &:hover {
         color: #1890ff;
       }
     }
