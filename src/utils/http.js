@@ -21,6 +21,19 @@ const post = (url, params, options = {}) => {
   })
 }
 
+const get = (url, params = {}, options = {}) => {
+  return new Promise(async (resolve, reject) => {
+    instance.get(url, params, options).then(res => {
+      resolve(res)
+    }).catch(err => {
+      /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
+      const { response: { data } } = err
+      console.log(data)
+      return reject()
+    })
+  })
+}
+
 export default {
-  post
+  post, get
 }
