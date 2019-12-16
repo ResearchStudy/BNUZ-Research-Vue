@@ -6,7 +6,7 @@ const instance = axios.create({
     'Content-Type': "application/json;charset=utf-8"
   },
   withCredentials: true
-})
+});
 
 const post = (url, params, options = {}) => {
   return new Promise(async (resolve, reject) => {
@@ -19,7 +19,7 @@ const post = (url, params, options = {}) => {
       return reject()
     })
   })
-}
+};
 
 const get = (url, params = {}, options = {}) => {
   return new Promise(async (resolve, reject) => {
