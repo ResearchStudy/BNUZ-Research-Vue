@@ -24,6 +24,19 @@ export default {
   components: { MyHeader: Header, SiderNav },
   data() {
     return {};
+  },
+  async mounted() {
+    await this.handleLogin();
+  },
+  methods: {
+    async handleLogin() {
+      const data = await this.$http.post("/api/accounts/login/common", {
+        key: "bb",
+        password: "123",
+        remember: true
+      });
+      console.log(data);
+    }
   }
 };
 </script>
