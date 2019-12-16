@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .el-header {
   padding: 0;
   color: #333;
@@ -51,30 +51,26 @@ export default {
   color: #333;
   text-align: left;
   line-height: 200px;
-
-  &::-webkit-scrollbar {
-    width: 15px;
-    height: 15px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #fff;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #d7d7d7;
-    border-radius: 20px;
-  }
 }
 
 .el-main {
   margin-left: 200px;
-  // height: calc(100vh - 120px);
   background-color: #f7f7f7;
   color: #333;
   text-align: left;
 }
 
-.el-container{
+::-webkit-scrollbar {
+  width: 15px;
+  height: 15px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d7d7d7;
+  border-radius: 20px;
 }
 </style>

@@ -12,6 +12,9 @@
   text-align: center;
   color: #2c3e50;
 }
+html, body, #app{
+  height: 100%;
+}
 body {
   margin: 0px !important;
 }
