@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { generateParams } from './generateParams'
 
 const instance = axios.create({
   timeout: 10000,
@@ -21,9 +22,9 @@ const http = {
       })
     })
   },
-  get: (url, options = {}) => {
+  get: (url, params = {}, options = {}) => {
     return new Promise(async (resolve, reject) => {
-      instance.get(url, options).then(res => {
+      instance.get(url + generateParams(params), options).then(res => {
         resolve(res)
       }).catch(err => {
         /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
