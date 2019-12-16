@@ -8,32 +8,43 @@ const instance = axios.create({
   withCredentials: true
 });
 
-const post = (url, params, options = {}) => {
-  return new Promise(async (resolve, reject) => {
-    instance.post(url, params, options).then(res => {
-      resolve(res)
-    }).catch(err => {
-      /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
-      const { response: { data } } = err
-      console.log(data)
-      return reject()
+const http = {
+  post: (url, params, options = {}) => {
+    return new Promise(async (resolve, reject) => {
+      instance.post(url, params, options).then(res => {
+        resolve(res)
+      }).catch(err => {
+        /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
+        const { response: { data } } = err
+        console.log(data)
+        return reject()
+      })
     })
-  })
-};
-
-const get = (url, params = {}, options = {}) => {
-  return new Promise(async (resolve, reject) => {
-    instance.get(url, params, options).then(res => {
-      resolve(res)
-    }).catch(err => {
-      /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
-      const { response: { data } } = err
-      console.log(data)
-      return reject()
+  },
+  get: (url, options = {}) => {
+    return new Promise(async (resolve, reject) => {
+      instance.get(url, options).then(res => {
+        resolve(res)
+      }).catch(err => {
+        /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
+        const { response: { data } } = err
+        console.log(data)
+        return reject()
+      })
     })
-  })
+  },
+  delete: (url, options = {}) => {
+    return new Promise(async (resolve, reject) => {
+      instance.delete(url, options).then(res => {
+        resolve(res)
+      }).catch(err => {
+        /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
+        const { response: { data } } = err
+        console.log(data)
+        return reject()
+      })
+    })
+  }
 }
 
-export default {
-  post, get
-}
+export default http
