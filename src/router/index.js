@@ -1,7 +1,7 @@
 import VueRouter from "vue-router";
 import Vue from 'vue'
 import index from "@/pages/index";
-import Login from "@/pages/Login";
+import LoginOrRegister from "@/pages/LoginOrRegister";
 import Index from '@/pages/Admin/Index/index'
 import Home from '@/pages/Admin/Home/index'
 import TabsManager from '@/pages/Admin/TabsManager/index'
@@ -15,7 +15,8 @@ const routes = [
         path: '/',
         component: index,
         children: [
-            {path: 'login', component: Login}
+            {path: 'login', component: LoginOrRegister},
+            {path: 'register', component: LoginOrRegister},
         ]
     }, {
         path: '/admin', component: Index, children: [
