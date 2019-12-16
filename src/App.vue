@@ -12,15 +12,8 @@
   text-align: center;
   color: #2c3e50;
 }
-html, body, #app, .el-container{
+html, body, #app{
   height: 100%;
-}
-.el-main{
-  margin-left: 0px !important;
-  min-height: 80%;
-}
-.el-footer{
-  line-height: 30px !important;
 }
 body {
   margin: 0px !important;

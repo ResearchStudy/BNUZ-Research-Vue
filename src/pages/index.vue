@@ -24,5 +24,15 @@
 </script>
 
 <style scoped>
-
+    .el-main{
+        margin-left: 0px !important;
+        background-color: white;
+        flex: none;
+    }
+    .el-footer{
+        line-height: 30px !important;
+    }
+    .el-container{
+        height: 100%;
+    }
 </style>
