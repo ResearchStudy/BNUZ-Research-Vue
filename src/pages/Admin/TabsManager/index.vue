@@ -96,7 +96,7 @@ export default {
           isOverPage && this.handleCurrentPageChange(this.currentPage + 1);
           this.$message({
             type: "success",
-            message: "添加成功！"
+            message: "添加成功！",
           });
         })
         .catch(() => {});
@@ -129,7 +129,8 @@ export default {
       await this.getTagsList();
       this.$message({
         type: "success",
-        message: "删除成功！"
+        message: "删除成功！",
+        isSingle: true
       });
       this.handleCurrentPageChange(this.currentPage);
     },

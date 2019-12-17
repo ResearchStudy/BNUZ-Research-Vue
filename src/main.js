@@ -8,8 +8,13 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 Vue.prototype.$message = (options = {}) => {
-  const messageCounts = document.getElementsByClassName('el-message').length
-  messageCounts === 0 && Message(options)
+  const { isSingle } = options
+  if (isSingle) {
+    const messageCounts = document.getElementsByClassName('el-message').length
+    messageCounts === 0 && Message(options)
+  } else {
+    Message(options)
+  }
 }
 
 Vue.prototype.$http = http;
