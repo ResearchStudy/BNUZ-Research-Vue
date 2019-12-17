@@ -7,34 +7,15 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
-class SingleMessage {
-  success(options, single = true) {
-    this[showMessage]('success', options, single)
-  }
-  warning(options, single = true) {
-    this[showMessage]('warning', options, single)
-  }
-  info(options, single = true) {
-    this[showMessage]('info', options, single)
-  }
-  error(options, single = true) {
-    this[showMessage]('error', options, single)
-  }
-
-  [showMessage](type, options, single) {
-    if (single) {
-      if (document.getElementsByClassName('el-message').length === 0) {
-        Message[type](options)
-      }
-    } else {
-      Message[type](options)
-    }
+Vue.prototype.$message = (options = {}) => {
+  const { isSingle } = options
+  if (isSingle) {
+    const messageCounts = document.getElementsByClassName('el-message').length
+    messageCounts === 0 && Message(options)
+  } else {
+    Message(options)
   }
 }
-
-Vue.prototype.$message = new SingleMessage()
-
-const showMessage = Symbol('showMessage')
 
 Vue.prototype.$http = http;
 
