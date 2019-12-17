@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {login, register} from '@/api/user'
+    import {register} from '@/api/user'
 
     export default {
         name: "LoginOrRegister",
@@ -57,9 +57,11 @@
         },
         methods: {
             login() {
-                login({...this.form, remember: false}).then((res) => {
-                    console.log(res)
-                })
+                const loginInfo = {
+                    key: this.form.key,
+                    password: this.form.password
+                };
+                this.$store.dispatch('setUserInfoAndRole', loginInfo)
             },
             register() {
                 register({...this.form, username: this.form.key}).then((res) => {
@@ -74,7 +76,8 @@
                   this.$message({
                     showClose: true,
                     message: `${this.modulesName}信息不符合要求，请重新输入`,
-                    type: 'error'
+                    type: 'error',
+                    isSingle: true
                   });
                   return false;
                 }

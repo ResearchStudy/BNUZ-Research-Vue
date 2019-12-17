@@ -16,3 +16,10 @@ export function register(data) {
         data: data
     })
 }
+
+export function getUserInfo(id) {
+    return request({
+        url: `${prefix}/${id}`,
+        method: 'get'
+    })
+}
