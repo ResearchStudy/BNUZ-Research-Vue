@@ -44,7 +44,7 @@ export default {
     };
   },
   created(){
-    this.imgUrl=require('@/assets/shida.png')
+    // this.imgUrl=require('@/assets/shida.png')
 
   },
   methods: {
