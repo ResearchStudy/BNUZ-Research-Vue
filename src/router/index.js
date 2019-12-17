@@ -1,13 +1,12 @@
 import VueRouter from "vue-router";
 import Vue from 'vue'
 import index from "@/pages/index";
-import LoginOrRegister from "@/pages/LoginOrRegister";
-import Index from '@/pages/Admin/Index/index'
-import Home from '@/pages/Admin/Home/index'
-import TabsManager from '@/pages/Admin/TabsManager/index'
-import AuditPendingList from '@/pages/Admin/AuditPendingList/index'
-import AuditPendingDetail from '@/pages/Admin/AuditPendingDetail/index'
-import AccountsManager from '@/pages/Admin/AccountsManager/index'
+import LoginOrRegister from "@/pages/index/LoginOrRegister";
+import store from '@/store'
+import {getUserInfo} from "../api/user";
+import adminRoutes from "./admin";
+import normalRoutes from "./normal";
+import NotFound from "../pages/common/NotFound";
 
 Vue.use(VueRouter);
 
@@ -17,24 +16,48 @@ const routes = [
         component: index,
         children: [
             {path: 'login', component: LoginOrRegister},
-            {path: 'register', component: LoginOrRegister}
+            {path: 'register', component: LoginOrRegister},
+
         ]
-    }, {
-        path: '/admin', component: Index, children: [
-            { path: '/', redirect: 'home' },
-            { path: 'home', component: Home },
-            { path: 'tabs', component: TabsManager },
-            { path: 'audit-pending', component: AuditPendingList },
-            { path: 'audit-pending/:id', component: AuditPendingDetail },
-            { path: 'accounts', component: AccountsManager }
-        ]
+    },
+    {
+        path: '*',
+        component: NotFound
     }
 
 ]
 
-
-
-export default new VueRouter({
+const router = new VueRouter({
     mode: 'history',
     routes
+});
+
+const permitAllRoutes = ['/login', '/register'];
+
+
+router.beforeEach((to, from, next) => {
+    if(permitAllRoutes.includes(to.path) || store.getters.role.length !== 0){
+        next()
+    }
+    else{
+        if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
+            next({path: '/login'})
+        } else {
+            if (store.getters.role.length === 0) {
+                getUserInfo(localStorage.getItem("id")).then((res) => {
+                    store.dispatch('setUserInfoAndRole', res);
+                    if (res.role === 99) {
+                        router.addRoutes(adminRoutes);
+                        next({path: "/admin/home"});
+                    }else if(res.role === 1){
+                        router.addRoutes(normalRoutes);
+                        next({path: "/home"})
+                    }
+                })
+            }
+        }
+    }
 })
+
+
+export default router

@@ -35,7 +35,8 @@ export default {
         password: "123",
         remember: true
       });
-      console.log(data);
+        console.log(data);
+
     }
   }
 };

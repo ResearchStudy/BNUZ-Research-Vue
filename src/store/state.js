@@ -1,6 +1,7 @@
 const state = {
     role: "",
-    userInfo: {}
+    userInfo: {},
+    routes: {}
 }
 
 export default state

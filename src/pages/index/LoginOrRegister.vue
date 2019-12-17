@@ -28,10 +28,15 @@
 </template>
 
 <script>
-    import {register} from '@/api/user'
+    import {register,login} from '@/api/user'
 
     export default {
         name: "LoginOrRegister",
+        watch:{
+            '$route.path':function(newVal){
+                this.modulesName = newVal.replace("/", "") === 'login' ? '登录' : '注册'
+            }
+        },
         data() {
             return {
                 form: {
@@ -61,7 +66,10 @@
                     key: this.form.key,
                     password: this.form.password
                 };
-                this.$store.dispatch('setUserInfoAndRole', loginInfo)
+                login(loginInfo).then((res) => {
+                    localStorage.setItem("id", res.id)
+                    this.$router.push({path: "/"})
+                })
             },
             register() {
                 register({...this.form, username: this.form.key}).then((res) => {

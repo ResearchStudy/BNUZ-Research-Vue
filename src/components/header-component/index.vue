@@ -8,8 +8,8 @@
         </div>
         <div class="right" style="margin-right: 10px">
             <button style="margin-right: 30px">我要发布</button>
-            <button style="margin-right: 17px">注册</button>
-            <button>登录</button>
+            <button style="margin-right: 17px" @click="navigateTo('/register')">注册</button>
+            <button @click="navigateTo('/login')">登录</button>
         </div>
     </div>
 </template>
@@ -22,6 +22,11 @@
         data(){
             return {
                 titleArr: ['首页', '课程', '机构', 'APP', '资讯', '掠影', '我们']
+            }
+        },
+        methods:{
+            navigateTo(path){
+                this.$router.push({path: path})
             }
         }
     }
