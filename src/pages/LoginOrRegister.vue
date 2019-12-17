@@ -67,7 +67,18 @@
                 })
             },
             dispatchSubmit() {
-                this.isLogin ? this.login() : this.register()
+              this.$refs['form'].validate((valid) => {
+                if (valid) {
+                  this.isLogin ? this.login() : this.register()
+                } else {
+                  this.$message({
+                    showClose: true,
+                    message: `${this.modulesName}信息不符合要求，请重新输入`,
+                    type: 'error'
+                  });
+                  return false;
+                }
+              });
             }
         }
     }
