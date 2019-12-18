@@ -3,7 +3,7 @@ import Vue from 'vue'
 import index from "@/pages/index";
 import Login from "@/pages/index/Login";
 import Register from "@/pages/index/Register";
-import Organization from "@/pages/organization/Organization";
+import Home from "@/pages/index/Home";
 import store from '@/store'
 import {getUserInfo} from "../api/user";
 import adminRoutes from "./admin";
@@ -16,7 +16,7 @@ const routes = [
         path: '/',
         component: index,
         children: [
-            {path: '', component: Organization},
+            {path: '', component: Home},
             {path: 'login', component: Login},
             {path: 'register', component: Register}
         ]
@@ -52,9 +52,9 @@ router.beforeEach((to, from, next) => {
             if (store.getters.role.length === 0) {
                 getUserInfo(localStorage.getItem("id")).then((res) => {
                     store.dispatch('setUserInfoAndRole', res);
-                    if (res.role === 8) {
+                    if (res.role === 99) {
                         router.addRoutes(adminRoutes);
-                    }else if(res.role === 1){
+                    }else if(res.role === 0 || res.role === 1 || res.role === 2){
                         router.addRoutes(normalRoutes);
                     }
                     next({path: to.path})

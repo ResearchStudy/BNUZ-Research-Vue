@@ -8,10 +8,10 @@
         </div>
         <div class="right" style="margin-right: 10px">
             <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
-            <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="role.length === 0">注册</button>
-            <button @click="navigateTo('/login')" v-if="role.length === 0">登录</button>
-            <a v-if="role.length !== 0" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>
-            <button @click="logout()" v-if="role.length !== 0">退出登录</button>
+            <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
+            <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
+            <a v-if="isLogin" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>
+            <button @click="logout()" v-if="isLogin">退出登录</button>
         </div>
     </div>
 </template>
@@ -31,7 +31,7 @@
                 this.$router.push({path: path})
             },
             navigateToAdmin(){
-                if(this.role === 8){
+                if(this.role === 99){
                     this.$router.push({path: '/admin/dashboard'})
                 }else if(this.role === 0 || this.role === 1 || this.role === 2){
                     this.$router.push({path: '/person'})
@@ -45,8 +45,11 @@
             role(){
                 return this.$store.getters.role || ""
             },
+            isLogin(){
+              return this.$store.getters.role !== "" && this.$store.getters.role !== undefined
+            },
             userInfo(){
-              return this.$store.getters.userInfo || {}
+                return this.$store.getters.userInfo || {}
             }
         }
     }
