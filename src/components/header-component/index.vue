@@ -31,9 +31,9 @@
                 this.$router.push({path: path})
             },
             navigateToAdmin(){
-                if(this.role === 99){
+                if(this.role === 8){
                     this.$router.push({path: '/admin/dashboard'})
-                }else{
+                }else if(this.role === 0 || this.role === 1 || this.role === 2){
                     this.$router.push({path: '/person'})
                 }
             },
