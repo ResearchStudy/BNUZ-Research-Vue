@@ -7,8 +7,8 @@
     </el-breadcrumb>
     <div class="tabs-manager__wrap">
       <div class="tabs-manager__header">
-        <el-button type="danger">批量删除</el-button>
-        <el-button type="primary">添加TAG</el-button>
+        <el-button type="danger" @click="handleMultiDeleteTag">批量删除</el-button>
+        <el-button type="primary" @click="handleAddClick">添加TAG</el-button>
       </div>
       <div class="tabs-manager__table">
         <el-table
@@ -20,23 +20,22 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
-          <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.id}}</template>
+          </el-table-column>
           <el-table-column
             prop="tag"
             label="TAG名称"
             width="140"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column prop="docs" label="文档数" width="140" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="time" label="添加时间" align="center" show-overflow-tooltip></el-table-column>
+          >
+            <template slot-scope="scope">{{scope.row.name}}</template>
+          </el-table-column>
+          <el-table-column prop="author" label="添加者" align="center" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
-              <el-button
-                @click.native.prevent="deleteRow(scope.$index, tableData)"
-                type="text"
-                size="small"
-              >移除</el-button>
+              <el-button @click="handleDeleteTag(scope.row.id)" type="text" size="small">移除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -64,104 +63,44 @@ export default {
     return {
       totalTagsCount: 0,
       totalPage: 0,
-      currentPage: 0,
+      currentPage: 1,
       currentTableData: [],
-      tableData: [
-        {
-          id: "1",
-          tag: "艺术",
-          docs: "0",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "2",
-          tag: "自然",
-          docs: "11",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "3",
-          tag: "历史",
-          docs: "2",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "4",
-          tag: "华中",
-          docs: "3",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "5",
-          tag: "华北",
-          docs: "8",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "6",
-          tag: "东北",
-          docs: "21",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "7",
-          tag: "国际",
-          docs: "9",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "8",
-          tag: "国内",
-          docs: "45",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "9",
-          tag: "政策",
-          docs: "1",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "10",
-          tag: "文化",
-          docs: "0",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "11",
-          tag: "语文",
-          docs: "6",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "12",
-          tag: "数学",
-          docs: "23",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "13",
-          tag: "政治",
-          docs: "76",
-          time: "2019-12-11 20:03:53"
-        },
-        {
-          id: "14",
-          tag: "生物",
-          docs: "14",
-          time: "2019-12-11 20:03:53"
-        }
-      ],
+      tableData: [],
       multipleSelection: []
     };
   },
-  mounted() {
-    this.totalPage = Math.ceil(this.tableData.length / 10);
-    this.totalTagsCount = this.tableData.length;
-    this.currentPage = 1;
-    this.currentTableData = this.tableData.slice(0, 10);
+  async mounted() {
+    await this.getTagsList();
   },
   methods: {
+    async getTagsList() {
+      const {
+        data: { tags }
+      } = await this.$http.get("/api/tags/list");
+      this.tableData = tags;
+      this.setCurrentTableData();
+    },
+    async handleAddClick() {
+      this.$prompt("请输入标签名", "创建标签", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputErrorMessage: "请输入标签名！"
+      })
+        .then(async ({ value }) => {
+          await this.$http.post("/api/tags", {
+            name: value
+          });
+          await this.getTagsList();
+          this.setCurrentTableData();
+          const isOverPage = (this.totalTagsCount - 1) % 10 === 0;
+          isOverPage && this.handleCurrentPageChange(this.currentPage + 1);
+          this.$message({
+            type: "success",
+            message: "添加成功！",
+          });
+        })
+        .catch(() => {});
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -174,12 +113,34 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleCurrentPageChange(currentPage) {
-      const start = (currentPage - 1) * 10;
-      const end = (start + 1) * 10;
-
-      this.currentPage = currentPage;
+    setCurrentTableData() {
+      const start = (this.currentPage - 1) * 10;
+      const end = this.currentPage * 10;
+      this.totalPage = Math.ceil(this.tableData.length / 10);
+      this.totalTagsCount = this.tableData.length;
       this.currentTableData = this.tableData.slice(start, end);
+    },
+    handleCurrentPageChange(currentPage) {
+      this.currentPage = currentPage;
+      this.setCurrentTableData();
+    },
+    async handleDeleteTag(id) {
+      await this.$http.delete(`/api/tags/${id}`);
+      await this.getTagsList();
+      this.$message({
+        type: "success",
+        message: "删除成功！",
+        isSingle: true
+      });
+      this.handleCurrentPageChange(this.currentPage);
+    },
+    async handleMultiDeleteTag() {
+      const deleteIdList = this.multipleSelection.map(
+        selection => selection.id
+      );
+      deleteIdList.forEach(async id => {
+        await this.handleDeleteTag(id);
+      });
     }
   }
 };
@@ -189,31 +150,25 @@ export default {
 .tabs-manager {
   &__container {
   }
-
   &__wrap {
     margin-top: 20px;
     padding: 10px;
     background: #fff;
   }
-
   &__header {
     width: 100%;
     padding-bottom: 10px;
     background: #fff;
   }
-
   &__table {
   }
-
   &__pagination {
     display: flex;
     margin-top: 20px;
-
     .pagination {
       &__info {
         color: #333;
       }
-
       &__container {
         margin-left: auto;
       }
