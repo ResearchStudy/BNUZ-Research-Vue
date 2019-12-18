@@ -7,8 +7,8 @@
     </el-breadcrumb>
     <div class="audit-pending-list__wrap">
       <div class="audit-pending-list__header">
-        <el-button type="primary">批量通过</el-button>
-        <el-button type="danger">批量不通过</el-button>
+        <el-button type="primary" @click="handleMultiAdoptClick(true)">批量通过</el-button>
+        <el-button type="danger" @click="handleMultiAdoptClick(false)">批量不通过</el-button>
         <div class="search-input">
           <el-input
             placeholder="请输入要搜索的内容"
@@ -29,44 +29,55 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
-          <el-table-column prop="name" label="机构名称" min-width="200" align="center" show-overflow-tooltip>
+          <el-table-column
+            prop="name"
+            label="机构名称"
+            min-width="200"
+            align="center"
+            show-overflow-tooltip
+          >
             <template slot-scope="scope">
               <router-link
                 class="router-link"
                 :to="`/admin/audit-pending/${scope.row.id}`"
-              >{{scope.row.name}}</router-link>
+              >{{scope.row.institution_details.name}}</router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="province" label="省份" width="120" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="city" label="城市" width="120"  align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="money" label="注册资金" width="120"  align="center" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="province" label="省份" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.institution_details.address.province_id}}</template>
+          </el-table-column>
+          <el-table-column prop="city" label="城市" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.institution_details.address.city_id}}</template>
+          </el-table-column>
           <el-table-column
-            prop="registerTime"
-            label="注册时间"
-            width="140"
+            prop="money"
+            label="注册资金"
+            width="120"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column
-            prop="applyTime"
-            label="申请时间"
-            width="140"
-            align="center"
-            show-overflow-tooltip
-          ></el-table-column>
-          <el-table-column
-            prop="description"
-            label="机构简介"
-            align="center"
-            show-overflow-tooltip
-          ></el-table-column>
+          >
+            <template slot-scope="scope">{{scope.row.institution_details.registered_money}}</template>
+          </el-table-column>
+          <el-table-column prop="registerTime" label="注册时间" align="center" show-overflow-tooltip>
+            <template
+              slot-scope="scope"
+            >{{new Date(scope.row.institution_details.approval_time).toLocaleDateString()}}</template>
+          </el-table-column>
+          <el-table-column prop="applyTime" label="申请时间" align="center" show-overflow-tooltip>
+            <template
+              slot-scope="scope"
+            >{{new Date(scope.row.create_time*1000).toLocaleDateString()}}</template>
+          </el-table-column>
+          <el-table-column prop="description" label="机构简介" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.institution_details.remarks}}</template>
+          </el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">通过</el-button>
+              <el-button size="mini" type="primary" @click="handleAdoptClick(scope.row.id, true)">通过</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)"
+                @click="handleAdoptClick(scope.row.id, false)"
               >不通过</el-button>
             </template>
           </el-table-column>
@@ -96,131 +107,45 @@ export default {
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
-      currentPage: 0,
+      currentPage: 1,
       currentTableData: [],
       tableData: [],
       multipleSelection: []
     };
   },
-  mounted() {
-    this.tableData = [
-      {
-        id: 1,
-        name: "北京师范大学珠海分校",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 2,
-        name: "北理工北理工北理工北理工北理工北理工",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 3,
-        name: "吉珠",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无无"
-      },
-      {
-        id: 4,
-        name: "中大中大中大中大中大中大中大中大中大中大中大中大",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 5,
-        name: "北师大",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 6,
-        name: "北师珠",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 7,
-        name: "北大",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 8,
-        name: "清华",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 9,
-        name: "交大",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 10,
-        name: "华农",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      },
-      {
-        id: 11,
-        name: "哈佛",
-        province: "广东省",
-        city: "珠海",
-        money: "200w",
-        registerTime: "2019-12-08",
-        applyTime: "2019-12-12",
-        description: "无"
-      }
-    ];
-    this.totalPage = Math.ceil(this.tableData.length / 10);
-    this.totalTagsCount = this.tableData.length;
-    this.currentPage = 1;
-    this.currentTableData = this.tableData.slice(0, 10);
+  async mounted() {
+    await this.getAuditPendingList();
   },
   methods: {
+    async getAuditPendingList() {
+      const {
+        data: { enrolls, total }
+      } = await this.$http.get("/api/institutions/enroll/list", {
+        limit: "10",
+        page: this.currentPage + "",
+        handle: false,
+        adopt: false,
+        name: ""
+      });
+      const idList = enrolls.map(auditPending => auditPending.id);
+      const { data: auditPendingList } = await this.$http.post(
+        "/api/institutions/enroll/_mget",
+        {
+          ids: idList
+        }
+      );
+
+      this.currentTableData = auditPendingList;
+      this.totalTagsCount = total;
+      this.totalPage = Math.ceil(total / 10);
+    },
+    setCurrentTableData() {
+      const start = (this.currentPage - 1) * 10;
+      const end = this.currentPage * 10;
+      this.totalPage = Math.ceil(this.tableData.length / 10);
+      this.totalTagsCount = this.tableData.length;
+      this.currentTableData = this.tableData.slice(start, end);
+    },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -233,11 +158,9 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleCurrentPageChange(currentPage) {
-      const start = (currentPage - 1) * 10;
-      const end = (start + 1) * 10;
+    async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
-      this.currentTableData = this.tableData.slice(start, end);
+      await this.getAuditPendingList();
     },
     handleSearchChange(val) {
       this.searchValue = val;
@@ -262,6 +185,29 @@ export default {
       const start = (this.currentPage - 1) * 10;
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
+    },
+    async handleAdoptClick(id, isAdopted) {
+      await this.$http.post(`/api/institutions/enroll/${id}/handle`, {
+        adopt: isAdopted,
+        reply: "没有回复哦"
+      });
+      if ((this.totalTagsCount - 1) % 10 === 0) {
+        this.currentPage -= 1;
+      }
+      await this.getAuditPendingList();
+      this.$message({
+        type: "success",
+        message: "处理成功！",
+        isSingle: true
+      });
+    },
+    async handleMultiAdoptClick(isAdopted) {
+      const handleIdList = this.multipleSelection.map(
+        selection => selection.id
+      );
+      handleIdList.forEach(
+        async id => await this.handleAdoptClick(id, isAdopted)
+      );
     }
   }
 };
