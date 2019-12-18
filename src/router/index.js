@@ -35,7 +35,12 @@ const permitAllRoutes = ['/login', '/register'];
 
 
 router.beforeEach((to, from, next) => {
-    if(permitAllRoutes.includes(to.path) || store.getters.role.length !== 0){
+    if(to.path.includes("/logout")){
+        localStorage.setItem("id", "");
+        store.dispatch('setRole', "")
+        next({path: '/login'})
+    }
+    if(permitAllRoutes.includes(to.path) ||store.getters.role.length !== 0){
         next()
     }
     else{
@@ -50,7 +55,7 @@ router.beforeEach((to, from, next) => {
                     }else if(res.role === 1){
                         router.addRoutes(normalRoutes);
                     }
-                    next({path: "/home"})
+                    next({path: to.path})
                 })
             }
         }

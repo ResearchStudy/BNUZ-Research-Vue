@@ -5,6 +5,9 @@ const mutations = {
     },
     setRoutes(state, routes){
         state.routes = routes
+    },
+    setRole(state, role){
+        state.role = role
     }
 };
 

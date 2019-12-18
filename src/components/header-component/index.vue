@@ -10,7 +10,8 @@
             <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
             <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="role.length === 0">注册</button>
             <button @click="navigateTo('/login')" v-if="role.length === 0">登录</button>
-            <a v-if="role.length !== 0" style="cursor: pointer" @click="navigateToAdmin">{{userInfo.nickname}}</a>
+            <a v-if="role.length !== 0" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>
+            <button @click="logout()" v-if="role.length !== 0">退出登录</button>
         </div>
     </div>
 </template>
@@ -35,14 +36,17 @@
                 }else{
                     this.$router.push({path: '/person'})
                 }
+            },
+            logout(){
+                this.$router.push({path: '/logout'})
             }
         },
         computed:{
             role(){
-                return this.$store.getters.role
+                return this.$store.getters.role || ""
             },
             userInfo(){
-              return this.$store.getters.userInfo
+              return this.$store.getters.userInfo || {}
             }
         }
     }
