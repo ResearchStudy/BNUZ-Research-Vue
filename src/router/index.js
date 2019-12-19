@@ -9,6 +9,7 @@ import {getUserInfo} from "../api/user";
 import adminRoutes from "./admin";
 import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
+import organizationRoutes from "@/router/organization";
 Vue.use(VueRouter);
 
 const routes = [
@@ -56,6 +57,8 @@ router.beforeEach((to, from, next) => {
                         router.addRoutes(adminRoutes);
                     }else if(res.role === 0 || res.role === 1 || res.role === 2){
                         router.addRoutes(normalRoutes);
+                    }else if(res.role === 8){
+                        router.addRoutes(organizationRoutes)
                     }
                     next({path: to.path})
                 })

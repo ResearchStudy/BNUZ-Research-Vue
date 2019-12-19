@@ -1,6 +1,6 @@
 <template>
     <div id="headerLink">
-        <a href="#">{{title}}</a>
+        <a @click="navigateToPath(href)" :style="{color: isActive ? '#00d7c6' : 'white'}">{{title}}</a>
     </div>
 </template>
 
@@ -8,7 +8,18 @@
     export default {
         name: "HeaderLink",
         props: {
-            title: String
+            title: String,
+            href: String
+        },
+        computed:{
+          isActive(){
+              return this.$route.path === this.href;
+          }
+        },
+        methods:{
+            navigateToPath(href){
+                this.$router.push({path: href})
+            }
         }
     }
 </script>

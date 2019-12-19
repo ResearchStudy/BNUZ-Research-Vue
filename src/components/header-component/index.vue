@@ -3,7 +3,7 @@
         <div class="left">
             <div class="logo">北师研学</div>
             <div style="display: flex; justify-content: space-between">
-                <header-link v-for="title in titleArr" :title="title" :key="title"/>
+                <header-link v-for="title in titleArr" :title="title.name" :href="title.href" :key="title.name"/>
             </div>
         </div>
         <div class="right" style="margin-right: 10px">
@@ -23,7 +23,28 @@
         components: {HeaderLink},
         data(){
             return {
-                titleArr: ['首页', '课程', '机构', 'APP', '资讯', '掠影', '我们']
+                titleArr: [{
+                    name: '首页',
+                    href: '/'
+                },{
+                    name: '课程',
+                    href: '/class'
+                },{
+                    name: '机构',
+                    href: '/organization'
+                },{
+                    name: 'APP',
+                    href: '/app'
+                },{
+                    name: '咨询',
+                    href: '/advisory'
+                },{
+                    name: '掠影',
+                    href: '/glimpse'
+                },{
+                    name: '我们',
+                    href: '/us'
+                }]
             }
         },
         methods:{
