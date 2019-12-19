@@ -3,6 +3,7 @@ import Vue from 'vue'
 import index from "@/pages/index";
 import Login from "@/pages/index/Login";
 import Register from "@/pages/index/Register";
+import Organization from "@/pages/organization/Organization";
 import Home from "@/pages/index/Home";
 import store from '@/store'
 import { getUserInfo } from "../api/user";
@@ -10,7 +11,6 @@ import rootAdminRoutes from "./rootAdmin";
 import insitutionAdminRoutes from "./institutionAdmin"
 import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
-import organizationRoutes from "@/router/organization";
 Vue.use(VueRouter);
 
 const routes = [
@@ -20,7 +20,8 @@ const routes = [
         children: [
             { path: '', component: Home },
             { path: 'login', component: Login },
-            { path: 'register', component: Register }
+            { path: 'register', component: Register },
+            {path: 'organization', component: Organization}
         ]
     },
     {
@@ -35,7 +36,7 @@ const router = new VueRouter({
     routes
 });
 
-const permitAllRoutes = ['/login', '/register', '/home'];
+const permitAllRoutes = ['/login', '/register', '/home', '/organization'];
 
 
 router.beforeEach((to, from, next) => {
@@ -57,7 +58,6 @@ router.beforeEach((to, from, next) => {
                     if (res.role === 99) {
                         router.addRoutes(rootAdminRoutes);
                     } else if (res.role === 8) {
-                        router.addRoutes(organizationRoutes)
                         router.addRoutes(insitutionAdminRoutes)
                     }
                     else if (res.role === 0 || res.role === 1 || res.role === 2) {
