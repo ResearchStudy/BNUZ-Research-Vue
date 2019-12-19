@@ -43,9 +43,8 @@
               style="width:100px "
               type="primary"
               @click="onSubmit"
-              
             >提交</el-button>
-            <el-button style="width:100px">取消</el-button>
+            <el-button style="width:100px;margin-left:20px">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -99,6 +98,7 @@ export default {
         phone: "",
         email: "",
         token: "",
+        id : ''
         
      
     };
@@ -111,22 +111,21 @@ export default {
       await this.onSubmit();
      
       
-    },
+  },
+
   methods: {
-    async getUserInfo() {   
-        await this.$http.get('/api/accounts/2').then(res => {
-            
-            console.log(res.data);
+    async getUserInfo() {  
+       this.id = this.$store.getters.userInfo.id;
+        console.log(this.id);
+        await this.$http.get('/api/accounts/' + this.id).then(res => {
+            console.log(res.data)
             this.nickname = res.data.nickname
             this.name = res.data.realname
             this.email = res.data.email
             this.phone = res.data.phone
             this.token = res.data.avtor
             
-        })
-
-        
-        
+        }) 
      
     },
     async getAvatar() {
@@ -167,12 +166,12 @@ export default {
 
 <style lang="scss" scoped>
 .base-data {
-  //   &__header {
-  //     display: flex;
-  //     width: 100%;
-  //     padding-bottom: 13px;
-  //     background: #fff;
-  //   }
+  &__header {
+    display: flex;
+    width: 100%;
+    padding-bottom: 13px;
+    background: #fff;
+  }
   &_container {
   }
   &_wrap {
@@ -183,10 +182,10 @@ export default {
   &_form {
     float: left;
     width: 40%;
-    margin-left: 10%;
+    margin-left: 15%;
     margin-top: 5%;
     text-align: center;
-    margin-bottom:3%;
+    margin-bottom: 3%;
   }
 
   &_avatar {
@@ -218,9 +217,6 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
-    
   }
 }
-
-
 </style>

@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    default-active="/person/base-data"
+    default-active="/person/dashboard"
     
     class="sider-nav__container"
     @open="handleOpen"
@@ -12,7 +12,7 @@
       <el-submenu index="1">
         <template slot="title"><i class="el-icon-user-solid"></i>账号中心</template>
         <el-menu-item-group>
-        <el-menu-item index="/person/base-data">基本资料</el-menu-item>
+        <el-menu-item index="/person/dashboard">基本资料</el-menu-item>
         <el-menu-item index="/person/reset-pwd">修改密码</el-menu-item>
         <el-menu-item index="1-3">修改手机号</el-menu-item>
         <el-menu-item index="1-4">联系地址</el-menu-item>
