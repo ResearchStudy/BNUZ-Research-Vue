@@ -28,6 +28,7 @@
         margin-left: 0px !important;
         background-color: white;
         flex: none;
+        padding: 0px !important;
     }
     .el-footer{
         line-height: 30px !important;

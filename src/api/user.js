@@ -23,3 +23,10 @@ export function getUserInfo(id) {
         method: 'get'
     })
 }
+
+export function checkUserLogin() {
+    return request({
+        url: `${prefix}/login/check`,
+        method: 'get'
+    })
+}

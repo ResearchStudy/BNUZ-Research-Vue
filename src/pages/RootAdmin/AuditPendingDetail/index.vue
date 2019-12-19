@@ -10,45 +10,50 @@
       <div class="audit-pending-detail__title">基本信息</div>
       <el-form ref="form" label-width="120px" label-suffix=":">
         <el-form-item label="企业名称">
-          <div class="content">{{name}}</div>
+          <div class="content">{{institutionDetails.name}}</div>
         </el-form-item>
         <el-form-item label="企业注册号">
-          <div class="content">{{taxId}}</div>
+          <div class="content">{{institutionDetails.tax_id}}</div>
         </el-form-item>
         <el-form-item label="企业类型">
-          <div class="content">{{institutionType}}</div>
+          <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
         <el-form-item label="详细地址">
-          <div class="content">{{address}}</div>
+          <div class="content">{{institutionDetails.address_id}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
-          <div class="content">{{legalPerson}}</div>
+          <div class="content">{{institutionDetails.legal_person}}</div>
         </el-form-item>
         <el-form-item label="成立时间">
-          <div class="content">{{establishTime}}</div>
+          <div class="content">{{institutionDetails.establish_time}}</div>
         </el-form-item>
         <el-form-item label="注册资金">
-          <div class="content">{{registeredMoney}}</div>
+          <div class="content">{{institutionDetails.registered_money}}</div>
         </el-form-item>
         <el-form-item label="营业期限">
-          <div class="content">{{businessLicenseStartTime}} 至 {{businessLicenseEntTime}}</div>
+          <div
+            class="content"
+          >{{institutionDetails.business_license_start_time}} 至 {{institutionDetails.business_license_ent_time}}</div>
         </el-form-item>
         <el-form-item label="经营范围">
-          <div class="content">{{businessScope}}</div>
+          <div class="content">{{institutionDetails.business_scope}}</div>
         </el-form-item>
         <el-form-item label="登记机关">
-          <div class="content">{{registrationAuthority}}</div>
+          <div class="content">{{institutionDetails.registration_authority}}</div>
         </el-form-item>
         <el-form-item label="核准时间">
-          <div class="content">{{approvalTime}}</div>
+          <div class="content">{{institutionDetails.approval_time}}</div>
         </el-form-item>
         <el-form-item label="营业执照">
-          <div class="logo"></div>
+          <div
+            class="logo"
+            :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
+          ></div>
         </el-form-item>
         <el-form-item>
           <div class="content">
-            <el-button type="primary" @click="onSubmit">通过审核</el-button>
-            <el-button type="danger">拒绝审核</el-button>
+            <el-button type="primary" @click="handleAdoptClick(true)">通过审核</el-button>
+            <el-button type="danger" @click="handleAdoptClick(false)">拒绝审核</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -61,27 +66,37 @@ export default {
   name: "AuditPendingDetail",
   data() {
     return {
-      name: "北京师范大学珠海分校",
-      taxId: "91310115323189418K",
-      institutionType: "有限责任公司（自然人投资或控股）",
-      address: "唐家湾镇金凤路18号",
-      legalPerson: "陈某人",
-      establishTime: "2019-11-09",
-      registeredMoney: "200万人民币",
-      businessLicenseStartTime: "2019-11-09",
-      businessLicenseEntTime: "2031-12-14",
-      businessScope:
-        "电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务电子商务",
-      registrationAuthority: "广东省香洲区市场监管局",
-      approvalTime: "2019-12-14"
+      id: -1,
+      institutionDetails: {}
     };
   },
-  mounted() {
+  async mounted() {
     const { id } = this.$route.params;
-    console.log(id);
-    /* ajax获取待审核机构信息 */
+    this.id = id;
+    await this.getAuditPendingDetail();
   },
-  methods: {}
+  methods: {
+    async getAuditPendingDetail() {
+      const {
+        data: { institution_details }
+      } = await this.$http.get(`/api/institutions/enroll/${this.id}`);
+      this.institutionDetails = institution_details;
+    },
+    async handleAdoptClick(isAdopted) {
+      await this.$http.post(`/api/institutions/enroll/handle/${this.id}`, {
+        adopt: isAdopted,
+        reply: "没有回复哦"
+      });
+      this.$message({
+        type: "success",
+        message: "处理成功！",
+        isSingle: true
+      });
+      this.$router.push({
+        path:'/admin/audit-pending'
+      });
+    }
+  }
 };
 </script>
 
@@ -115,10 +130,13 @@ export default {
       height: 300px;
       margin-top: 13px;
       margin-left: 30px;
-      background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      // background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
     }
 
-    /deep/ .el-form-item{
+    /deep/ .el-form-item {
       margin-bottom: 16px;
     }
   }
