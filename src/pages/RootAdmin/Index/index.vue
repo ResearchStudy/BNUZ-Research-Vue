@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import Header from "@/components/Admin/Header";
-import SiderNav from "@/components/Admin/SiderNav";
+import Header from "@/components/RootAdmin/Header";
+import SiderNav from "@/components/RootAdmin/SiderNav";
 export default {
   components: { MyHeader: Header, SiderNav },
   data() {
