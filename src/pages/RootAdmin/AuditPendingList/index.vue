@@ -205,9 +205,18 @@ export default {
       const handleIdList = this.multipleSelection.map(
         selection => selection.id
       );
-      handleIdList.forEach(
-        async id => await this.handleAdoptClick(id, isAdopted)
-      );
+
+      await this.$http.post("/api/institutions/enroll/handle/_mpost", {
+        adopt: isAdopted,
+        reply: "没有回复哦",
+        ids: handleIdList
+      });
+      await this.getAuditPendingList();
+      this.$message({
+        type: "success",
+        message: "处理成功！",
+        isSingle: true
+      });
     }
   }
 };
