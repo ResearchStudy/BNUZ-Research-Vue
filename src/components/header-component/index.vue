@@ -1,39 +1,19 @@
 <template>
-  <div id="header">
-    <div class="left">
-      <div class="logo">北师研学</div>
-      <div style="display: flex; justify-content: space-between">
-        <header-link
-          v-for="title in titleArr"
-          :title="title.name"
-          :href="title.href"
-          :key="title.name"
-        />
-      </div>
+    <div id="header">
+        <div class="left">
+            <div class="logo">北师研学</div>
+            <div style="display: flex; justify-content: space-between">
+                <header-link v-for="title in titleArr" :title="title.name" :href="title.href" :key="title.name"/>
+            </div>
+        </div>
+        <div class="right" style="margin-right: 10px">
+            <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
+            <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
+            <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
+            <a v-if="isLogin" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>
+            <button @click="logout()" v-if="isLogin">退出登录</button>
+        </div>
     </div>
-    <div class="right" style="margin-right: 10px">
-      <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
-      <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
-      <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
-      <a
-        v-if="isLogin"
-        style="cursor: pointer;padding-right: 20px"
-        @click="navigateToAdmin"
-      >{{userInfo.nickname}}</a>
-      <button @click="logout()" v-if="isLogin">退出登录</button>
-    </div>
-    <div class="right" style="margin-right: 10px">
-      <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
-      <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
-      <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
-      <a
-        v-if="isLogin"
-        style="cursor: pointer;padding-right: 20px"
-        @click="navigateToAdmin"
-      >{{userInfo.nickname}}</a>
-      <button @click="logout()" v-if="isLogin">退出登录</button>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -81,7 +61,9 @@ export default {
     },
     navigateToAdmin() {
       if (this.role === 99) {
-        this.$router.push({ path: "/admin/dashboard" });
+        this.$router.push({ path: "/root-admin" });
+      } else if (this.role === 8) {
+        this.$router.push({ path: "/insitution-admin" });
       } else if (this.role === 0 || this.role === 1 || this.role === 2) {
         this.$router.push({ path: "/person" });
       }
