@@ -74,5 +74,6 @@ export default {
 }
 
 .el-container{
+  background: white;
 }
 </style>
