@@ -3,8 +3,24 @@
     <div class="left">
       <div class="logo">北师研学</div>
       <div style="display: flex; justify-content: space-between">
-        <header-link v-for="title in titleArr" :title="title" :key="title" />
+        <header-link
+          v-for="title in titleArr"
+          :title="title.name"
+          :href="title.href"
+          :key="title.name"
+        />
       </div>
+    </div>
+    <div class="right" style="margin-right: 10px">
+      <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
+      <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
+      <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
+      <a
+        v-if="isLogin"
+        style="cursor: pointer;padding-right: 20px"
+        @click="navigateToAdmin"
+      >{{userInfo.nickname}}</a>
+      <button @click="logout()" v-if="isLogin">退出登录</button>
     </div>
     <div class="right" style="margin-right: 10px">
       <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
@@ -27,7 +43,36 @@ export default {
   components: { HeaderLink },
   data() {
     return {
-      titleArr: ["首页", "课程", "机构", "APP", "资讯", "掠影", "我们"]
+      titleArr: [
+        {
+          name: "首页",
+          href: "/"
+        },
+        {
+          name: "课程",
+          href: "/class"
+        },
+        {
+          name: "机构",
+          href: "/organization"
+        },
+        {
+          name: "APP",
+          href: "/app"
+        },
+        {
+          name: "咨询",
+          href: "/advisory"
+        },
+        {
+          name: "掠影",
+          href: "/glimpse"
+        },
+        {
+          name: "我们",
+          href: "/us"
+        }
+      ]
     };
   },
   methods: {
@@ -36,9 +81,7 @@ export default {
     },
     navigateToAdmin() {
       if (this.role === 99) {
-        this.$router.push({ path: "/root-admin/dashboard" });
-      } else if (this.role === 8) {
-        this.$router.push({ path: "insitution-admin/dashboard" });
+        this.$router.push({ path: "/admin/dashboard" });
       } else if (this.role === 0 || this.role === 1 || this.role === 2) {
         this.$router.push({ path: "/person" });
       }
