@@ -57,12 +57,11 @@ router.beforeEach((to, from, next) => {
                     if (res.role === 99) {
                         router.addRoutes(rootAdminRoutes);
                     } else if (res.role === 8) {
+                        router.addRoutes(organizationRoutes)
                         router.addRoutes(insitutionAdminRoutes)
                     }
                     else if (res.role === 0 || res.role === 1 || res.role === 2) {
                         router.addRoutes(normalRoutes);
-                    }else if(res.role === 8){
-                        router.addRoutes(organizationRoutes)
                     }
                     next({ path: to.path })
                 })

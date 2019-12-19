@@ -4,7 +4,7 @@ import index from "@/pages/index";
 const organizationRoutes = [
     {
         path: '/', component: index, children: [
-            {path: '/organization', component: Organization}
+            {path: 'organization', component: Organization}
         ]
     }
 ];
