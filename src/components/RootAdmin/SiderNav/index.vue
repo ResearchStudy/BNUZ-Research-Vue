@@ -13,7 +13,7 @@
         <span>机构管理</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/admin/audit-pending">待审核机构</el-menu-item>
+        <el-menu-item index="/root-admin/audit-pending">待审核机构</el-menu-item>
         <el-menu-item index="1-2">已审核机构</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -26,7 +26,7 @@
         <el-menu-item index="2-1">课程列表</el-menu-item>
         <el-menu-item index="2-2">资讯列表</el-menu-item>
         <el-menu-item index="2-3">附件管理</el-menu-item>
-        <el-menu-item index="/admin/tabs">标签管理</el-menu-item>
+        <el-menu-item index="/root-admin/tabs">标签管理</el-menu-item>
         <el-menu-item index="2-5">课程评论管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -36,7 +36,7 @@
         <span>用户中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/admin/accounts">会员管理</el-menu-item>
+        <el-menu-item index="/root-admin/accounts">会员管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="4">

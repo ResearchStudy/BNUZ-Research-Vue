@@ -138,7 +138,7 @@ export default {
         8: "机构管理员",
         99: "系统管理员"
       };
-      return roleList[role];
+      return roleList[role] || '无';
     },
     async handleAddClick() {
       this.$prompt("请输入标签名", "创建标签", {
