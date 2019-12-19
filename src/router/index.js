@@ -6,11 +6,11 @@ import Register from "@/pages/index/Register";
 import Organization from "@/pages/organization/Organization";
 import Home from "@/pages/index/Home";
 import store from '@/store'
-import { getUserInfo } from "../api/user";
+import {checkUserLogin, getUserInfo} from "../api/user";
 import rootAdminRoutes from "./rootAdmin";
-import insitutionAdminRoutes from "./institutionAdmin"
 import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
+import insitutionAdminRoutes from "./institutionAdmin";
 Vue.use(VueRouter);
 
 const routes = [
@@ -53,17 +53,24 @@ router.beforeEach((to, from, next) => {
             next({ path: '/login' })
         } else {
             if (store.getters.role.length === 0) {
-                getUserInfo(localStorage.getItem("id")).then((res) => {
-                    store.dispatch('setUserInfoAndRole', res);
-                    if (res.role === 99) {
-                        router.addRoutes(rootAdminRoutes);
-                    } else if (res.role === 8) {
-                        router.addRoutes(insitutionAdminRoutes)
+                checkUserLogin().then((res) => {
+                    if(!res.status){
+                        next({path : '/login'})
+                        localStorage.setItem("id", "")
+                    }else{
+                        getUserInfo(localStorage.getItem("id")).then((res) => {
+                            store.dispatch('setUserInfoAndRole', res);
+                            if (res.role === 99) {
+                                router.addRoutes(rootAdminRoutes);
+                            } else if (res.role === 8) {
+                                router.addRoutes(insitutionAdminRoutes)
+                            }
+                            else if (res.role === 0 || res.role === 1 || res.role === 2) {
+                                router.addRoutes(normalRoutes);
+                            }
+                            next({ path: to.path })
+                        })
                     }
-                    else if (res.role === 0 || res.role === 1 || res.role === 2) {
-                        router.addRoutes(normalRoutes);
-                    }
-                    next({ path: to.path })
                 })
             }
         }
