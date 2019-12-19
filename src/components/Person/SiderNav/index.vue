@@ -1,10 +1,12 @@
 <template>
   <el-menu
-    default-active="1"
+    default-active="/person/base-data"
+    
     class="sider-nav__container"
     @open="handleOpen"
     @close="handleClose"
     :unique-opened="true"
+    
     router
   >
       <el-submenu index="1">
