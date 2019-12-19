@@ -187,7 +187,7 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleAdoptClick(id, isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/${id}/handle`, {
+      await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
         adopt: isAdopted,
         reply: "没有回复哦"
       });

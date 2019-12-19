@@ -83,7 +83,7 @@ export default {
       this.institutionDetails = institution_details;
     },
     async handleAdoptClick(isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/${this.id}/handle`, {
+      await this.$http.post(`/api/institutions/enroll/handle/${this.id}`, {
         adopt: isAdopted,
         reply: "没有回复哦"
       });
