@@ -10,10 +10,9 @@ const normalRoutes = [
             {path : 'pre-entry' , component : PreEntry},
             {path : 'alr-entry' , component : AlrEntry},
             {path : 'reset-pwd' ,component : ResetPwd},
-            {path : 'base-data' , component : BaseData},
-            {path : '/' , redirect: 'base-data'},
+            {path : 'dashboard' , component : BaseData},
+            {path : '/' , redirect: 'bashboard'},
          
-
         ]
     }
 ]

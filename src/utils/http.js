@@ -22,6 +22,18 @@ const http = {
       })
     })
   },
+  put: (url, params, options = {}) => {
+    return new Promise(async (resolve, reject) => {
+      instance.put(url, params, options).then(res => {
+        resolve(res)
+      }).catch(err => {
+        /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
+        const { response: { data } } = err
+        console.log(data)
+        return reject()
+      })
+    })
+  },
   get: (url, params = {}, options = {}) => {
     return new Promise(async (resolve, reject) => {
       instance.get(url + generateParams(params), options).then(res => {
