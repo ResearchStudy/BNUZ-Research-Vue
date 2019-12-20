@@ -11,7 +11,7 @@ const normalRoutes = [
             {path : 'alr-entry' , component : AlrEntry},
             {path : 'reset-pwd' ,component : ResetPwd},
             {path : 'dashboard' , component : BaseData},
-            {path : '/' , redirect: 'bashboard'},
+            {path : '/' , redirect: 'dashboard'},
          
         ]
     }
