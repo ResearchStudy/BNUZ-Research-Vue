@@ -245,7 +245,7 @@ export default {
         address_id,
         logo,
         business_license_start_time,
-        business_license_ent_time
+        business_license_ent_time,
       );
     },
     handleAvatarProgress(event) {
@@ -255,12 +255,11 @@ export default {
     handleAvatarSuccess(res, file) {
       this.isUploading = false;
       this.uploadPercent = 0;
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-
+      reader.readAsDataURL(file.raw);
       reader.onload = e => {
-        console.log(e);
+        this.imageUrl = e.target.result;
       };
     },
     beforeAvatarUpload(file) {
