@@ -25,7 +25,9 @@
           <div class="content">{{institutionDetails.legal_person}}</div>
         </el-form-item>
         <el-form-item label="成立时间">
-          <div class="content">{{institutionDetails.establish_time}}</div>
+          <div
+            class="content"
+          >{{new Date(institutionDetails.establish_time*1000).toLocaleDateString()}}</div>
         </el-form-item>
         <el-form-item label="注册资金">
           <div class="content">{{institutionDetails.registered_money}}</div>
@@ -33,7 +35,7 @@
         <el-form-item label="营业期限">
           <div
             class="content"
-          >{{institutionDetails.business_license_start_time}} 至 {{institutionDetails.business_license_ent_time}}</div>
+          >{{new Date(institutionDetails.business_license_start_time*1000).toLocaleDateString()}} 至 {{new Date(institutionDetails.business_license_ent_time*1000).toLocaleDateString()}}</div>
         </el-form-item>
         <el-form-item label="经营范围">
           <div class="content">{{institutionDetails.business_scope}}</div>
@@ -42,7 +44,9 @@
           <div class="content">{{institutionDetails.registration_authority}}</div>
         </el-form-item>
         <el-form-item label="核准时间">
-          <div class="content">{{institutionDetails.approval_time}}</div>
+          <div
+            class="content"
+          >{{new Date(institutionDetails.approval_time *1000).toLocaleDateString()}}</div>
         </el-form-item>
         <el-form-item label="营业执照">
           <div
@@ -93,7 +97,7 @@ export default {
         isSingle: true
       });
       this.$router.push({
-        path:'/admin/audit-pending'
+        path: "/admin/audit-pending"
       });
     }
   }
