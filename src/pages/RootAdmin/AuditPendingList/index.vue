@@ -39,7 +39,7 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/admin/audit-pending/${scope.row.id}`"
+                :to="`/root-admin/audit-pending/${scope.row.id}`"
               >{{scope.row.institution_details.name}}</router-link>
             </template>
           </el-table-column>
