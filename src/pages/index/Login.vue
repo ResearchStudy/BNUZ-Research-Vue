@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 45px">
     <el-row>
       <el-col :span="14" :offset="1">
         <div class="banner ">

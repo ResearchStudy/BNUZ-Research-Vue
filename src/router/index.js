@@ -4,6 +4,7 @@ import index from "@/pages/index";
 import Login from "@/pages/index/Login";
 import Register from "@/pages/index/Register";
 import Organization from "@/pages/organization/Organization";
+import OrganizationIndex from "@/pages/organization/index";
 import Home from "@/pages/index/Home";
 import store from '@/store'
 import {checkUserLogin, getUserInfo} from "../api/user";
@@ -11,6 +12,7 @@ import rootAdminRoutes from "./rootAdmin";
 import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
 import insitutionAdminRoutes from "./institutionAdmin";
+import OrganizationRegister from "@/pages/organization/OrganizationRegister";
 Vue.use(VueRouter);
 
 const routes = [
@@ -21,7 +23,10 @@ const routes = [
             { path: '', component: Home },
             { path: 'login', component: Login },
             { path: 'register', component: Register },
-            {path: 'organization', component: Organization}
+            {path: 'organization/', component: OrganizationIndex, children: [
+                    {path: '', component: Organization},
+                    {path: 'register', component: OrganizationRegister}
+                ]}
         ]
     },
     {
@@ -75,7 +80,7 @@ router.beforeEach((to, from, next) => {
             }
         }
     }
-})
+});
 
 
 export default router

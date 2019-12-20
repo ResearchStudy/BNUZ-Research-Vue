@@ -6,7 +6,10 @@
       <el-button slot="append" icon="el-icon-search" type="primary"></el-button>
     </el-input>
   </div>
-  <div style="margin-top: 30px">
+  <div style="margin-left: 5%">
+    <el-button type="primary" @click="naviateToRegister()">我要入驻</el-button>
+  </div>
+  <div style="margin-top: 30px; width: 90%;margin-left: 5%">
     <el-table
             :data="insitutions"
             border
@@ -101,6 +104,9 @@
             handleCurrentChange(page) {
               this.page = page
               this.getInsititutionsList(page, this.limit)
+            },
+            naviateToRegister(){
+                this.$router.push({path: 'organization/register'})
             }
         }
     }
