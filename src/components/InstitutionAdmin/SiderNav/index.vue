@@ -13,7 +13,7 @@
         <span>账户中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/root-admin/audit-pending">基本资料</el-menu-item>
+        <el-menu-item index="/insitution-admin/dashboard">基本资料</el-menu-item>
         <el-menu-item index="1-2">修改密码</el-menu-item>
         <el-menu-item index="1-2">修改手机号</el-menu-item>
         <el-menu-item index="1-2">修改地址</el-menu-item>
