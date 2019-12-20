@@ -3,7 +3,7 @@
 
     <div class="header__logo">北师研学个人中心</div>
     <div class="header__navbar"></div>
-    <div class="header__link"></div>
+    <div class="header__link"><el-button type="primary" round @click="backHome()">返回首页</el-button></div>
   </div>
 </template>
 
@@ -29,7 +29,9 @@
 }
 
 .header__link {
-  margin-left: auto;
+  margin-left : auto; 
+  padding-right:20px;
+  
 }
 </style>
 
@@ -43,13 +45,13 @@ export default {
       imgUrl : ''
     };
   },
-  created(){
-    // this.imgUrl=require('@/assets/shida.png')
 
-  },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
+    },
+    backHome() {
+      this.$router.push({ path: "/" });
     }
   }
 };
