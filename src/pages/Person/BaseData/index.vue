@@ -4,7 +4,7 @@
       separator-class="el-icon-arrow-right"
       style="margin-top:2px"
     >
-      <el-breadcrumb-item :to="{ path: '/person/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/person' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>账号中心</el-breadcrumb-item>
       <el-breadcrumb-item>基本资料</el-breadcrumb-item>
     </el-breadcrumb>
@@ -12,29 +12,31 @@
       <div class="base-data_form">
         <el-form
           label-width="80px"
-          :model="right"
+          :model="form"
+          ref="form"
+          :rules="rules"
         >
-          <el-form-item label="用户昵称">
+          <el-form-item label="用户昵称" prop="nickname">
             <el-input
-              v-model="nickname"
+              v-model="form.nickname"
               style="margin-bottom:20px"
             ></el-input>
           </el-form-item>
-          <el-form-item label="姓名">
+          <el-form-item label="姓名" prop="name">
             <el-input
-              v-model="name"
+              v-model="form.name"
+              style="margin-bottom:20px"
+            ></el-input>
+          </el-form-item >
+          <el-form-item label="电话" prop="phone">
+            <el-input
+              v-model="form.phone"
               style="margin-bottom:20px"
             ></el-input>
           </el-form-item>
-          <el-form-item label="电话">
+          <el-form-item label="邮箱" prop="email">
             <el-input
-              v-model="phone"
-              style="margin-bottom:20px"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input
-              v-model="email"
+              v-model="form.email"
               style="margin-bottom:20px"
             ></el-input>
           </el-form-item>
@@ -44,7 +46,7 @@
               type="primary"
               @click="onSubmit"
             >提交</el-button>
-            <el-button style="width:100px;margin-left:20px">取消</el-button>
+            <el-button style="width:100px;margin-left:20px" @click="handleCancel">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -85,61 +87,105 @@
 </template>
 
 <script>
+// import { userInfo } from 'os';
 
 export default {
   name: "BaseData",
   data() {
+    let checkPhone = (rule, value, callback) => {
+      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+      console.log(reg.test(value));
+      if (reg.test(value)) {
+        callback();
+      } else {
+        return callback(new Error('手机格式有误'));
+      }
+        
+    };   
+
+    let checkEmail = (rlue , value , callback) => {
+      const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+      if (reg.test(value)) {
+        callback();
+      } else {
+        return callback(new Error('邮箱格式有误'));
+      }
+    };
+    
+    
     return {
-      checkphone: null,
-      
       imageUrl:"",
-        nickname: "",
+
+      form:{
+        nickname: "111",
         name: "",
         phone: "",
         email: "",
         token: "",
         id : ''
-        
+      },
+
+      rules: {
+        email : [
+          {required : true , message : "邮箱不能为空" , trigger: "blur" },
+          {validator : checkEmail , trigger : 'blur'},
+        ],
+        phone : [
+          { required: true, message: "电话不能为空", trigger: "blur" },
+          {validator : checkPhone , trigger : 'blur'},
+
+        ],
+        name : [
+          {required : true , message : "名字不能为空" , trigger : "blur"}
+        ],
+        nickname : [
+          {required : true , message : "昵称不能为空" , trigger : "blur"}
+        ]
+      } 
      
     };
   },
   async mounted() {
       await this.getUserInfo();
-      await this.getAvatar();
+      // await this.getAvatar();
       await this.beforeAvatarUpload();
       await this.handleAvatarSuccess();
       await this.onSubmit();
+      await this.handleCancel();
+      
      
       
   },
 
+
   methods: {
+    async handleCancel(){
+      window.location.reload();
+    },
     async getUserInfo() {  
-       this.id = this.$store.getters.userInfo.id;
-        console.log(this.id);
-        await this.$http.get('/api/accounts/' + this.id).then(res => {
-            console.log(res.data)
-            this.nickname = res.data.nickname
-            this.name = res.data.realname
-            this.email = res.data.email
-            this.phone = res.data.phone
-            this.token = res.data.avtor
-            
+       this.form.id = this.$store.getters.userInfo.id;
+        // console.log(this.form.id);
+        await this.$http.get('/api/accounts/' + this.form.id).then(res => {
+            console.log(res.data.nickname)
+            this.form.nickname = res.data.nickname
+            this.form.name = res.data.realname
+            this.form.email = res.data.email
+            this.form.phone = res.data.phone
+            this.form.token = res.data.avtor    
         }) 
-     
     },
-    async getAvatar() {
-        await this.$http.get('/api/account/'+this.token,{
-            download : true,
-            filename : 'a',
+    // async getAvatar() {
+    //     await this.$http.get('/api/account/'+this.token,{
+    //         download : true,
+    //         filename : 'a',
 
-        }).then((res) => {
-            let urlCreator = window.URL || window.webkitURL;
-            let imageUrl = urlCreator.createObjectURL(res);
-            this.imageUrl = imageUrl;
+    //     }).then((res) => {
+    //         let urlCreator = window.URL || window.webkitURL;
+    //         let imageUrl = urlCreator.createObjectURL(res);
+    //         this.imageUrl = imageUrl;
 
-        })
-    },
+    //     })
+    // },
 
 
     async handleAvatarSuccess(res, file) {
@@ -158,7 +204,41 @@ export default {
       return isJPG && isLt2M;
     },
     async onSubmit() {
-      console.log("submit");
+      await this.$refs.form.validate(valid => {
+        if (valid) {
+          console.log(this.form.id);
+          const EditInfo = {
+            nickname : this.form.nickname,
+            realname : this.form.name,
+          }
+          this.$http
+            .put("/api/accounts/" + this.form.id,EditInfo)
+            .then(res => {
+              if(res.data.id !== null){
+                this.$message({
+                type:"success",
+                message:"修改信息成功!",
+                isSingle: true
+              });   
+                        
+              }
+            }).catch(err => {
+              console.log(err);
+                this.$message({
+                type:"error",
+                message:"修改失败！！!",
+                isSingle: true
+                });
+
+            });
+        } else {
+          this.$message({
+            type: "error",
+            message: "请正确填写信息！",
+            isSingle: true
+          });
+        }
+      });
     }
   }
 };
