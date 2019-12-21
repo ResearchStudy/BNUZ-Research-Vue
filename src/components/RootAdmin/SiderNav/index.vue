@@ -2,8 +2,6 @@
   <el-menu
     default-active="1"
     class="sider-nav__container"
-    @open="handleOpen"
-    @close="handleClose"
     :unique-opened="true"
     router
   >

@@ -11,6 +11,9 @@ module.exports = {
         case "string":
           paramsString += `=${value}&`
           break;
+        case "number":
+          paramsString += `=${value}&`
+          break;
       }
     }
     paramsString = paramsString.substr(0, paramsString.length - 1)
