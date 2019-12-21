@@ -200,6 +200,7 @@ export default {
       addressList: [],
       preProvinceId: -1,
       preCityId: -1,
+      preImageUrl: "",
       rules: ruleList
     };
   },
@@ -244,6 +245,7 @@ export default {
         ],
         imageUrl: "/api/resources/" + logo
       };
+      this.preImageUrl = await this.getPreImageInfo();
     },
     handleSaveClick(formName) {
       this.$refs[formName].validate(async valid => {
@@ -290,7 +292,10 @@ export default {
             ? {
                 logo: imageUrl
               }
-            : {};
+            : {
+                logo: this.preImageUrl
+              };
+
           await this.$http.put(`/api/institutions/${this.institutionId}`, {
             name,
             invoice_rise,
@@ -348,6 +353,22 @@ export default {
     async handleAvatarUpload({ file }) {
       this.isUploaded = true;
       this.institutionDetails.imageUrl = await this.getImageInfo(file);
+    },
+    getPreImageInfo() {
+      return new Promise(async resolve => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.src = this.institutionDetails.imageUrl;
+
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const res = canvas.toDataURL("image/jpeg");
+          resolve(res);
+        };
+      });
     },
     getImageInfo(file) {
       return new Promise(async resolve => {
