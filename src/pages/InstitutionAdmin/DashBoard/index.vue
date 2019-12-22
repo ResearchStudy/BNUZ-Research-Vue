@@ -366,7 +366,8 @@ export default {
         img.onload = () => {
           canvas.width = img.width;
           canvas.height = img.height;
-
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(img, 0, 0);
           const res = canvas.toDataURL("image/jpeg");
           resolve(res);
