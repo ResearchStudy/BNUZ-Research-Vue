@@ -16,25 +16,37 @@
           ref="form"
           :rules="rules"
         >
-          <el-form-item label="用户昵称" prop="nickname">
+          <el-form-item
+            label="用户昵称"
+            prop="nickname"
+          >
             <el-input
               v-model="form.nickname"
               style="margin-bottom:20px"
             ></el-input>
           </el-form-item>
-          <el-form-item label="姓名" prop="name">
+          <el-form-item
+            label="姓名"
+            prop="name"
+          >
             <el-input
               v-model="form.name"
               style="margin-bottom:20px"
             ></el-input>
-          </el-form-item >
-          <el-form-item label="电话" prop="phone">
+          </el-form-item>
+          <el-form-item
+            label="电话"
+            prop="phone"
+          >
             <el-input
               v-model="form.phone"
               style="margin-bottom:20px"
             ></el-input>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email">
+          <el-form-item
+            label="邮箱"
+            prop="email"
+          >
             <el-input
               v-model="form.email"
               style="margin-bottom:20px"
@@ -46,7 +58,10 @@
               type="primary"
               @click="onSubmit"
             >提交</el-button>
-            <el-button style="width:100px;margin-left:20px" @click="handleCancel">取消</el-button>
+            <el-button
+              style="width:100px;margin-left:20px"
+              @click="handleCancel"
+            >取消</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -54,9 +69,9 @@
         <span>头像设置</span>
         <el-upload
           class="base-data_avatar-uploader"
-          action="#"
+          action="https://jsonplaceholder.typicode.com/posts/"
           :show-file-list="false"
-          :on-success="handleAvatarSuccess"
+          :http-request="handleAvatarUpload"
           :before-upload="beforeAvatarUpload"
         >
           <img
@@ -64,12 +79,14 @@
             :src="imageUrl"
             class="base-data_img-avatar"
           >
+          
           <i
             v-else
             class="el-icon-plus base-data_avatar-uploader-icon"
           ></i>
         </el-upload>
-        <el-button
+       
+        <!-- <el-button
           type="primary"
           size="mini"
           icon="el-icon-check"
@@ -78,7 +95,7 @@
           type="danger"
           size="mini"
           icon="el-icon-refresh-right"
-        >重置</el-button>
+        >重置</el-button> -->
       </div>
     </div>
 
@@ -87,7 +104,8 @@
 </template>
 
 <script>
-// import { userInfo } from 'os';
+
+
 
 export default {
   name: "BaseData",
@@ -115,7 +133,9 @@ export default {
     
     return {
       imageUrl:"",
-
+      isUploaded:false,
+      preImageUrl:"",
+      seen : false,
       form:{
         nickname: "111",
         name: "",
@@ -147,56 +167,73 @@ export default {
   },
   async mounted() {
       await this.getUserInfo();
-      // await this.getAvatar();
-      await this.beforeAvatarUpload();
-      await this.handleAvatarSuccess();
-      await this.onSubmit();
-      await this.handleCancel();
-      
-     
-      
+
   },
 
 
   methods: {
+
     async handleCancel(){
       window.location.reload();
     },
     async getUserInfo() {  
        this.form.id = this.$store.getters.userInfo.id;
-        // console.log(this.form.id);
+        console.log(this.form.id);
         await this.$http.get('/api/accounts/' + this.form.id).then(res => {
-            console.log(res.data.nickname)
+            console.log(res.data)
             this.form.nickname = res.data.nickname
             this.form.name = res.data.realname
             this.form.email = res.data.email
             this.form.phone = res.data.phone
-            this.form.token = res.data.avtor    
-        }) 
+            this.form.token = res.data.avator
+            this.imageUrl = "/api/resources/"+this.form.token
+        })
+        this.preImageUrl = await this.getPreImageInfo();
     },
-    // async getAvatar() {
-    //     await this.$http.get('/api/account/'+this.token,{
-    //         download : true,
-    //         filename : 'a',
+    
 
-    //     }).then((res) => {
-    //         let urlCreator = window.URL || window.webkitURL;
-    //         let imageUrl = urlCreator.createObjectURL(res);
-    //         this.imageUrl = imageUrl;
-
-    //     })
-    // },
+ 
 
 
-    async handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+
+
+    async handleAvatarUpload({ file }) {
+      this.isUploaded = true;
+      this.imageUrl = await this.getImageInfo(file);
     },
+    getPreImageInfo() {
+      return new Promise(async resolve => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.src = this.imageUrl;
+
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          const res = canvas.toDataURL("image/jpeg");
+          resolve(res);
+        };
+      });
+    },
+    getImageInfo(file) {
+      return new Promise(async resolve => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+          resolve(e.target.result);
+        };
+      });
+    },
+
     async beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/*";
+      const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!isJPG && !isPNG) {
+        this.$message.error("上传头像图片只能是 JPG/PNG 格式");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
@@ -207,10 +244,16 @@ export default {
       await this.$refs.form.validate(valid => {
         if (valid) {
           console.log(this.form.id);
+          this.token = this.isUploaded ? this.imageUrl : this.preImageUrl;  
+          console.log(this.token)       
           const EditInfo = {
             nickname : this.form.nickname,
             realname : this.form.name,
+            avator : this.token,
+            phone : this.phone,
+            email : this.email
           }
+
           this.$http
             .put("/api/accounts/" + this.form.id,EditInfo)
             .then(res => {
