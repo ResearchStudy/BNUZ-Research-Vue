@@ -260,7 +260,9 @@
                         approval_time: new Date(this.form.approval_time).getTime()/1000
                     }
                     enrollInstitutions(data).then((res) => {
-                        institutionsFilesUpload(res.id, {files: this.form.files}).then(() => {
+                        const formData = new FormData();
+                        formData.append("files", this.form.files);
+                        institutionsFilesUpload(res.id, formData).then(() => {
                             that.nextPage();
                         })
                     })
