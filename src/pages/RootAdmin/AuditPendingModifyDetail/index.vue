@@ -3,8 +3,8 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
-      <el-breadcrumb-item>待审核机构</el-breadcrumb-item>
-      <el-breadcrumb-item>北师珠</el-breadcrumb-item>
+      <el-breadcrumb-item>待审核修改</el-breadcrumb-item>
+      <el-breadcrumb-item>{{institutionDetails.name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="audit-pending-detail__wrap">
       <div class="audit-pending-detail__title">基本信息</div>
@@ -19,7 +19,9 @@
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
         <el-form-item label="详细地址">
-          <div class="content">{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
+          <div
+            class="content"
+          >{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
           <div class="content">{{institutionDetails.legal_person}}</div>
@@ -67,7 +69,7 @@
 
 <script>
 export default {
-  name: "AuditPendingDetail",
+  name: "AuditPendingModifyDetail",
   data() {
     return {
       id: -1,
@@ -81,15 +83,14 @@ export default {
   },
   methods: {
     async getAuditPendingDetail() {
-      const {
-        data: { institution_details }
-      } = await this.$http.get(`/api/institutions/enroll/${this.id}`);
-      this.institutionDetails = institution_details;
+      const { data } = await this.$http.post("/api/institutions/modify/_mget", {
+        ids: [this.id]
+      });
+      this.institutionDetails = data[0];
     },
     async handleAdoptClick(isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/handle/${this.id}`, {
-        adopt: isAdopted,
-        reply: "没有回复哦"
+      await this.$http.post(`/api/institutions/modify/handle/${this.id}`, {
+        adopt: isAdopted
       });
       this.$message({
         type: "success",
@@ -97,7 +98,7 @@ export default {
         isSingle: true
       });
       this.$router.push({
-        path: "/admin/audit-pending"
+        path: "/root-admin/audit-pending-modify"
       });
     }
   }

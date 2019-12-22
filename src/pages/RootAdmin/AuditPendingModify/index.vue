@@ -1,12 +1,12 @@
 <template>
-  <div class="audit-pending-list__container">
+  <div class="audit-pending-modify__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
-      <el-breadcrumb-item>待审核机构</el-breadcrumb-item>
+      <el-breadcrumb-item>待审核修改</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="audit-pending-list__wrap">
-      <div class="audit-pending-list__header">
+    <div class="audit-pending-modify__wrap">
+      <div class="audit-pending-modify__header">
         <el-button type="primary" @click="handleMultiAdoptClick(true)">批量通过</el-button>
         <el-button type="danger" @click="handleMultiAdoptClick(false)">批量不通过</el-button>
         <div class="search-input">
@@ -20,7 +20,7 @@
           />
         </div>
       </div>
-      <div class="audit-pending-list__table">
+      <div class="audit-pending-modify__table">
         <el-table
           ref="multipleTable"
           :data="currentTableData"
@@ -39,15 +39,15 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/root-admin/audit-pending-list/${scope.row.id}`"
-              >{{scope.row.institution_details.name}}</router-link>
+                :to="`/root-admin/audit-pending-modify/${scope.row.id}`"
+              >{{scope.row.name}}</router-link>
             </template>
           </el-table-column>
           <el-table-column prop="province" label="省份" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.institution_details.address.province_name}}</template>
+            <template slot-scope="scope">{{scope.row.address.province_name}}</template>
           </el-table-column>
           <el-table-column prop="city" label="城市" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.institution_details.address.city_name}}</template>
+            <template slot-scope="scope">{{scope.row.address.city_name}}</template>
           </el-table-column>
           <el-table-column
             prop="money"
@@ -56,12 +56,12 @@
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">{{scope.row.institution_details.registered_money}}</template>
+            <template slot-scope="scope">{{scope.row.registered_money}}</template>
           </el-table-column>
           <el-table-column prop="registerTime" label="注册时间" align="center" show-overflow-tooltip>
             <template
               slot-scope="scope"
-            >{{new Date(scope.row.institution_details.approval_time*1000).toLocaleDateString()}}</template>
+            >{{new Date(scope.row.approval_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
           <el-table-column prop="applyTime" label="申请时间" align="center" show-overflow-tooltip>
             <template
@@ -69,7 +69,7 @@
             >{{new Date(scope.row.create_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
           <el-table-column prop="description" label="机构简介" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.institution_details.remarks}}</template>
+            <template slot-scope="scope">{{scope.row.remarks}}</template>
           </el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
@@ -83,7 +83,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="audit-pending-list__pagination">
+      <div class="audit-pending-modify__pagination">
         <div class="pagination__info">共{{totalTagsCount}}条记录，共{{totalPage}}页，当前显示第{{currentPage}}页</div>
         <el-pagination
           class="pagination__container"
@@ -101,7 +101,7 @@
 
 <script>
 export default {
-  name: "AuditPendingList",
+  name: "AuditPendingModify",
   data() {
     return {
       searchValue: "",
@@ -114,28 +114,22 @@ export default {
     };
   },
   async mounted() {
-    await this.getAuditPendingList();
+    await this.getAuditPendingModify();
   },
   methods: {
-    async getAuditPendingList() {
+    async getAuditPendingModify() {
       const {
-        data: { enrolls, total }
-      } = await this.$http.get("/api/institutions/enroll/list", {
-        limit: "10",
+        data: { institutions, total }
+      } = await this.$http.get("/api/institutions/list", {
+        limit: 10,
         page: this.currentPage + "",
-        handle: false,
-        adopt: false,
-        name: ""
+        wait_update: true
       });
-      const idList = enrolls.map(auditPending => auditPending.id);
-      const { data: auditPendingList } = await this.$http.post(
-        "/api/institutions/enroll/_mget",
-        {
-          ids: idList
-        }
-      );
+      const { data } = await this.$http.post("/api/institutions/modify/_mget", {
+        ids: institutions.map(institution => institution.id)
+      });
 
-      this.currentTableData = auditPendingList;
+      this.currentTableData = data;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
     },
@@ -187,14 +181,13 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleAdoptClick(id, isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
-        adopt: isAdopted,
-        reply: "没有回复哦"
+      await this.$http.post(`/api/institutions/modify/handle/${id}`, {
+        adopt: isAdopted
       });
       if ((this.totalTagsCount - 1) % 10 === 0) {
         this.currentPage -= 1;
       }
-      await this.getAuditPendingList();
+      await this.getAuditPendingModify();
       this.$message({
         type: "success",
         message: "处理成功！",
@@ -206,12 +199,10 @@ export default {
         selection => selection.id
       );
 
-      await this.$http.post("/api/institutions/enroll/handle/_mpost", {
-        adopt: isAdopted,
-        reply: "没有回复哦",
-        ids: handleIdList
+      handleIdList.forEach(async id => {
+        await this.handleAdoptClick(id, isAdopted);
       });
-      await this.getAuditPendingList();
+      await this.getAuditPendingModify();
       this.$message({
         type: "success",
         message: "处理成功！",
@@ -223,7 +214,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.audit-pending-list {
+.audit-pending-modify {
   &__container {
   }
 
