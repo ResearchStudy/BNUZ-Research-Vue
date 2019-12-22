@@ -39,15 +39,15 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/root-admin/audit-pending/${scope.row.id}`"
+                :to="`/root-admin/audit-pending-list/${scope.row.id}`"
               >{{scope.row.institution_details.name}}</router-link>
             </template>
           </el-table-column>
           <el-table-column prop="province" label="省份" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.institution_details.address.province_id}}</template>
+            <template slot-scope="scope">{{scope.row.institution_details.address.province_name}}</template>
           </el-table-column>
           <el-table-column prop="city" label="城市" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.institution_details.address.city_id}}</template>
+            <template slot-scope="scope">{{scope.row.institution_details.address.city_name}}</template>
           </el-table-column>
           <el-table-column
             prop="money"
@@ -61,7 +61,7 @@
           <el-table-column prop="registerTime" label="注册时间" align="center" show-overflow-tooltip>
             <template
               slot-scope="scope"
-            >{{new Date(scope.row.institution_details.approval_time).toLocaleDateString()}}</template>
+            >{{new Date(scope.row.institution_details.approval_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
           <el-table-column prop="applyTime" label="申请时间" align="center" show-overflow-tooltip>
             <template
