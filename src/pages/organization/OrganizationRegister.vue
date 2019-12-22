@@ -7,7 +7,7 @@
         <el-step title="步骤 3" description="等候审核"></el-step>
       </el-steps>
     </div>
-    
+
     <div style="margin-top: 20px; width:50%; margin-left: 25%" v-if="active === 1">
       <div>
         <el-divider content-position="center" ><span style="font-size: 20px">基本资料</span></el-divider>
@@ -22,10 +22,25 @@
         <el-form-item label="企业类型">
           <el-input v-model="form.institution_type"></el-input>
         </el-form-item>
-<!--        地址选择-->
-<!--        <el-form-item label="详细地址">-->
-<!--          <el-input v-model="form.institution_type"></el-input>-->
-<!--        </el-form-item>-->
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="省份">
+              <el-select v-model="form.address.province_id" placeholder="请选择省份" @change="getCityList(form.address.province_id)">
+                <el-option v-for="province in provinceList" :label="province.name" :key="province.id" :value="province.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="城市">
+              <el-select v-model="form.address.city_id" placeholder="请选择城市">
+                <el-option v-for="city in cityList" :label="city.name" :key="city.id" :value="city.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="详细地址">
+          <el-input v-model="form.address.details"></el-input>
+        </el-form-item>
         <el-form-item label="法定代表人">
           <el-input v-model="form.legal_person"></el-input>
         </el-form-item>
@@ -33,13 +48,13 @@
           <el-date-picker type="date" placeholder="选择日期" v-model="form.establish_time" style="width: 100%;"></el-date-picker>
         </el-form-item>
         <el-form-item label="注册资金">
-          <el-input v-model="form.registered_money"></el-input>
+          <el-input v-model="form.registered_money" type="number"></el-input>
         </el-form-item>
         <el-form-item label="营业期限">
           <el-col :span="11">
             <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_start_time" style="width: 100%;"></el-date-picker>
           </el-col>
-          <el-col :span="1" offset="1">
+          <el-col :span="1" :offset="1">
             <span style="font-size: 10px">-</span>
           </el-col>
           <el-col :span="11">
@@ -74,10 +89,10 @@
           <el-form-item label="纳税人识别号">
             <el-input v-model="form.taxpayer_distinguish"></el-input>
           </el-form-item>
+          <el-form-item label="电话号码">
+            <el-input v-model="form.invoice_phone"></el-input>
+          </el-form-item>
         </div>
-<!--        <el-form-item label="电话号码">-->
-<!--          <el-input v-model="form.invoice_rise"></el-input>-->
-<!--        </el-form-item>-->
         <div style="text-align: center">
           <el-form-item>
             <el-button type="primary" @click="nextPage">下一步</el-button>
@@ -90,43 +105,58 @@
         <span style="font-weight: bold">上传附件材料</span> <span style="color: #afafaf">支持扩展名：.rar .zip .doc .docx .pdf .jpg...</span>
       </div>
       <div style="margin-top: 40px">
-        <el-row>
-          <el-col :span="7" offset="4">
+        <el-row style="height: 100px">
+          <el-col :span="7" :offset="4">
             <span class="label">上传机构显示封面</span>
           </el-col>
           <el-col :span="11">
             <el-upload
                     class="avatar-uploader"
-                    action="https://jsonplaceholder.typicode.com/posts/"
-                    :show-file-list="false">
-              <img v-if="form.logo" :src="form.logo" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    action="#"
+                    :show-file-list="false"
+                    :before-upload="beforeAvatarUpload"
+                    :http-request="handleAvatarUpload"
+            >
+              <img
+                      v-if="form.logo"
+                      :src="form.logo"
+                      class="avatar"
+              />
+              <i v-if="!form.logo" class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+          </el-col>
+        </el-row>
+        <el-row style="height: 100px">
+          <el-col :span="7" :offset="4">
+            <span class="label">上传经营许可证</span>
+          </el-col>
+          <el-col :span="11">
+            <el-upload
+                    class="avatar-uploader"
+                    action="#"
+                    :show-file-list="false"
+                    :before-upload="beforeAvatarUpload"
+                    :http-request="handleBusinessLicenceUpload"
+            >
+              <img
+                      v-if="form.business_license"
+                      :src="form.business_license"
+                      class="avatar"
+              />
+              <i v-if="!form.business_license" class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="7" offset="4">
-            <span class="label">上传经营许可证</span>
-            <el-col :span="11">
-              <el-upload
-                      class="avatar-uploader"
-                      action="https://jsonplaceholder.typicode.com/posts/"
-                      :show-file-list="false">
-                <img v-if="form.business_license" :src="form.business_license" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-            </el-col>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="7" offset="4">
+          <el-col :span="7" :offset="4">
             <span class="label">其他补充说明文件</span>
           </el-col>
           <el-col :span="7">
             <el-upload
                     class="upload-demo"
                     drag
-                    action="https://jsonplaceholder.typicode.com/posts/"
+                    action="#"
+                    :http-request="beforeOtherFilesUpload"
                     multiple>
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -134,15 +164,15 @@
           </el-col>
         </el-row>
       </div>
-      <div style="text-align: center;margin-top: 20px">
-        <el-button type="primary" @click="nextPage()">立即创建</el-button>
+      <div style="text-align: center;margin: 20px 0px">
+        <el-button type="primary" @click="enrollInstitutionsMsg()">立即创建</el-button>
       </div>
     </div>
     <div style="margin-top: 20px; width:50%; margin-left: 25%" v-if="active === 3">
       <div style="text-align: center;font-size: 100px">
         等待审核通过
       </div>
-      <div style="text-align: center;margin-top: 20px">
+      <div style="text-align: center;margin: 20px 0px">
         <el-button type="primary" @click="navigateToIndex()">返回</el-button>
       </div>
     </div>
@@ -150,8 +180,14 @@
 </template>
 
 <script>
-    export default {
+  import {getAddressById, saveAddress} from "../../api/address";
+  import {enrollInstitutions, institutionsFilesUpload} from "../../api/institutions";
+
+  export default {
         name: "OrganizationRegister",
+        mounted(){
+            this.getProvinceList();
+        },
         data(){
             return {
                 active: 1,
@@ -162,6 +198,7 @@
                   legal_person: '',
                   establish_time: '',
                   registered_money:'',
+                  business_license: '',
                   business_license_start_time: '',
                   business_license_end_time: '',
                   approval_time: '',
@@ -170,8 +207,17 @@
                   hasInvoice: false,
                   invoice_rise: '',
                   taxpayer_distinguish: '',
-                    logo: ''
+                  invoice_phone: '',
+                  logo: '',
+                  address: {
+                    province_id: '',
+                      city_id: '',
+                      details: ''
+                  },
+                  files:[]
                 },
+                provinceList: [],
+                cityList: []
             }
         },
         methods:{
@@ -180,6 +226,98 @@
             },
             navigateToIndex(){
                 this.$router.push({path: '/'})
+            },
+            beforeOtherFilesUpload({file}){
+                this.form.files.push(file)
+            },
+            async getProvinceList() {
+                const result = await getAddressById({target: 2});
+                this.provinceList = result.address;
+            },
+            async getCityList(provinceId) {
+                this.form.address.city_id = ''
+                const result = await getAddressById({
+                    target: 3,
+                    parent: provinceId
+                });
+                this.cityList = result.address;
+            },
+            async enrollInstitutionsMsg(){
+                const data = {
+                    ...this.form.address,
+                    country_id: 1
+                };
+                const that = this;
+                saveAddress(data).then((res) => {
+                    const addressId = res.id;
+                    const data = {
+                        ...this.form,
+                        address_id: addressId,
+                        registered_money: parseInt(this.form.registered_money),
+                        business_license_start_time: new Date(this.form.business_license_start_time).getTime()/1000,
+                        establish_time: new Date(this.form.establish_time).getTime()/1000,
+                        business_license_end_time: new Date(this.form.business_license_end_time).getTime()/1000,
+                        approval_time: new Date(this.form.approval_time).getTime()/1000
+                    }
+                    enrollInstitutions(data).then((res) => {
+                        institutionsFilesUpload(res.id, {files: this.form.files}).then(() => {
+                            that.nextPage();
+                        })
+                    })
+                })
+            },
+            async handleAvatarUpload({ file }) {
+                this.form.logo = await this.getImageInfo(file);
+            },
+            async handleBusinessLicenceUpload({ file }) {
+                this.form.business_license = await this.getImageInfo(file);
+                console.log(this.form.business_license)
+            },
+            getPreImageInfo() {
+                return new Promise(async resolve => {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    const img = new Image();
+                    img.src = this.institutionDetails.imageUrl;
+
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.fillStyle = "#fff";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0);
+                        const res = canvas.toDataURL("image/jpeg");
+                        resolve(res);
+                    };
+                });
+            },
+            getImageInfo(file) {
+                return new Promise(async resolve => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = e => {
+                        resolve(e.target.result);
+                    };
+                });
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === "image/jpeg";
+                const isPNG = file.type === "image/png";
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG && !isPNG) {
+                    this.$message({
+                        type: "error",
+                        message: "只能JPG或者PNG"
+                    });
+                }
+                if (!isLt2M) {
+                    this.$message({
+                        type: "error",
+                        message: "超过2M"
+                    });
+                }
+                return (isJPG || isPNG) && isLt2M;
             }
         }
     }
@@ -187,19 +325,18 @@
 
 <style scoped>
 .label{
-  font-weight: bold;font-size: 20px
+  font-weight: bold;font-size: 15px
 }
 
-.avatar-uploader .el-upload {
+.avatar-uploader {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  width: 70px;
 }
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;

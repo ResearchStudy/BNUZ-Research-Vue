@@ -17,3 +17,21 @@ export function getInstitutionDetails(ids) {
         method: 'post'
     })
 }
+
+
+export function enrollInstitutions(data) {
+    return request({
+        url: `${prefix}/enroll`,
+        method: 'post',
+        data: data
+    })
+}
+
+
+export function institutionsFilesUpload(id,data) {
+    return request({
+        url: `${prefix}/enroll/${id}/attachments`,
+        data: data,
+        method: 'post'
+    })
+}

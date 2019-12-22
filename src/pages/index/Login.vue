@@ -48,7 +48,8 @@
             login() {
                 const loginInfo = {
                     key: this.form.key,
-                    password: this.form.password
+                    password: this.form.password,
+                    remember: true
                 };
                 login(loginInfo).then((res) => {
                     localStorage.setItem("id", res.id)
