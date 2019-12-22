@@ -3,6 +3,8 @@ import Home from '@/pages/RootAdmin/Home/index'
 import TabsManager from '@/pages/RootAdmin/TabsManager/index'
 import AuditPendingList from '@/pages/RootAdmin/AuditPendingList/index'
 import AuditPendingDetail from '@/pages/RootAdmin/AuditPendingDetail/index'
+import AuditPendingModify from '@/pages/RootAdmin/AuditPendingModify/index'
+import AuditPendingModifyDetail from '@/pages/RootAdmin/AuditPendingModifyDetail/index'
 import AccountsManager from '@/pages/RootAdmin/AccountsManager/index'
 
 const adminRoutes = [
@@ -11,8 +13,10 @@ const adminRoutes = [
             { path: '/', redirect: 'dashboard' },
             { path: 'dashboard', component: Home },
             { path: 'tabs', component: TabsManager },
-            { path: 'audit-pending', component: AuditPendingList },
-            { path: 'audit-pending/:id', component: AuditPendingDetail },
+            { path: 'audit-pending-list', component: AuditPendingList },
+            { path: 'audit-pending-list/:id', component: AuditPendingDetail },
+            { path: 'audit-pending-modify/', component: AuditPendingModify },
+            { path: 'audit-pending-modify/:id', component: AuditPendingModifyDetail },
             { path: 'accounts', component: AccountsManager },
         ]
     }
