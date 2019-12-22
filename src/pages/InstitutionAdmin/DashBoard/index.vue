@@ -201,6 +201,7 @@ export default {
       preProvinceId: -1,
       preCityId: -1,
       preImageUrl: "",
+      preDetails: "",
       rules: ruleList
     };
   },
@@ -232,6 +233,7 @@ export default {
 
       this.preProvinceId = provinceId;
       this.preCityId = cityId;
+      this.preDetails = details;
       this.institutionDetails = {
         ...institution_details,
         establish_time: establish_time * 1000,
@@ -260,7 +262,6 @@ export default {
             approval_time,
             taxpayer_distinguish,
             phone,
-            address_id,
             institution_type,
             establish_time,
             legal_person,
@@ -270,11 +271,14 @@ export default {
             province_id,
             city_id,
             details,
-            imageUrl
+            imageUrl,
+            tax_id
           } = this.institutionDetails;
 
           const isAddressChange =
-            this.preProvinceId !== province_id || this.preCityId !== city_id;
+            this.preProvinceId !== province_id ||
+            this.preCityId !== city_id ||
+            this.preDetails !== details;
 
           if (isAddressChange) {
             const {
@@ -288,20 +292,16 @@ export default {
             this.institutionDetails.address_id = newAddressId;
           }
 
-          const logoInfo = this.isUploaded
-            ? {
-                logo: imageUrl
-              }
-            : {
-                logo: this.preImageUrl
-              };
+          const logoInfo = {
+            logo: this.isUploaded ? imageUrl : this.preImageUrl
+          };
 
           await this.$http.put(`/api/institutions/${this.institutionId}`, {
             name,
             invoice_rise,
             taxpayer_distinguish,
             phone,
-            address_id,
+            address_id: this.institutionDetails.address_id,
             approval_time: approval_time / 1000,
             business_license_start_time: business_license_start_time / 1000,
             business_license_ent_time: business_license_ent_time / 1000,
@@ -313,7 +313,9 @@ export default {
             business_scope,
             province_id,
             city_id,
-            ...logoInfo
+            ...logoInfo,
+            tax_id,
+            details
           });
           this.$message({
             type: "success",
@@ -364,6 +366,7 @@ export default {
         img.onload = () => {
           canvas.width = img.width;
           canvas.height = img.height;
+
           ctx.drawImage(img, 0, 0);
           const res = canvas.toDataURL("image/jpeg");
           resolve(res);
