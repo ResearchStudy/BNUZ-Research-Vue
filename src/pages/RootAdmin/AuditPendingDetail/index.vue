@@ -19,7 +19,7 @@
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
         <el-form-item label="详细地址">
-          <div class="content">{{institutionDetails.address_id}}</div>
+          <div class="content">{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
           <div class="content">{{institutionDetails.legal_person}}</div>
