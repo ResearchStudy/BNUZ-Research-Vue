@@ -16,6 +16,14 @@ const validateCommon = (rule, value, callback) => {
   callback()
 }
 
+const validatePassword = (rule, value, callback) => {
+  if (value.toString().length < 8 || value.toString().length > 32) {
+    callback(new Error('密码长度应在8至32位'))
+  } else {
+    validateCommon(rule, value, callback)
+  }
+}
+
 const validateNumber = (rule, value, callback) => {
   if (/[^\d.]/.test(value.toString())) {
     callback(new Error('请输入纯数字'))
@@ -45,6 +53,7 @@ const validateEmail = (rule, value, callback) => {
 
 module.exports = {
   validateNumber,
+  validatePassword,
   validatePhone,
   validateEmail,
   validateCommon

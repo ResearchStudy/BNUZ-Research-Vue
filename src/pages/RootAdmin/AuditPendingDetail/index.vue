@@ -97,7 +97,7 @@ export default {
         isSingle: true
       });
       this.$router.push({
-        path: "/admin/audit-pending"
+        path: "/root-admin/audit-pending-list"
       });
     }
   }

@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <div class="accounts-manager__wrap">
       <div class="accounts-manager__header">
-        <el-button type="danger">批量删除</el-button>
+        <!-- <el-button type="danger">批量删除</el-button> -->
         <el-button type="primary" @click="handleAddClick">添加用户</el-button>
       </div>
       <div class="accounts-manager__table">
@@ -19,7 +19,7 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="60" align="center"></el-table-column>
+          <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
           <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.id}}</template>
           </el-table-column>
@@ -59,11 +59,11 @@
           <el-table-column prop="tag" label="电话验证" width="140" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.phone_validated ?'已验证':'未验证'}}</template>
           </el-table-column>
-          <el-table-column label="操作" width="140" align="center">
+          <!-- <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
               <el-button @click="handleDeleteTag(scope.row.id)" type="text" size="small">移除</el-button>
             </template>
-          </el-table-column>
+          </el-table-column>-->
         </el-table>
       </div>
       <div class="accounts-manager__pagination">
@@ -79,10 +79,42 @@
         ></el-pagination>
       </div>
     </div>
+    <el-dialog title="创建用户" :visible.sync="isDialogShow" width="30%">
+      <el-form
+        ref="accountForm"
+        :model="accountForm"
+        label-position="left"
+        label-width="80px"
+        :rules="rules"
+        label-suffix=":"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="accountForm.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="accountForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select v-model="accountForm.role" placeholder="请选择用户角色">
+            <el-option label="学生" value="1"></el-option>
+            <el-option label="家长" value="2"></el-option>
+            <el-option label="机构工作人员" value="4"></el-option>
+            <el-option label="机构管理员" value="8"></el-option>
+            <el-option label="系统管理员" value="99"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleDialogClose">取 消</el-button>
+        <el-button type="primary" @click="handleDialogConfirm('accountForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import ruleList from "./validate";
+
 export default {
   name: "AccountsManager",
   data() {
@@ -92,28 +124,26 @@ export default {
       currentPage: 1,
       currentTableData: [],
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+      isDialogShow: false,
+      accountForm: {
+        username: "",
+        password: "",
+        role: ""
+      },
+      rules: ruleList
     };
   },
   async mounted() {
-    await this.handleLogin();
     await this.getAccountsList();
   },
   methods: {
-    async handleLogin() {
-      const data = await this.$http.post("/api/accounts/login/common", {
-        key: "bb",
-        password: "123",
-        remember: true
-      });
-      console.log(data);
-    },
     async getAccountsList() {
       const {
-        data: { accounts }
+        data: { accounts, total }
       } = await this.$http.get("/api/accounts/list", {
         limit: 10,
-        page: 1,
+        page: this.currentPage,
         key: "",
         id_code: ""
       });
@@ -125,10 +155,9 @@ export default {
         }
       );
 
-      this.tableData = accountsInfoList;
-      this.totalPage = Math.ceil(this.tableData.length / 10);
-      this.totalTagsCount = this.tableData.length;
-      this.currentTableData = this.tableData.slice(0, 10);
+      this.currentTableData = accountsInfoList;
+      this.totalTagsCount = total;
+      this.totalPage = Math.ceil(total / 10);
     },
     generateRole(role) {
       const roleList = {
@@ -138,35 +167,18 @@ export default {
         8: "机构管理员",
         99: "系统管理员"
       };
-      return roleList[role] || '无';
+      return roleList[role] || "无";
     },
     async handleAddClick() {
-      this.$prompt("请输入标签名", "创建标签", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputErrorMessage: "请输入标签名！"
-      })
-        .then(async ({ value }) => {
-          await this.$http.post("/api/tags", {
-            name: value
-          });
-          await this.getTagsList();
-          this.setCurrentTableData();
-          this.$message({
-            type: "success",
-            message: "添加成功！"
-          });
-        })
-        .catch(() => {});
+      this.isDialogShow = true;
     },
-    setCurrentTableData() {
-      const start = (this.currentPage - 1) * 10;
-      const end = this.currentPage * 10;
-
-      this.totalPage = Math.ceil(this.tableData.length / 10);
-      this.totalTagsCount = this.tableData.length;
-      this.currentTableData = this.tableData.slice(start, end);
-    },
+    // setCurrentTableData() {
+    //   const start = (this.currentPage - 1) * 10;
+    //   const end = this.currentPage * 10;
+    //   this.totalPage = Math.ceil(this.tableData.length / 10);
+    //   this.totalTagsCount = this.tableData.length;
+    //   this.currentTableData = this.tableData.slice(start, end);
+    // },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
@@ -179,16 +191,45 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleCurrentPageChange(currentPage) {
+    async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
-      this.setCurrentTableData();
+      await this.getAccountsList();
     },
-    async handleDeleteTag(id) {
-      await this.$http.delete(`/api/tags/${id}`);
-      await this.getTagsList();
-      this.$message({
-        type: "success",
-        message: "删除成功！"
+    handleDialogClose() {
+      this.isDialogShow = false;
+    },
+    handleDialogConfirm(accountForm) {
+      this.$refs[accountForm].validate(async valid => {
+        if (valid) {
+          const { username, password, role } = this.accountForm;
+          await this.$http.post("/api/accounts/admin/create", {
+            username,
+            password,
+            role: parseInt(role)
+          });
+          if (this.totalTagsCount % 10 === 0) {
+            this.totalTagsCount += 1;
+            await this.handleCurrentPageChange(this.currentPage + 1);
+          }else{
+            await this.getAccountsList()
+          }
+          this.isDialogShow = false;
+          this.accountForm = {
+            username: "",
+            password: "",
+            role: ""
+          };
+          this.$message({
+            type: "success",
+            message: "添加成功"
+          });
+        } else {
+          this.$message({
+            type: "error",
+            message: "请按要求完成表格"
+          });
+          return false;
+        }
       });
     }
   }
