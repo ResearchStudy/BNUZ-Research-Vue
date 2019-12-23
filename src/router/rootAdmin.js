@@ -5,6 +5,9 @@ import AuditPendingList from '@/pages/RootAdmin/AuditPendingList/index'
 import AuditPendingDetail from '@/pages/RootAdmin/AuditPendingDetail/index'
 import AuditPendingModify from '@/pages/RootAdmin/AuditPendingModify/index'
 import AuditPendingModifyDetail from '@/pages/RootAdmin/AuditPendingModifyDetail/index'
+import AuditFinishList from '@/pages/RootAdmin/AuditFinishList/index'
+import AuditFinishDetail from '@/pages/RootAdmin/AuditFinishDetail/index'
+
 import AccountsManager from '@/pages/RootAdmin/AccountsManager/index'
 
 const adminRoutes = [
@@ -17,6 +20,8 @@ const adminRoutes = [
             { path: 'audit-pending-list/:id', component: AuditPendingDetail },
             { path: 'audit-pending-modify/', component: AuditPendingModify },
             { path: 'audit-pending-modify/:id', component: AuditPendingModifyDetail },
+            { path: 'audit-finish-list', component: AuditFinishList },
+            { path: 'audit-finish-list/:id', component: AuditFinishDetail },
             { path: 'accounts', component: AccountsManager },
         ]
     }
