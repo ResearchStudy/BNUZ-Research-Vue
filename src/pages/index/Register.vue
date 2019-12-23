@@ -51,8 +51,13 @@
         },
         methods: {
             register() {
-                register({...this.form, username: this.form.key}).then((res) => {
-                    console.log(res)
+                register({...this.form, username: this.form.key}).then(() => {
+                    this.$message({
+                        showClose: true,
+                        message: `注册成功`,
+                        type: 'success',
+                        isSingle: true
+                    });
                 })
             },
             dispatchSubmit() {
