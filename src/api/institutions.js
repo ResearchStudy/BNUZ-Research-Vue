@@ -29,9 +29,14 @@ export function enrollInstitutions(data) {
 
 
 export function institutionsFilesUpload(id,data) {
+    const formData = new FormData();
+    data.forEach((item) => {
+        formData.append("files",item)
+    })
     return request({
         url: `${prefix}/enroll/${id}/attachments`,
-        data: data,
-        method: 'post'
+        data: formData,
+        method: 'post',
+        headers: {'Content-Type': 'multipart/form-data'}
     })
 }

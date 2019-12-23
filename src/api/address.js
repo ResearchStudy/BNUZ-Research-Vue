@@ -14,6 +14,6 @@ export function getAddressById(params) {
     return request({
         url: `${prefix}/list`,
         method: 'get',
-        params:params,
+        params:params
     })
 }

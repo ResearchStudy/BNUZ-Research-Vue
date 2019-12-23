@@ -12,6 +12,7 @@ service.interceptors.request.use(
         // if (localStorage.getItem('token')) {
         //     config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token')
         // }
+
         return config
     },
     error => {

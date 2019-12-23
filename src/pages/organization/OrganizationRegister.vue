@@ -262,7 +262,7 @@
                     enrollInstitutions(data).then((res) => {
                         const formData = new FormData();
                         formData.append("files", this.form.files);
-                        institutionsFilesUpload(res.id, formData).then(() => {
+                        institutionsFilesUpload(res.id, this.form.files).then(() => {
                             that.nextPage();
                         })
                     })
@@ -273,7 +273,6 @@
             },
             async handleBusinessLicenceUpload({ file }) {
                 this.form.business_license = await this.getImageInfo(file);
-                console.log(this.form.business_license)
             },
             getPreImageInfo() {
                 return new Promise(async resolve => {
