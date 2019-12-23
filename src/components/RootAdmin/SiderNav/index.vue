@@ -12,7 +12,7 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="/root-admin/audit-pending-list">待审核机构</el-menu-item>
-        <el-menu-item index="1-2">已审核机构</el-menu-item>
+        <el-menu-item index="/root-admin/audit-finish-list">已审核机构</el-menu-item>
         <el-menu-item index="/root-admin/audit-pending-modify">待审核修改</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
