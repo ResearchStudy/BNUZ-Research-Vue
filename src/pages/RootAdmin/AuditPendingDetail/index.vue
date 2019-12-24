@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
       <el-breadcrumb-item>待审核机构</el-breadcrumb-item>
-      <el-breadcrumb-item>北师珠</el-breadcrumb-item>
+      <el-breadcrumb-item>{{institutionDetails.name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="audit-pending-detail__wrap">
       <div class="audit-pending-detail__title">基本信息</div>
@@ -18,8 +18,8 @@
         <el-form-item label="企业类型">
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
-        <el-form-item label="详细地址">
-          <div class="content">{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
+        <el-form-item label="详细地址" v-if="institutionDetails.address">
+          <div class="content">{{details}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
           <div class="content">{{institutionDetails.legal_person}}</div>
@@ -51,8 +51,14 @@
         <el-form-item label="营业执照">
           <div
             class="logo"
+            v-if="institutionDetails.logo"
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
           ></div>
+        </el-form-item>
+        <el-form-item label="附件列表">
+          <div class="content">
+            <enclousure-list :resources="resources"></enclousure-list>
+          </div>
         </el-form-item>
         <el-form-item>
           <div class="content">
@@ -66,12 +72,15 @@
 </template>
 
 <script>
+import EnclousureList from "@/components/EnclosureList";
 export default {
   name: "AuditPendingDetail",
+  components: { EnclousureList },
   data() {
     return {
       id: -1,
-      institutionDetails: {}
+      institutionDetails: {},
+      resources: []
     };
   },
   async mounted() {
@@ -82,9 +91,10 @@ export default {
   methods: {
     async getAuditPendingDetail() {
       const {
-        data: { institution_details }
+        data: { institution_details, resources }
       } = await this.$http.get(`/api/institutions/enroll/${this.id}`);
       this.institutionDetails = institution_details;
+      this.resources = resources;
     },
     async handleAdoptClick(isAdopted) {
       await this.$http.post(`/api/institutions/enroll/handle/${this.id}`, {
@@ -99,6 +109,15 @@ export default {
       this.$router.push({
         path: "/root-admin/audit-pending-list"
       });
+    }
+  },
+  computed: {
+    details: function() {
+      if (!this.institutionDetails) return "";
+      const {
+        address: { country_name, province_name, city_name }
+      } = this.institutionDetails;
+      return `${country_name} ${province_name} ${city_name}`;
     }
   }
 };
