@@ -5,6 +5,8 @@ import Login from "@/pages/index/Login";
 import Register from "@/pages/index/Register";
 import Organization from "@/pages/organization/Organization";
 import OrganizationIndex from "@/pages/organization/index";
+import CoursesIndex from "@/pages/courses/index";
+import CoursesForm from "@/pages/courses/CoursesForm";
 import Home from "@/pages/index/Home";
 import store from '@/store'
 import {checkUserLogin, getUserInfo} from "../api/user";
@@ -26,7 +28,12 @@ const routes = [
             {path: 'organization/', component: OrganizationIndex, children: [
                     {path: '', component: Organization},
                     {path: 'register', component: OrganizationRegister}
-                ]}
+                ]},
+            {
+                path: 'courses/', component: CoursesIndex, children: [
+                    {path: 'form',component: CoursesForm }
+                ]
+            }
         ]
     },
     {

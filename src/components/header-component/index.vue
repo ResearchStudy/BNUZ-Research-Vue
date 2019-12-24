@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="right" style="margin-right: 10px">
-            <button style="margin-right: 30px" v-if="role === 8">我要发布</button>
+            <button style="margin-right: 30px" v-if="role === 8" @click="$router.push({path: '/courses/form'})">我要发布</button>
             <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
             <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
             <a v-if="isLogin" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>

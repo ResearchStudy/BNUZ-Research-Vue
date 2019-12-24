@@ -28,7 +28,7 @@
 </template>
 
 <script>
-    import {register} from '@/api/user'
+    import {register, login} from '@/api/user'
 
     export default {
         name: "Register",
@@ -58,6 +58,15 @@
                         type: 'success',
                         isSingle: true
                     });
+                    const loginInfo = {
+                        key: this.form.key,
+                        password: this.form.password,
+                        remember: true
+                    };
+                    login(loginInfo).then((res) => {
+                        localStorage.setItem("id", res.id)
+                        this.$router.push({path: "/"})
+                    })
                 })
             },
             dispatchSubmit() {
