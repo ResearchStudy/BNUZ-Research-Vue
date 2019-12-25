@@ -19,5 +19,8 @@ html, body, #app{
 body {
   margin: 0px !important;
 }
+.ql-container.ql-snow{
+  min-height: 180px;
+}
 
 </style>
