@@ -1,6 +1,6 @@
 module.exports = {
   devServer: {
-    host: 'api.shoogoome.com',
+    host: 'frontend.shoogoome.com',
     port: 8080,
     proxy: {
       '/api': {
@@ -11,4 +11,4 @@ module.exports = {
       }
     }
   }
-}
+};
