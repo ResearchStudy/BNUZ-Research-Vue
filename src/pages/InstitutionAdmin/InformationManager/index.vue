@@ -7,7 +7,9 @@
     </el-breadcrumb>
     <div class="information-list__wrap">
       <div class="information-list__header">
-        <el-button type="primary" @click="handleMultiAdoptClick(true)">发布新资讯</el-button>
+
+
+        <el-button type="primary" @click="naviateToPublish()">发布新资讯</el-button>
 
         <div class="search-input">
           <el-input
@@ -162,6 +164,11 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
+
+    naviateToPublish(){
+      this.$router.push({path: '/insitution-admin/publishInformation'})
+    },
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
