@@ -5,7 +5,6 @@
         <h1>发布课程</h1>
         <el-divider></el-divider>
       </div>
-      <div  v-if="activeName === 'first'">
         <el-form :model="form" ref="form" label-width="100px">
           <el-form-item label="课程名称">
             <el-input v-model="form.title"></el-input>
@@ -13,11 +12,28 @@
           <el-form-item label="课程子标题">
             <el-input v-model="form.subtitle"></el-input>
           </el-form-item>
-          <el-form-item label="课程类型">
-            <el-input v-model="form.course_type"></el-input>
-          </el-form-item>
           <el-form-item label="适合人群">
             <el-input v-model="form.suitable_for_crowd"></el-input>
+          </el-form-item>
+          <el-form-item label="课程类型">
+            <el-select v-model="form.course_type" placeholder="请选择">
+              <el-option
+                      v-for="item in courseType"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="课程时间">
+            <el-date-picker
+                    v-model="form.date"
+                    type="daterange"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+            </el-date-picker>
           </el-form-item>
           <el-form-item label="课程封面">
             <el-upload
@@ -59,34 +75,46 @@
                           ref="myQuillEditor" class="warrper">
             </quill-editor>
           </div>
-          <div style="display: flex;justify-content: center;margin-top: 20px">
-            <el-button type="primary" @click="navigateToSecond()">立即创建</el-button>
-          </div>
         </el-form>
-      </div>
-      <div v-else>
-        <el-tabs v-model="activeName">
+        <el-tabs v-model="activeName" style="margin-top: 30px">
           <el-tab-pane label="行程安排" name="second">
             <div >
-              <quill-editor v-model="form.details"
+              <quill-editor v-model="form.scheduling"
                             ref="myQuillEditor" class="warrper">
               </quill-editor>
             </div>
+
           </el-tab-pane>
           <el-tab-pane label="开营时间" name="third">
-            <div>
+            <div v-for="term in form.term" :key="term.title">
               <el-row>
+                <el-col :span="2"><h3>{{term.title}}</h3></el-col>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-col :span="2">计划人数</el-col>
+                <el-col :span="22">
+                  <el-input type="number" v-model="term.planned"></el-input>
+                </el-col>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-col :span="2">价格</el-col>
+                <el-col :span="22">
+                  <el-input type="number" v-model="term.price"></el-input>
+                </el-col>
+              </el-row>
+              <el-row style="margin-top: 15px">
                 <el-col :span="2">活动时间</el-col>
                 <el-col :span="22">
                   <el-date-picker
-                        v-model="value1"
+                        v-model="term.date"
                         type="daterange"
+                        unlink-panels
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
                 </el-date-picker></el-col>
               </el-row>
-              <el-row>
+              <el-row style="margin-top: 15px">
                 <el-col :span="2">
                   备注
                 </el-col>
@@ -95,51 +123,91 @@
                           type="textarea"
                           :rows="3"
                           placeholder="请输入内容"
-                          v-model="textarea">
+                          v-model="term.remarks">
                   </el-input>
                 </el-col>
               </el-row>
             </div>
+            <div style="text-align: right;margin-top: 15px">
+              <el-button plain @click="newTerm()">新增学期</el-button>
+            </div>
           </el-tab-pane>
           <el-tab-pane label="研学服务" name="fourth">
-            <div >
-              <quill-editor v-model="form.details"
+            <div>
+              <quill-editor v-model="form.notice"
                             ref="myQuillEditor" class="warrper">
               </quill-editor>
             </div>
+            <div>
+              <el-button @click="submit()" type="primary">立即创建</el-button>
+            </div>
           </el-tab-pane>
         </el-tabs>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-    import {getAddressById} from "../../api/address";
-
+    import {getAddressById, saveAddress} from "../../api/address";
+    import {saveCourses} from "../../api/courses";
     export default {
         name: "CoursesForm",
         data() {
             return {
-                activeName: 'first',
-                value1: '',
-                textarea: '',
+                activeName: 'second',
                 form: {
                     title: '',
                     subtitle: '',
                     course_type: '',
                     cover: '',
                     description: '',
+                    scheduling: '',
                     details: '',
                     suitable_for_crowd: '',
+                    address_id: '',
+                    start_time: '',
+                    end_time: '',
+                    date: '',
+                    notice: '',
                     address: {
                         province_id: '',
-                        city_id: ''
+                        city_id: '',
+                        country_id: 1
                     },
+                    term:[
+                        {
+                            title: '第1期',
+                            planned: 0,
+                            price: 0,
+                            start_time: '',
+                            end_time: '',
+                            remarks: '',
+                            date: '',
+                        }
+                    ]
                 },
                 provinceList: [],
-                cityList: []
+                cityList: [],
+                courseType: [{
+                    value: 1,
+                    label: "知识科普"
+                },{
+                    value: 2,
+                    label: "自然观赏"
+                },{
+                    value: 4,
+                    label: "体验考察"
+                },{
+                    value: 8,
+                    label: "励志拓展"
+                },{
+                    value: 16,
+                    label: "文化康乐"
+                }]
             };
+        },
+        mounted(){
+            this.getProvinceList();
         },
         methods: {
             async handleAvatarUpload({file}) {
@@ -203,8 +271,42 @@
                 });
                 this.cityList = result.address;
             },
-            navigateToSecond(){
-                this.activeName = 'second'
+            newTerm(){
+                const result = this.form.term;
+                const text = result[result.length - 1].title;
+                const number = parseInt(text.substring(1, text.length - 1)) + 1
+                const lastTitle = `第${number}期`
+                result.push({
+                    title: lastTitle,
+                    planned: 0,
+                    price: 0,
+                    start_time: '',
+                    end_time: ''
+                })
+                this.form.term = result
+            },
+            submit(){
+                this.form.start_time = new Date(this.form.date[0]).getTime()/1000
+                this.form.end_time = new Date(this.form.date[1]).getTime()/1000
+                const term  = this.form.term
+                const termMapping = term.map((term) => {
+                    return {
+                        ...term,
+                        planned: parseInt(term.planned),
+                        price: parseInt(term.price),
+                        start_time: new Date(term.date[0]).getTime()/1000,
+                        end_time: new Date(term.date[1]).getTime()/1000,
+                    }
+                });
+                this.form.term = termMapping
+                saveAddress(this.form.address).then((res) => {
+                    this.form.address_id = res.id
+                    this.form.course_type = 1
+                    this.form.price = 0
+                    saveCourses(this.form).then((res) => {
+                        console.log(res)
+                    })
+                })
             }
         }
     }
@@ -219,7 +321,7 @@
     overflow: hidden;
     width: 70px;
   }
-  
+
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
@@ -228,7 +330,7 @@
     line-height: 70px;
     text-align: center;
   }
-  
+
   .avatar {
     width: 70px;
     height: 70px;
