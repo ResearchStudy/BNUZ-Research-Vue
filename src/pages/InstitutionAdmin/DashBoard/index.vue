@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <div class="institution-admin-dashboard__main">
       <div class="institution-admin-dashboard__wrap">
-        <div class="institution-admin-dashboard__title">基本资料</div>
+        <div class="institution-admin-dashboard__title">基本资料111</div>
         <el-form
           ref="institutionDetails"
           :model="institutionDetails"
