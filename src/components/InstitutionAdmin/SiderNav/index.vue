@@ -26,7 +26,7 @@
         <el-menu-item index="2-1">发布新课程</el-menu-item>
         <el-menu-item index="2-2">已发布课程</el-menu-item>
         <el-menu-item index="2-3">发布新资讯</el-menu-item>
-        <el-menu-item index="2-4">已发布资讯</el-menu-item>
+        <el-menu-item index="/insitution-admin/informationManager">已发布资讯</el-menu-item>
         <el-menu-item index="2-5">附件管理</el-menu-item>
         <el-menu-item index="2-5">标签管理</el-menu-item>
         <el-menu-item index="2-5">课程评论管理</el-menu-item>

@@ -185,6 +185,7 @@
   </div>
 </template>
 
+
 <script>
 import ruleList from "./validate";
 export default {
