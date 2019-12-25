@@ -3,7 +3,7 @@ import { Message } from 'element-ui'
 
 const service = axios.create({
     baseURL: '/api',
-    timeout: 5000
+    timeout: 50000
 })
 
 // request interceptor

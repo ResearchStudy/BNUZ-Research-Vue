@@ -10,3 +10,27 @@ export function saveCourses(data) {
         data: data
     })
 }
+
+export function getCoursesById(id) {
+    return request({
+        url: `${prefix}/${id}`,
+        method: 'get'
+    })
+}
+
+
+export function getTermByCoursesId(id) {
+    return request({
+        url: `${prefix}/${id}/terms`,
+        method: 'get'
+    })
+}
+
+export function preEnroll(id, data) {
+    return request({
+        url: `${prefix}/${id}/pre_enroll`,
+        method: 'post',
+        data: data
+    })
+}
+
