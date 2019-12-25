@@ -1,8 +1,8 @@
 <template>
   <el-menu
-    default-active="1"
     class="sider-nav__container"
     :unique-opened="true"
+    :default-openeds="['1', '2', '3', '4' ]"
     router
   >
     <el-submenu index="1">

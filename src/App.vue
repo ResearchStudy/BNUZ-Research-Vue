@@ -23,4 +23,8 @@ body {
   min-height: 180px;
 }
 
+.el-main{
+  background-color: white !important;
+}
+
 </style>

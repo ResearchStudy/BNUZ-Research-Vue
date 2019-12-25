@@ -49,7 +49,7 @@
 
 
           <el-table-column prop="author" label="发布者"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.author_id}}</template>
+            <template slot-scope="scope">{{scope.row.author_name}}</template>
           </el-table-column>
 
           <el-table-column prop="updateTime" label="更新时间" width="100" align="center" show-overflow-tooltip>

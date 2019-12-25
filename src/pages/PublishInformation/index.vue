@@ -1,363 +1,126 @@
 <template>
-  <div class="institution-admin-dashboard__container">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>内容中心</el-breadcrumb-item>
-      <el-breadcrumb-item>资讯管理</el-breadcrumb-item>
-    </el-breadcrumb>
-
-    <div class="institution-admin-dashboard__main">
-      <div class="institution-admin-dashboard__wrap">
-        <div class="institution-admin-dashboard__title">发布资讯11</div>
-
-        <el-form
-                ref="institutionDetails"
-                :model="institutionDetails"
-                :rules="rules"
-                label-width="120px"
-                label-suffix=":"
-        >
-          <el-form-item label="企业名称" prop="name">
-            <div class="content">
-              <el-input v-model="institutionDetails.name"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="企业注册号" prop="tax_id">
-            <div class="content">
-              <el-input v-model="institutionDetails.tax_id"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="企业类型" prop="institution_type">
-            <div class="content">
-              <el-input v-model="institutionDetails.institution_type"></el-input>
-            </div>
-          </el-form-item>
-          <div style="display:flex">
-            <el-form-item label="省份" style="width:50%">
-              <div class="content">
-                <el-select
-                        v-model="institutionDetails.province_id"
-                        placeholder="请选择省份"
-                        filterable
-                        @change="handleProvinceChange"
-                        value-key="id"
-                >
-                  <el-option
-                          v-for="item in provinceList"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                  ></el-option>
-                </el-select>
-              </div>
-            </el-form-item>
-            <el-form-item label="城市" style="width:50%">
-              <div class="content">
-                <el-select
-                        v-model="institutionDetails.city_id"
-                        filterable
-                        value-key="id"
-                        placeholder="请选择城市"
-                >
-                  <el-option
-                          v-for="item in cityList"
-                          :key="item.id"
-                          :label="item.name"
-                          :value="item.id"
-                  ></el-option>
-                </el-select>
-              </div>
-            </el-form-item>
-          </div>
-          <el-form-item label="详细地址" prop="details">
-            <div class="content">
-              <el-input v-model="institutionDetails.details"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="法定代表人" prop="legal_person">
-            <div class="content">
-              <el-input v-model="institutionDetails.legal_person"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="成立时间">
-            <div class="content">
-              <el-date-picker
-                      type="date"
-                      v-model="institutionDetails.establish_time"
-                      placeholder="成立时间"
-                      value-format="timestamp"
-                      style="width: 100%;"
-                      :clearable="false"
-                      :editable="false"
-              ></el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="注册资金" prop="registered_money">
-            <div class="content">
-              <el-input v-model="institutionDetails.registered_money"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="营业期限">
-            <div class="content">
-              <el-date-picker
-                      style="width:100%"
-                      unlink-panels
-                      v-model="institutionDetails.timeRange"
-                      value-format="timestamp"
-                      type="daterange"
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      :clearable="false"
-                      :editable="false"
-              ></el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="登记机关" prop="registration_authority">
-            <div class="content">
-              <el-input v-model="institutionDetails.registration_authority"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="核准时间">
-            <div class="content">
-              <el-date-picker
-                      type="date"
-                      v-model="institutionDetails.approval_time"
-                      value-format="timestamp"
-                      placeholder="核准时间"
-                      style="width: 100%;"
-                      :clearable="false"
-                      :editable="false"
-              ></el-date-picker>
-            </div>
-          </el-form-item>
-          <el-form-item label="联系电话" prop="phone">
-            <div class="content">
-              <el-input v-model="institutionDetails.phone"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="经营范围" prop="business_scope">
-            <div class="content">
-              <el-input type="textarea" v-model="institutionDetails.business_scope"></el-input>
-            </div>
-          </el-form-item>
-          <el-form-item label="头像">
-            <div class="content">
-              <el-upload
-                      class="avatar-uploader"
-                      action="https://jsonplaceholder.typicode.com/posts/"
-                      :show-file-list="false"
-                      :before-upload="beforeAvatarUpload"
-                      :http-request="handleAvatarUpload"
-              >
-                <img
-                        v-if="institutionDetails.imageUrl"
-                        :src="institutionDetails.imageUrl"
-                        class="avatar"
-                />
-                <i v-if="!institutionDetails.imageUrl" class="el-icon-plus avatar-uploader-icon"></i>
-              </el-upload>
-            </div>
-          </el-form-item>
-          <el-form-item label="更多发票信息">
-            <div class="content">
-              <el-switch v-model="isMore" active-color="#409EFF" inactive-color="#d7d7d7"></el-switch>
-            </div>
-          </el-form-item>
-          <div v-if="isMore">
-            <el-form-item label="发票抬头" prop="invoice_rise">
-              <div class="content">
-                <el-input v-model="institutionDetails.invoice_rise"></el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="纳税人识别号" prop="taxpayer_distinguish">
-              <div class="content">
-                <el-input v-model="institutionDetails.taxpayer_distinguish"></el-input>
-              </div>
-            </el-form-item>
-          </div>
-          <el-form-item>
-            <div class="content">
-              <el-button type="primary" @click="handleSaveClick('institutionDetails')">保存</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
+  <div style="padding: 50px">
+    <div style="width: 80%;margin-left: 10%">
+      <div>
+        <h1>发布资讯</h1>
+        <el-divider></el-divider>
       </div>
+      <el-form :model="form" ref="form" label-width="80px">
+        <el-form-item label="标题">
+          <el-input v-model="form.title"></el-input>
+        </el-form-item>
+
+        <el-row>
+          <el-col span="8">
+            <el-form-item label="类型">
+              <el-select v-model="form.information_type" placeholder="请选择">
+                <el-option
+                        v-for="item in information_type"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col span="8">
+            <el-form-item label="发布时间">
+              <div class="content">
+                <el-date-picker
+                        type="date"
+                        v-model="form.establish_time"
+                        placeholder="发布时间"
+                        value-format="timestamp"
+                        style="width: 220px"
+                        :clearable="false"
+                        :editable="false"
+                ></el-date-picker>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
+        <el-form-item label="封面">
+          <el-upload
+                  class="avatar-uploader"
+                  action="#"
+                  :show-file-list="false"
+                  :before-upload="beforeAvatarUpload"
+                  :http-request="handleAvatarUpload"
+          >
+            <img
+                    v-if="form.cover"
+                    :src="form.cover"
+                    class="avatar"
+            />
+            <i v-if="!form.cover" class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+        </el-form-item>
+
+          <el-form-item label="摘要">
+            <el-input
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="form.abstract"
+                    >
+            </el-input>
+          </el-form-item>
+
+        <el-form-item label="详情">
+          <div >
+            <quill-editor v-model="form.content"
+                          ref="myQuillEditor" class="warrper">
+            </quill-editor>
+          </div>
+        </el-form-item>
+         <el-form-item>
+          <div >
+            <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即发布</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
     </div>
   </div>
 </template>
 
 
 <script>
-  import ruleList from "./validate";
+
+  import {saveInformation} from "../../api/information";
+
   export default {
-    name: "InsitutionAdminDashBoard",
+    name: "InformationForm",
     data() {
       return {
-        institutionId: -1,
-        isMore: false,
-        isUploaded: false,
-        institutionDetails: {},
-        provinceList: [],
-        cityList: [],
-        addressList: [],
-        preProvinceId: -1,
-        preCityId: -1,
-        preImageUrl: "",
-        preDetails: "",
-        rules: ruleList
+        fullscreenLoading: false,
+        form: {
+          title: '',
+          information_type: '',
+          cover: '',
+          abstract: '',
+          publist_time:'',
+          content: ''
+          },
+
+        information_type: [{
+          value: 1,
+          label: "行业资讯"
+        },{
+          value: 2,
+          label: "研学政策"
+        }]
       };
     },
-    async mounted() {
-      await this.getInstitutionInfo();
+
+    mounted(){
+      this.getProvinceList();
     },
     methods: {
-      async getInstitutionInfo() {
-        const {
-          data: { institution_details, id }
-        } = await this.$http.get(`/api/institutions/me`);
-        const {
-          establish_time,
-          approval_time,
-          business_license_start_time,
-          business_license_ent_time,
-          logo,
-          address: { details, province_name, city_name }
-        } = institution_details;
-        this.institutionId = id;
-
-        await this.getProvinceList();
-        const provinceId = this.provinceList.filter(
-                province => province.name === province_name
-        )[0].id;
-        await this.getCityList(provinceId);
-        const cityId = this.cityList.filter(city => city.name === city_name)[0]
-                .id;
-
-        this.preProvinceId = provinceId;
-        this.preCityId = cityId;
-        this.preDetails = details;
-        this.institutionDetails = {
-          ...institution_details,
-          establish_time: establish_time * 1000,
-          approval_time: approval_time * 1000,
-          details,
-          province_id: provinceId,
-          city_id: cityId,
-          timeRange: [
-            business_license_start_time * 1000,
-            business_license_ent_time * 1000
-          ],
-          imageUrl: "/api/resources/" + logo
-        };
-        this.preImageUrl = await this.getPreImageInfo();
-      },
-      handleSaveClick(formName) {
-        this.$refs[formName].validate(async valid => {
-          if (valid) {
-            const [
-              business_license_start_time,
-              business_license_ent_time
-            ] = this.institutionDetails.timeRange;
-            const {
-              name,
-              invoice_rise,
-              approval_time,
-              taxpayer_distinguish,
-              phone,
-              institution_type,
-              establish_time,
-              legal_person,
-              registered_money,
-              registration_authority,
-              business_scope,
-              province_id,
-              city_id,
-              details,
-              imageUrl,
-              tax_id
-            } = this.institutionDetails;
-
-            const isAddressChange =
-                    this.preProvinceId !== province_id ||
-                    this.preCityId !== city_id ||
-                    this.preDetails !== details;
-
-            if (isAddressChange) {
-              const {
-                data: { id: newAddressId }
-              } = await this.$http.post("/api/address", {
-                country_id: 1,
-                province_id,
-                city_id,
-                details
-              });
-              this.institutionDetails.address_id = newAddressId;
-            }
-
-            const logoInfo = {
-              logo: this.isUploaded ? imageUrl : this.preImageUrl
-            };
-
-            await this.$http.put(`/api/institutions/${this.institutionId}`, {
-              name,
-              invoice_rise,
-              taxpayer_distinguish,
-              phone,
-              address_id: this.institutionDetails.address_id,
-              approval_time: approval_time / 1000,
-              business_license_start_time: business_license_start_time / 1000,
-              business_license_ent_time: business_license_ent_time / 1000,
-              institution_type,
-              establish_time: establish_time / 1000,
-              legal_person,
-              registered_money: parseFloat(registered_money),
-              registration_authority,
-              business_scope,
-              province_id,
-              city_id,
-              ...logoInfo,
-              tax_id,
-              details
-            });
-            this.$message({
-              type: "success",
-              message: "修改成功"
-            });
-          } else {
-            this.$message({
-              type: "error",
-              message: "请按要求完成表格"
-            });
-            return false;
-          }
-        });
-      },
-      async getProvinceList() {
-        const {
-          data: { address: provinceList }
-        } = await this.$http.get("/api/address/list", {
-          target: 2
-        });
-        this.provinceList = provinceList;
-      },
-      async getCityList(provinceId) {
-        const {
-          data: { address: cityList }
-        } = await this.$http.get("/api/address/list", {
-          target: 3,
-          parent: provinceId
-        });
-        this.cityList = cityList;
-      },
-      async handleProvinceChange(provinceId) {
-        this.institutionDetails.province_id = provinceId;
-        await this.getCityList(provinceId);
-        this.institutionDetails.city_id = this.cityList[0].id;
-      },
-      async handleAvatarUpload({ file }) {
-        this.isUploaded = true;
-        this.institutionDetails.imageUrl = await this.getImageInfo(file);
+      async handleAvatarUpload({file}) {
+        this.form.cover = await this.getImageInfo(file);
       },
       getPreImageInfo() {
         return new Promise(async resolve => {
@@ -404,55 +167,52 @@
           });
         }
         return (isJPG || isPNG) && isLt2M;
+      },
+
+
+
+      submit(){
+        this.form.publist_time = new Date(this.form.publist_time).getTime() / 1000
+        this.fullscreenLoading = true
+        saveInformation(this.form).then(() => {
+          this.fullscreenLoading = false
+          this.$message({
+            message: '发布成功',
+            type: 'success'
+          });
+          this.$router.push({path: '/insitution-admin/informationManager'})
+        })
+
       }
     }
-  };
+  }
 </script>
 
-<style lang="scss" scoped>
-  @import "./recover.scss";
+<style scoped>
+  .avatar-uploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 70px;
+  }
 
-  .institution-admin-dashboard {
-    &__title {
-      margin-bottom: 30px;
-      color: #333;
-      font-size: 32px;
-      font-weight: bold;
-      text-align: center;
-      letter-spacing: 8px;
-    }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+  }
 
-    &__main {
-      background: #fff;
-    }
-
-    &__wrap {
-      width: 70%;
-      margin-top: 20px;
-      padding: 10px;
-
-      .content {
-        margin-left: 30px;
-        color: #666;
-
-        .upload-progress {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 178px;
-          height: 178px;
-        }
-      }
-
-      .logo {
-        width: 50%;
-        height: 300px;
-        margin-top: 13px;
-        margin-left: 30px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-      }
-    }
+  .avatar {
+    width: 70px;
+    height: 70px;
+    display: block;
+  }
+  .ql-container.ql-snow{
+    min-height: 180px;
   }
 </style>
