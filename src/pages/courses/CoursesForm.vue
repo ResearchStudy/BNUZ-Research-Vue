@@ -139,7 +139,7 @@
               </quill-editor>
             </div>
             <div>
-              <el-button @click="submit()" type="primary">立即创建</el-button>
+              <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即创建</el-button>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -155,6 +155,7 @@
         data() {
             return {
                 activeName: 'second',
+                fullscreenLoading: false,
                 form: {
                     title: '',
                     subtitle: '',
@@ -300,13 +301,22 @@
                 });
                 this.form.term = termMapping
                 saveAddress(this.form.address).then((res) => {
+                    this.fullscreenLoading = true
                     this.form.address_id = res.id
                     this.form.course_type = 1
                     this.form.price = 0
-                    saveCourses(this.form).then((res) => {
-                        console.log(res)
+                    saveCourses(this.form).then(() => {
+                        this.fullscreenLoading = false
+                        this.$message({
+                            showClose: true,
+                            message: `创建课程成功！`,
+                            type: 'success',
+                            isSingle: true,
+                            duration: 5000
+                        });
                     })
                 })
+                this.fullscreenLoading = false
             }
         }
     }
