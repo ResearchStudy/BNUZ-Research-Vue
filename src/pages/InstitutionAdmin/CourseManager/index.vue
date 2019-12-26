@@ -3,13 +3,13 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
-      <el-breadcrumb-item>资讯管理</el-breadcrumb-item>
+      <el-breadcrumb-item>课程管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="information-list__wrap">
       <div class="information-list__header">
 
 
-        <el-button type="primary" @click="naviateToPublish()">发布新资讯</el-button>
+        <el-button type="primary" @click="naviateToPublish()">发布新课程</el-button>
 
         <div class="search-input">
           <el-input
@@ -48,29 +48,29 @@
           </el-table-column>
 
 
-          <el-table-column prop="author" label="发布者"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.author_name}}</template>
+          <el-table-column prop="type" label="类型"  width="100" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.course_type}}</template>
           </el-table-column>
 
-          <el-table-column prop="updateTime" label="更新时间" width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{new Date(scope.row.update_time*1000).toLocaleDateString()}}</template>
+          <el-table-column prop="travelDays" label="行程天数" width="100" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.travel_days}}</template>
           </el-table-column>
 
           <el-table-column
-            prop="status"
-            label="状态"
-            width="60"
+            prop="suitableForCrowd"
+            label="适合人群"
+            width="100"
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">{{scope.row.status}}</template>
+            <template slot-scope="scope">{{scope.row.suitable_for_crowd}}</template>
 
 
           </el-table-column>
-          <el-table-column prop="abstract" label="摘要" align="center" show-overflow-tooltip>
+          <el-table-column prop="desc" label="课程描述" align="center" show-overflow-tooltip>
             <template
               slot-scope="scope"
-            >{{scope.row.abstract}}</template>
+            >{{scope.row.description}}</template>
           </el-table-column>
 
 
@@ -105,7 +105,7 @@
 
 <script>
 export default {
-  name: "InformationList",
+  name: "CourseList",
   data() {
     return {
       searchValue: "",
@@ -118,32 +118,32 @@ export default {
     };
   },
   async mounted() {
-    await this.getInformationList();
+    await this.getCourseList();
   },
   methods: {
-    async getInformationList() {
+    async getCourseList() {
       const {
-        data: { informations, total }
-      } = await this.$http.get("/api/information/list", {
+        data: { courses, total }
+      } = await this.$http.get("/api/courses/list", {
         limit: "10",
         page: this.currentPage + "",
         title:"",
         attribute:"",
         status:"",
-        information_type: ""
+        course_type: ""
       });
 
 
-      const idList = informations.map(infors => infors.id);
+      const idList = courses.map(infors => infors.id);
 
-      const { data: informationList } = await this.$http.post(
-        "/api/information/_mget",
+      const { data: courseList } = await this.$http.post(
+        "/api/courses/_mget",
         {
           ids: idList
         }
       );
 
-      this.currentTableData = informationList;
+      this.currentTableData = courseList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
     },
@@ -166,7 +166,7 @@ export default {
     },
 
     naviateToPublish(){
-      this.$router.push({path: '/insitution-admin/publishInformation'})
+      this.$router.push({path: '/courses/form'})
     },
 
     handleSelectionChange(val) {
@@ -174,7 +174,7 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
-      await this.getAuditPendingList();
+      await this.getCourseList();
     },
     handleSearchChange(val) {
       this.searchValue = val;
