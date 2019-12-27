@@ -19,7 +19,6 @@
         >
         <el-form-item
             label="当前手机号码"
-           
           >
             <el-label
               v-model="form.current_phone"
@@ -118,7 +117,7 @@ export default {
 
       rules: {
         password : [
-          {required : true , message : "邮箱不能为空" , trigger: "blur" },
+          {required : true , message : "密码不能为空" , trigger: "blur" },
         ],
         phone : [
           { required: true, message: "电话不能为空", trigger: "blur" },
@@ -151,19 +150,12 @@ export default {
         await this.$http.get('/api/accounts/' + this.form.id).then(res => {
             console.log(res.data)
             this.form.current_phone = res.data.phone
+            console.log(this.form.current_phone)
         })
     },
-    
-
- 
-
-
-
-
   }
 };
 </script>
-
 <style lang="scss" scoped>
 .reset-phone {
   &__header {
@@ -187,8 +179,6 @@ export default {
     text-align: center;
     margin-bottom: 3%;
   }
-
-
   &_avatar {
     float: right;
     margin-top: 7%;
