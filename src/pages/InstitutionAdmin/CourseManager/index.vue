@@ -47,6 +47,9 @@
             </template>
           </el-table-column>
 
+          <el-table-column prop="type" label="id"  width="100" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.id}}</template>
+          </el-table-column>
 
           <el-table-column prop="type" label="类型"  width="100" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.course_type}}</template>
@@ -166,6 +169,7 @@ export default {
     },
 
     async handleDeleteCourse(id) {
+
       await this.$http.delete(`/api/courses/${id}`);
       await this.getCourseList();
       this.$message({

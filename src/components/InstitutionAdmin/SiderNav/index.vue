@@ -38,6 +38,7 @@
         <span>用户中心</span>
       </template>
       <el-menu-item-group>
+        <el-menu-item index="/insitution-admin/preEnrollStudent">预报名学生</el-menu-item>
         <el-menu-item index="/root-admin/accounts">已报名学生</el-menu-item>
         <el-menu-item index="/root-admin/accounts">批量报名</el-menu-item>
         <el-menu-item index="/root-admin/accounts">退款申请</el-menu-item>
