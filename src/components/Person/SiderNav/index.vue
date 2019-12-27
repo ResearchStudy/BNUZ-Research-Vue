@@ -14,7 +14,7 @@
         <el-menu-item-group>
         <el-menu-item index="/person/dashboard">基本资料</el-menu-item>
         <el-menu-item index="/person/reset-pwd">修改密码</el-menu-item>
-        <el-menu-item index="1-3">修改手机号</el-menu-item>
+        <el-menu-item index="/person/reset-phone">修改手机号</el-menu-item>
         <el-menu-item index="1-4">联系地址</el-menu-item>
         <el-menu-item index="1-5">第三方账号绑定</el-menu-item>
         </el-menu-item-group>
