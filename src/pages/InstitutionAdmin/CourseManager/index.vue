@@ -80,7 +80,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleAdoptClick(scope.row.id, false)"
+                @click="handleDeleteCourse(scope.row.id)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -164,6 +164,18 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
+
+    async handleDeleteCourse(id) {
+      await this.$http.delete(`/api/courses/${id}`);
+      await this.getCourseList();
+      this.$message({
+        type: "success",
+        message: "删除成功！",
+        isSingle: true
+      });
+      this.handleCurrentPageChange(this.currentPage);
+    },
+
 
     naviateToPublish(){
       this.$router.push({path: '/courses/form'})
