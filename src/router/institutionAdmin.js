@@ -3,6 +3,7 @@ import DashBoard from '@/pages/InstitutionAdmin/DashBoard/index'
 import InformationManager from '@/pages/InstitutionAdmin/InformationManager/index'
 import PublishInformation from '@/pages/PublishInformation/index'
 import InformationDetail from '@/pages/InstitutionAdmin/InformationDetail/index'
+import UpdateInformation from '@/pages/UpdateInformation/index'
 import CourseManager from '@/pages/InstitutionAdmin/CourseManager/index'
 
 
@@ -14,6 +15,7 @@ const institutionAdminRoutes = [
       { path: 'informationManager', component: InformationManager },
       { path: 'publishInformation', component: PublishInformation },
       { path: 'information-list/:id', component: InformationDetail },
+      { path: 'information-update/:id', component: UpdateInformation },
       { path: 'courseManager', component: CourseManager },
     ]
   }

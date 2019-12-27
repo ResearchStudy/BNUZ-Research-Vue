@@ -201,19 +201,9 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleUpdateClick(id) {
-      await this.$http.put(`/api/information/${id}`, {
+      this.$router.push({path: '/insitution-admin/information-update/'+id})
 
-        reply: "没有回复哦"
-      });
-      if ((this.totalTagsCount - 1) % 10 === 0) {
-        this.currentPage -= 1;
-      }
-      await this.getAuditPendingList();
-      this.$message({
-        type: "success",
-        message: "处理成功！",
-        isSingle: true
-      });
+
     },
     async handleMultiAdoptClick(isAdopted) {
       const handleIdList = this.multipleSelection.map(

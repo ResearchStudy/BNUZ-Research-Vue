@@ -2,18 +2,19 @@
   <div style="padding: 50px">
     <div style="width: 80%;margin-left: 10%">
       <div>
-        <h1>修改资讯</h1>
+        <h1 align="center">修改资讯</h1>
         <el-divider></el-divider>
       </div>
       <el-form :model="form" ref="form" label-width="80px">
         <el-form-item label="标题">
-          <el-input v-model="form.title"></el-input>
+          <el-input v-model="info.title" > </el-input>
         </el-form-item>
 
         <el-row>
+
           <el-col span="8">
             <el-form-item label="类型">
-              <el-select v-model="form.information_type" placeholder="请选择">
+              <el-select v-model="info.information_type" placeholder="请选择">
                 <el-option
                         v-for="item in information_type"
                         :key="item.value"
@@ -29,7 +30,7 @@
               <div class="content">
                 <el-date-picker
                         type="date"
-                        v-model="form.establish_time"
+                        v-model="info.update_time"
                         placeholder="发布时间"
                         value-format="timestamp"
                         style="width: 220px"
@@ -45,18 +46,22 @@
         <el-form-item label="封面">
           <el-upload
                   class="avatar-uploader"
-                  action="#"
+                  action="https://jsonplaceholder.typicode.com/posts/"
                   :show-file-list="false"
                   :before-upload="beforeAvatarUpload"
                   :http-request="handleAvatarUpload"
           >
             <img
-                    v-if="form.cover"
-                    :src="form.cover"
+                    v-if="info.src"
+                    :src="info.src"
                     class="avatar"
             />
-            <i v-if="!form.cover" class="el-icon-plus avatar-uploader-icon"></i>
+            <i
+                    v-else
+                    class="el-icon-plus base-data_avatar-uploader-icon"
+            ></i>
           </el-upload>
+
         </el-form-item>
 
           <el-form-item label="摘要">
@@ -64,21 +69,21 @@
                     type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="form.abstract"
+                    v-model="info.abstract"
                     >
             </el-input>
           </el-form-item>
 
         <el-form-item label="详情">
           <div >
-            <quill-editor v-model="form.content"
+            <quill-editor v-model="info.content"
                           ref="myQuillEditor" class="warrper">
             </quill-editor>
           </div>
         </el-form-item>
          <el-form-item>
           <div >
-            <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即发布</el-button>
+            <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -89,12 +94,13 @@
 
 <script>
 
-  import {saveInformation} from "../../api/information";
+  import {saveInformation,getInformationById} from "../../api/information";
 
   export default {
     name: "InformationForm",
     data() {
       return {
+        imageUrl:"",
         fullscreenLoading: false,
         form: {
           title: '',
@@ -104,7 +110,7 @@
           publist_time:'',
           content: ''
           },
-
+        info: {},
         information_type: [{
           value: 1,
           label: "行业资讯"
@@ -116,12 +122,22 @@
     },
 
     mounted(){
-      this.getProvinceList();
+      this.getInformationInfo();
     },
     methods: {
-      async handleAvatarUpload({file}) {
-        this.form.cover = await this.getImageInfo(file);
+      async getInformationInfo(){
+        this.info = await getInformationById(this.$route.params.id);
+        this.info.src = `/api/resources/${this.info.cover}`
+        this.info.startTime = new Date(this.info.start_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.start_time * 1000).getMonth() + 1
+        this.info.endTime = new Date(this.info.end_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.end_time * 1000).getMonth() + 1
       },
+
+      async handleAvatarUpload({file}) {
+        this.info.src = await this.getImageInfo(file);
+
+      },
+
+
       getPreImageInfo() {
         return new Promise(async resolve => {
           const canvas = document.createElement("canvas");
@@ -140,6 +156,7 @@
           };
         });
       },
+
       getImageInfo(file) {
         return new Promise(async resolve => {
           const reader = new FileReader();
@@ -149,6 +166,7 @@
           };
         });
       },
+
       beforeAvatarUpload(file) {
         const isJPG = file.type === "image/jpeg";
         const isPNG = file.type === "image/png";
@@ -177,7 +195,7 @@
         saveInformation(this.form).then(() => {
           this.fullscreenLoading = false
           this.$message({
-            message: '发布成功',
+            message: '保存成功',
             type: 'success'
           });
           this.$router.push({path: '/insitution-admin/informationManager'})
