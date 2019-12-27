@@ -22,8 +22,8 @@
           >
             <el-label
               v-model="form.current_phone"
-              style="margin-bottom:20px;"
-            ></el-label>
+              style="margin-bottom:20px;float:left"
+            >152********15</el-label>
             
           </el-form-item>
           <el-form-item
