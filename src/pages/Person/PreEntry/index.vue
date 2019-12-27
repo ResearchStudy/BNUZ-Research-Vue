@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <div class="pre-entry__wrap">
       <div class="pre-entry__header">
-        
+
         <div class="search-input">
           <el-button
             style="margin-right:20px;"
@@ -23,7 +23,11 @@
             @clear="handleClearClick"
             clearable
           >
-            <el-button slot="append" icon="el-icon-search" @click="handleSearchClick">搜索</el-button>
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="handleSearchClick"
+            >搜索</el-button>
           </el-input>
         </div>
       </div>
@@ -43,22 +47,24 @@
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="introduction"
+            prop="course_title"
             label="简要介绍"
             width="220"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
-        
+
           <el-table-column
-            prop="StartTime"
+            prop="create_time"
             label="开始时间"
+            :formatter="formatDate"
             width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="EndTime"
+            prop="update_time"
+            :formatter="formatDate2"
             label="结束事件"
             width="200"
             align="center"
@@ -71,10 +77,20 @@
             align="center"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column label="操作" width="200" align="center">
+          <el-table-column
+            label="操作"
+            width="200"
+            align="center"
+          >
             <template slot-scope="scope">
-              <el-button  type="text" @click="handleEntry(scope.$index, scope.row)">确认</el-button>
-              <el-button  type="text" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button
+                type="text"
+                @click="handleEntry(scope.$index, scope.row)"
+              >确认</el-button>
+              <el-button
+                type="text"
+                @click="handleDelete(scope.$index, scope.row)"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -100,6 +116,7 @@ export default {
   name: "PreEntry",
   data() {
     return {
+      userId: "",
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -109,142 +126,76 @@ export default {
       multipleSelection: []
     };
   },
-  mounted() {
-    this.tableData = [
-      {
-        id: 1,
-        name: "北师珠",
-        introduction: "这是一个很长的介绍，一点都不简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 2,
-        name: "北理工",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 3,
-        name: "吉珠",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 4,
-        name: "中大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 5,
-        name: "北师大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 6,
-        name: "北师珠",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 7,
-        name: "北大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 8,
-        name: "清华",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 9,
-        name: "交大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 10,
-        name: "华农",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 11,
-        name: "哈佛",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      }
-    ];
-    this.totalPage = Math.ceil(this.tableData.length / 10);
-    this.totalTagsCount = this.tableData.length;
-    this.currentPage = 1;
-    this.currentTableData = this.tableData.slice(0, 10);
+  async mounted() {
+    await this.getPreEntryList();
   },
   methods: {
+    async getPreEntryList() {
+      this.userId = this.$store.getters.userInfo.id;
+      console.log(this.userId);
 
-    // toggleSelection(rows) {
-    //   if (rows) {
-    //     rows.forEach(row => {
-    //       this.$refs.multipleTable.toggleRowSelection(row);
-    //     });
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
-    // handleSelectionChange(val) {
-    //   this.multipleSelection = val;
-    // },
-    // handleEntry(index,rows){
-    //     alert(rows.index.name);
-    // },
-    // handleDelete(index,rows){
-
-    // },
-    handleCurrentPageChange(currentPage) {
-      const start = (currentPage - 1) * 10;
-      const end = (start + 1) * 10;
-      this.currentPage = currentPage;
+      const { data: data } = await this.$http.get("/api/accounts/dashboard");
+      const { course_pre_enroll } = data;
+      this.currentTableData = course_pre_enroll;
+      this.totalTagsCount = course_pre_enroll.length;
+      this.totalPage = Math.ceil(course_pre_enroll.length / 10);
+      // this.currentTableData.create_time = this.getTimestamp(this.currentTableData.create_time);
+    },
+    formatDate2(row) {
+      let date = new Date(parseInt(row.update_time) * 1000);
+      let Y = date.getFullYear() + "-";
+      let M =
+        date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1) + "-"
+          : date.getMonth() + 1 + "-";
+      let D =
+        date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
+      return Y + M + D;
+    },
+    formatDate(row) {
+      let date = new Date(parseInt(row.create_time) * 1000);
+      let Y = date.getFullYear() + "-";
+      let M =
+        date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1) + "-"
+          : date.getMonth() + 1 + "-";
+      let D =
+        date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
+      return Y + M + D;
+    },
+    setCurrentTableData() {
+      const start = (this.currentPage - 1) * 10;
+      const end = this.currentPage * 10;
+      this.totalPage = Math.ceil(this.tableData.length / 10);
+      this.totalTagsCount = this.tableData.length;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    handleSearchChange(val) {
-      this.searchValue = val;
+
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
     },
-    handleClearClick() {
-      this.searchValue = "";
-      // const start = (this.currentPage - 1) * 10;
-      // const end = (start + 1) * 10;
-      // this.currentTableData = this.tableData.slice(start, end);
+
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     },
+
+    async handleCurrentPageChange(currentPage) {
+      this.currentPage = currentPage;
+      await this.getPreEntryList();
+    },
+
     handleRefreshClick() {
       const start = (this.currentPage - 1) * 10;
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
     },
+
     handleSearchClick() {
       if (this.searchValue === "") {
         this.$message({
