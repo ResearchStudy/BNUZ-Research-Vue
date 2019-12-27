@@ -42,7 +42,7 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/root-admin/audit-pending-list/${scope.row.id}`"
+                :to="`/insitution-admin/information-list/${scope.row.id}`"
               >{{scope.row.title}}</router-link>
             </template>
           </el-table-column>

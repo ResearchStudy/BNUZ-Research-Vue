@@ -10,3 +10,10 @@ export function saveInformation(data) {
         data: data
     })
 }
+
+export function getInformationById(id) {
+    return request({
+        url: `${prefix}/${id}`,
+        method: 'get'
+    })
+}

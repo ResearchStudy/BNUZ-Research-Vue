@@ -40,3 +40,5 @@ export function institutionsFilesUpload(id,data) {
         headers: {'Content-Type': 'multipart/form-data'}
     })
 }
+
+
