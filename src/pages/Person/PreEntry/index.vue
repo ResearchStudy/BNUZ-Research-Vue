@@ -40,16 +40,16 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column
-            prop="name"
+            prop="course_title"
             label="课程名字"
             width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="course_title"
+            prop="course_description"
             label="简要介绍"
-            width="220"
+            width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
@@ -135,11 +135,12 @@ export default {
       console.log(this.userId);
 
       const { data: data } = await this.$http.get("/api/accounts/dashboard");
+      
       const { course_pre_enroll } = data;
       this.currentTableData = course_pre_enroll;
       this.totalTagsCount = course_pre_enroll.length;
       this.totalPage = Math.ceil(course_pre_enroll.length / 10);
-      // this.currentTableData.create_time = this.getTimestamp(this.currentTableData.create_time);
+     
     },
     formatDate2(row) {
       let date = new Date(parseInt(row.update_time) * 1000);
