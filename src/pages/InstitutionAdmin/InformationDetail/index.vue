@@ -26,62 +26,10 @@
 
         <div v-html="info.content"></div>
 
-<!--
-        <el-row>
-          <el-col>
-            <h4>{{info.sub_title}}</h4>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="2">
-            适合人群:
-          </el-col>
-          <el-col :span="10">
-            {{info.suitable_for_crowd}}
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="2">
-            研学城市:
-          </el-col>
-          <el-col :span="10">
-            {{info.address.city_name ? info.address.city_name : ''}}
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="2">
-            行程天数:
-          </el-col>
-          <el-col :span="10">
-            {{info.travel_days }}天
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="2">
-            研学日期:
-          </el-col>
-          <el-col :span="10">
-            {{info.startTime}}月 - {{info.endTime}}月
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <el-button type="primary" @click="preEnroll()">预约报名</el-button>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="2">
-            分享:
-          </el-col>
-        </el-row>
-        -->
+
       </div>
     </div>
     <div>
-
-      <!--
-     <div v-html="info.details"></div>
--->
     </div>
 
   </div>
