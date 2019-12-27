@@ -76,7 +76,7 @@
 
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleAdoptClick(scope.row.id, true)">编辑</el-button>
+              <el-button size="mini" type="primary" @click="handleUpdateClick(scope.row.id)">编辑</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -200,9 +200,9 @@ export default {
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    async handleAdoptClick(id, isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
-        adopt: isAdopted,
+    async handleUpdateClick(id) {
+      await this.$http.put(`/api/information/${id}`, {
+
         reply: "没有回复哦"
       });
       if ((this.totalTagsCount - 1) % 10 === 0) {

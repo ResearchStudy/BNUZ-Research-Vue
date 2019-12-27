@@ -23,10 +23,7 @@
             <label  text-align="left" width = 50px>{{info.author_name}}</label>
           </el-col>
         </el-row>
-
         <div v-html="info.content"></div>
-
-
       </div>
     </div>
     <div>
