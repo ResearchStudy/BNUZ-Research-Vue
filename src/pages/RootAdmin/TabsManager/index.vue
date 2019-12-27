@@ -124,6 +124,7 @@ export default {
       this.currentPage = currentPage;
       this.setCurrentTableData();
     },
+
     async handleDeleteTag(id) {
       await this.$http.delete(`/api/tags/${id}`);
       await this.getTagsList();
@@ -134,6 +135,7 @@ export default {
       });
       this.handleCurrentPageChange(this.currentPage);
     },
+
     async handleMultiDeleteTag() {
       const deleteIdList = this.multipleSelection.map(
         selection => selection.id

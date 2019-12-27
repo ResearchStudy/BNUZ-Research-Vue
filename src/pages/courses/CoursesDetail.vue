@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
      <el-row>
-       <el-col :span="2">
+       <el-col :span="3">
          适合人群:
        </el-col>
        <el-col :span="10">
@@ -24,7 +24,7 @@
        </el-col>
      </el-row>
      <el-row>
-       <el-col :span="2">
+       <el-col :span="3">
          研学城市:
        </el-col>
        <el-col :span="10">
@@ -32,7 +32,7 @@
        </el-col>
      </el-row>
      <el-row>
-       <el-col :span="2">
+       <el-col :span="3">
          行程天数:
        </el-col>
        <el-col :span="10">
@@ -40,7 +40,7 @@
        </el-col>
      </el-row>
      <el-row>
-       <el-col :span="2">
+       <el-col :span="3">
          研学日期:
        </el-col>
        <el-col :span="10">

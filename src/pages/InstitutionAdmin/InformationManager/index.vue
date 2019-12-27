@@ -80,7 +80,7 @@
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleAdoptClick(scope.row.id, false)"
+                @click="handleDeleteInformation(scope.row.id)"
               >删除</el-button>
             </template>
           </el-table-column>
@@ -205,6 +205,19 @@ export default {
 
 
     },
+
+    async handleDeleteInformation(id) {
+      await this.$http.delete(`/api/information/${id}`);
+      await this.getInformationList();
+      this.$message({
+        type: "success",
+        message: "删除成功！",
+        isSingle: true
+      });
+      this.handleCurrentPageChange(this.currentPage);
+    },
+
+
     async handleMultiAdoptClick(isAdopted) {
       const handleIdList = this.multipleSelection.map(
         selection => selection.id
