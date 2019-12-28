@@ -76,11 +76,23 @@
             </quill-editor>
           </div>
         </el-form-item>
-         <el-form-item>
-          <div >
-            <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即发布</el-button>
-          </div>
-        </el-form-item>
+
+        <el-row>
+          <el-col span = "4">
+            <el-form-item>
+              <div >
+                <el-button @click="saveInformation()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">保存</el-button>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col span = "2">
+           <el-form-item>
+            <div >
+              <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即发布</el-button>
+            </div>
+          </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </div>
   </div>
@@ -89,13 +101,14 @@
 
 <script>
 
-  import {saveInformation} from "../../api/information";
+  import {saveInformation,submitInformation} from "../../api/information";
 
   export default {
     name: "InformationForm",
     data() {
       return {
         fullscreenLoading: false,
+        id:0,
         form: {
           title: '',
           information_type: '',
@@ -115,9 +128,7 @@
       };
     },
 
-    mounted(){
-      this.getProvinceList();
-    },
+
     methods: {
       async handleAvatarUpload({file}) {
         this.form.cover = await this.getImageInfo(file);
@@ -169,19 +180,50 @@
         return (isJPG || isPNG) && isLt2M;
       },
 
-
-
-      submit(){
+      saveInformation(){//暂存
+        this.form.status = 16;//暂存
         this.form.publist_time = new Date(this.form.publist_time).getTime() / 1000
         this.fullscreenLoading = true
-        saveInformation(this.form).then(() => {
+        saveInformation(this.form).then((res) => {
           this.fullscreenLoading = false
+          this.id = res.id,
           this.$message({
-            message: '发布成功',
+            message: '保存成功' ,
             type: 'success'
           });
-          this.$router.push({path: '/insitution-admin/informationManager'})
+          //this.$router.push({path: '/insitution-admin/informationManager'})
         })
+
+      },
+
+      submit(){
+        if(this.id == 0){  //不暂存，直接发布
+          this.form.status = 1;
+          this.form.publist_time = new Date(this.form.publist_time).getTime() / 1000
+          this.fullscreenLoading = true
+          saveInformation(this.form).then(() => {
+            this.fullscreenLoading = false
+                    this.$message({
+                      message: '发布成功' ,
+                      type: 'success'
+                    });
+            this.$router.push({path: '/insitution-admin/informationManager'})
+          })
+        }else{
+          //当保存后，再点击立即发布
+          this.form.status = 1;
+          this.form.publist_time = new Date(this.form.publist_time).getTime() / 1000
+          this.fullscreenLoading = true
+          submitInformation(this.form,this.id).then(() => {
+            this.fullscreenLoading = false
+            this.$message({
+              message: '发布成功',
+              type: 'success'
+            });
+            this.$router.push({path: '/insitution-admin/informationManager'})
+          })
+        }
+
 
       }
     }
