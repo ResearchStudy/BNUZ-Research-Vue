@@ -30,7 +30,7 @@ export default {
         },
         {
           name: "课程",
-          href: "/class"
+          href: "/courses/list"
         },
         {
           name: "机构",

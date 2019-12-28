@@ -16,6 +16,7 @@ import NotFound from "../pages/common/NotFound";
 import insitutionAdminRoutes from "./institutionAdmin";
 import OrganizationRegister from "@/pages/organization/OrganizationRegister";
 import CoursesDetail from "../pages/courses/CoursesDetail";
+import CoursesList from "../pages/courses/CoursesList";
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,7 +34,8 @@ const routes = [
             {
                 path: 'courses/', component: CoursesIndex, children: [
                     {path: 'form',component: CoursesForm },
-                    {path: ':id',component: CoursesDetail }
+                    {path: 'list',component: CoursesList },
+                    {path: ':id',component: CoursesDetail },
                 ]
             }
         ]
