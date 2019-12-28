@@ -25,6 +25,12 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="课程标签">
+            <el-select v-model="form.tag" multiple placeholder="请选择课程类型">
+              <el-option v-for="tag in tagList" :label="tag.name" :key="tag.name"
+                         :value="tag.id"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="课程时间">
             <el-date-picker
                     v-model="form.date"
@@ -150,6 +156,8 @@
 <script>
     import {getAddressById, saveAddress} from "../../api/address";
     import {saveCourses} from "../../api/courses";
+    import {getTags} from "../../api/tags";
+
     export default {
         name: "CoursesForm",
         data() {
@@ -166,6 +174,7 @@
                     details: '',
                     suitable_for_crowd: '',
                     address_id: '',
+                    tag: [],
                     start_time: '',
                     end_time: '',
                     date: '',
@@ -189,6 +198,7 @@
                 },
                 provinceList: [],
                 cityList: [],
+                tagList:[],
                 courseType: [{
                     value: 1,
                     label: "知识科普"
@@ -209,6 +219,7 @@
         },
         mounted(){
             this.getProvinceList();
+            this.getTags();
         },
         methods: {
             async handleAvatarUpload({file}) {
@@ -263,6 +274,10 @@
             async getProvinceList() {
                 const result = await getAddressById({target: 2});
                 this.provinceList = result.address;
+            },
+            async getTags() {
+                const result = await getTags();
+                this.tagList = result.tags;
             },
             async getCityList(provinceId) {
                 this.form.address.city_id = ''

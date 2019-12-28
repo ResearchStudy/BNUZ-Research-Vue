@@ -18,6 +18,21 @@ export function getCoursesById(id) {
     })
 }
 
+export function getCoursesList(params) {
+    return request({
+        url: `${prefix}/list`,
+        params:params,
+    })
+}
+
+export function mGetCoursesInfo(ids){
+    return request({
+        url: `${prefix}/_mget`,
+        method: 'post',
+        data: ids
+    })
+}
+
 
 export function getTermByCoursesId(id) {
     return request({
