@@ -73,6 +73,7 @@
       <el-tab-pane label="预约报名" name="four"></el-tab-pane>
     </el-tabs>
   </div>
+
   <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
     <el-form :model="enroll">
       <el-form-item label="用户名称" label-width="100px">
