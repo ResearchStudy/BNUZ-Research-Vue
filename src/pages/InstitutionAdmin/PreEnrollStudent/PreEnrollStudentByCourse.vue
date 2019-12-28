@@ -4,12 +4,10 @@
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>用户中心</el-breadcrumb-item>
       <el-breadcrumb-item>预报名学生</el-breadcrumb-item>
-      <el-breadcrumb-item>课程标题4444</el-breadcrumb-item>
+      <el-breadcrumb-item>课程名称 </el-breadcrumb-item>
     </el-breadcrumb>
     <div class="information-list__wrap">
       <div class="information-list__header">
-
-
         <div class="search-input">
           <el-input
                   placeholder="请输入要搜索的内容"
@@ -33,7 +31,7 @@
           <el-table-column
                   prop="title"
                   label="课程编号"
-                  min-width="100"
+                  width="100"
                   align="center"
                   show-overflow-tooltip
           >
@@ -42,43 +40,27 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="type" label="课程名称"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.id}}</template>
+
+
+          <el-table-column prop="type" label="姓名"  width="200" align="center" show-overflow-tooltip>
+            <template slot-scope="scope" >{{scope.row.name}}</template>
           </el-table-column>
 
-          <el-table-column prop="desc" label="课程描述" align="center" show-overflow-tooltip>
-            <template slot-scope="scope"
-            >{{scope.row.description}}</template>
-          </el-table-column>
-
-          <el-table-column prop="type" label="档期"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.course_term_id}}</template>
-          </el-table-column>
-
-          <el-table-column prop="type" label="姓名"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.name}}</template>
-          </el-table-column>
-
-          <el-table-column prop="type" label="性别"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="性别"  width="200" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.sex}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="年龄"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="年龄"  width="200" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.age}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="电话"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="电话"  width="200" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.phone}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="邮箱"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="邮箱"  align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.email}}</template>
           </el-table-column>
-
-
-
-
-
 
         </el-table>
       </div>
@@ -100,6 +82,7 @@
 </template>
 
 <script>
+
   export default {
     name: "PreEnrollStudentList",
     data() {
@@ -119,25 +102,25 @@
     methods: {
       async PreEnrollStudentList() {
         const {
-          data: { preEnrollStudents,  total }
-        } = await this.$http.get("/api/courses/scope.row.id/pre_enroll/list", {
+          data: { pre_enrolls,  total }
+        } = await this.$http.get(`/api/courses/${this.$route.params.id}/pre_enroll/list`, {
           limit: "10",
           page: this.currentPage + "",
-          title:"",
-          attribute:"",
-          status:"",
-          course_type: ""
+          term_id:"",
+          key:"",
+          account_id:""
+
         });
 
-
-        const idList = preEnrollStudents.map(infors => infors.id);
+         const idList = pre_enrolls.map(infors => infors.id);
 
         const { data: preEnrollStudentsList } = await this.$http.post(
-                "/api/courses/:cid/pre_enroll/_mget",
+                `/api/courses/${this.$route.params.id}/pre_enroll/_mget`,
                 {
                   ids: idList
                 }
         );
+
 
         this.currentTableData = preEnrollStudentsList;
         this.totalTagsCount = total;
@@ -194,21 +177,7 @@
         const end = (start + 1) * 10;
         this.currentTableData = this.tableData.slice(start, end);
       },
-      async handleAdoptClick(id, isAdopted) {
-        await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
-          adopt: isAdopted,
-          reply: "没有回复哦"
-        });
-        if ((this.totalTagsCount - 1) % 10 === 0) {
-          this.currentPage -= 1;
-        }
-        await this.getAuditPendingList();
-        this.$message({
-          type: "success",
-          message: "处理成功！",
-          isSingle: true
-        });
-      },
+
       async handleMultiAdoptClick(isAdopted) {
         const handleIdList = this.multipleSelection.map(
                 selection => selection.id
