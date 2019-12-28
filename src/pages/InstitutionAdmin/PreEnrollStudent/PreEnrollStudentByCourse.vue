@@ -58,8 +58,12 @@
             <template slot-scope="scope">{{scope.row.phone}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="邮箱"  align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="邮箱" width="300" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.email}}</template>
+          </el-table-column>
+
+          <el-table-column prop="type" label="留言备注"  align="center" show-overflow-tooltip>
+            <template slot-scope="scope">{{scope.row.remarks}}</template>
           </el-table-column>
 
         </el-table>

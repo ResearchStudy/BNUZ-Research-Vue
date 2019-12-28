@@ -174,7 +174,7 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
-      await this.getAuditPendingList();
+      await this.getInformationList();
     },
     handleSearchChange(val) {
       this.searchValue = val;
@@ -214,27 +214,10 @@ export default {
         message: "删除成功！",
         isSingle: true
       });
-      this.handleCurrentPageChange(this.currentPage);
-    },
+      this.handleCurrentPageChange(this.currentPage);  },
 
 
-    async handleMultiAdoptClick(isAdopted) {
-      const handleIdList = this.multipleSelection.map(
-        selection => selection.id
-      );
 
-      await this.$http.post("/api/institutions/enroll/handle/_mpost", {
-        adopt: isAdopted,
-        reply: "没有回复哦",
-        ids: handleIdList
-      });
-      await this.getAuditPendingList();
-      this.$message({
-        type: "success",
-        message: "处理成功！",
-        isSingle: true
-      });
-    }
   }
 };
 </script>
