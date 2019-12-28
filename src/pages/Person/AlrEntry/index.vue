@@ -9,13 +9,6 @@
       <div class="pre-entry__header">
         
         <div class="search-input">
-          <el-button
-            style="margin-right:20px;"
-            type="success"
-            icon="el-icon-refresh-right"
-            circle
-            @click="handleRefreshClick"
-          />
           <el-input
             placeholder="请输入要搜索的课程"
             v-model="searchValue"
@@ -45,7 +38,7 @@
           <el-table-column
             prop="introduction"
             label="简要介绍"
-            width="220"
+            width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
@@ -59,7 +52,7 @@
           ></el-table-column>
           <el-table-column
             prop="EndTime"
-            label="结束事件"
+            label="结束时间"
             width="200"
             align="center"
             show-overflow-tooltip
@@ -231,35 +224,33 @@ export default {
       this.currentPage = currentPage;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    handleSearchChange(val) {
-      this.searchValue = val;
-    },
+
     handleClearClick() {
       this.searchValue = "";
-      // const start = (this.currentPage - 1) * 10;
-      // const end = (start + 1) * 10;
-      // this.currentTableData = this.tableData.slice(start, end);
-    },
-    handleRefreshClick() {
       const start = (this.currentPage - 1) * 10;
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    handleSearchClick() {
+
+    handleSearchChange(val) {
+      this.searchValue = val;
       if (this.searchValue === "") {
-        this.$message({
-          message: "请输入要搜索的课程",
-          type: "warning",
-          duration: 1500,
-          showClose: true
-        });
+        const start = (this.currentPage - 1) * 10;
+        const end = (start + 1) * 10;
+        this.currentTableData = this.tableData.slice(start, end);
+        this.totalPage = Math.ceil(this.tableData.length / 10);
+        this.totalTagsCount = this.tableData.length;
         return;
       }
 
       this.currentTableData = this.tableData.filter(
-        item => item.name.search(this.searchValue) != -1
+        item => item.name === this.searchValue
       );
-    }
+      
+      this.currentPage = Math.ceil(this.currentTableData.length / 10) || 1;
+      this.totalPage = Math.ceil(this.currentTableData.length / 10);
+      this.totalTagsCount = this.currentTableData.length;
+    },
   }
 };
 </script>
@@ -277,7 +268,7 @@ export default {
 
     .search-input {
       display: flex;
-      width: 50%;
+      width: 40%;
       margin-left: auto;
 
       /deep/ .el-input-group__append {
