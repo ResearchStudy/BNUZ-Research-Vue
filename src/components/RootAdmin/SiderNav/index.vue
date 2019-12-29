@@ -3,6 +3,8 @@
     default-active="1"
     class="sider-nav__container"
     :unique-opened="true"
+    theme=dark
+    background-color="#F6F6F8"
     router
   >
     <el-submenu index="1">
