@@ -1,12 +1,12 @@
 <template>
   <el-menu
     default-active="/person/dashboard"
-    
     class="sider-nav__container"
     @open="handleOpen"
     @close="handleClose"
     :unique-opened="true"
-    
+    theme=dark
+    background-color="#F6F6F8"
     router
   >
       <el-submenu index="1">

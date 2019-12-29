@@ -3,6 +3,8 @@
     class="sider-nav__container"
     :unique-opened="true"
     :default-openeds="['1', '2', '3', '4' ]"
+    theme=dark
+    background-color="#F6F6F8"
     router
   >
     <el-submenu index="1">
@@ -28,7 +30,7 @@
 
         <el-menu-item index="/insitution-admin/informationManager">资讯管理</el-menu-item>
         <el-menu-item index="2-5">附件管理</el-menu-item>
-        <el-menu-item index="2-5">标签管理</el-menu-item>
+        <el-menu-item index="/insitution-admin/tags">标签管理</el-menu-item>
         <el-menu-item index="2-5">课程评论管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>

@@ -18,10 +18,13 @@
 </template>
 
 <script>
-import Header from "@/components/RootAdmin/Header";
+
+//import Header from "@/components/RootAdmin/Header";
+import appHeader from '../../../components/header-component/index.vue';
 import SiderNav from "@/components/RootAdmin/SiderNav";
+
 export default {
-  components: { MyHeader: Header, SiderNav },
+  components: { MyHeader: appHeader, SiderNav },
   data() {
     return {};
   }
@@ -71,6 +74,6 @@ export default {
 
 ::-webkit-scrollbar-thumb {
   background: #d7d7d7;
-  border-radius: 20px;
+  // border-radius: 20px;
 }
 </style>
