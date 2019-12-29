@@ -22,16 +22,16 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <!--<div style="margin-left: 30px;width: 20%">-->
-      <!--<el-row style="text-align: right">-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
-      <!--</el-row>-->
-    <!--</div>-->
+    <div style="margin-left: 5px;width: 20%">
+      <el-row style="text-align: right">
+        <el-col :span="8"><img src="../../assets/img/default-cover/knowledge.png" alt="" class="default-cover" @click="navigateCourse({course_type: 1})"></el-col>
+        <el-col :span="8"><img src="../../assets/img/default-cover/nature.png" alt="" class="default-cover" @click="navigateCourse({course_type: 2})"></el-col>
+        <el-col :span="8"><img src="../../assets/img/default-cover/partice.png" alt="" class="default-cover" @click="navigateCourse({course_type: 4})"></el-col>
+        <el-col :span="8"><img src="../../assets/img/default-cover/determin.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 8})"></el-col>
+        <el-col :span="8"><img src="../../assets/img/default-cover/culture.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 16})"></el-col>
+        <el-col :span="8"><img src="../../assets/img/default-cover/recommend.jpeg" alt="" class="default-cover" @click="navigateCourse({})"></el-col>
+      </el-row>
+    </div>
   </div>
   <div class="hot-city-group" ref="hotCityGroup">
     <div><h2>热门城市 | </h2></div>
@@ -245,6 +245,8 @@
     background-color: #d3dce6;
   }
   .default-cover{
-    height: 150px
+    height: 150px;
+    width: 70px;
+    cursor: pointer;
   }
 </style>
