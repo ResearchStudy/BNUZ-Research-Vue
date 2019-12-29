@@ -7,7 +7,6 @@
     </el-breadcrumb>
     <div class="accounts-manager__wrap">
       <div class="accounts-manager__header">
-        <!-- <el-button type="danger">批量删除</el-button> -->
         <el-button type="primary" @click="handleAddClick">添加用户</el-button>
       </div>
       <div class="accounts-manager__table">
@@ -17,9 +16,7 @@
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
         >
-          <!-- <el-table-column type="selection" width="60" align="center"></el-table-column> -->
           <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.id}}</template>
           </el-table-column>
@@ -38,7 +35,7 @@
           <el-table-column
             prop="tag"
             label="创建时间"
-            min-width="180"
+            min-width="200"
             align="center"
             show-overflow-tooltip
           >
@@ -47,7 +44,7 @@
           <el-table-column
             prop="author"
             label="更新时间"
-            min-width="180"
+            min-width="200"
             align="center"
             show-overflow-tooltip
           >
@@ -59,11 +56,12 @@
           <el-table-column prop="tag" label="电话验证" width="140" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.phone_validated ?'已验证':'未验证'}}</template>
           </el-table-column>
-          <!-- <el-table-column label="操作" width="140" align="center">
+          <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button @click="handleDeleteTag(scope.row.id)" type="text" size="small">移除</el-button>
+              <el-button size="mini" type="primary" @click="handleEditClick(scope.row.id)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleAdoptClick(scope.row.id, false)">删除</el-button>
             </template>
-          </el-table-column>-->
+          </el-table-column>
         </el-table>
       </div>
       <div class="accounts-manager__pagination">
@@ -210,8 +208,8 @@ export default {
           if (this.totalTagsCount % 10 === 0) {
             this.totalTagsCount += 1;
             await this.handleCurrentPageChange(this.currentPage + 1);
-          }else{
-            await this.getAccountsList()
+          } else {
+            await this.getAccountsList();
           }
           this.isDialogShow = false;
           this.accountForm = {
@@ -231,6 +229,9 @@ export default {
           return false;
         }
       });
+    },
+    handleEditClick(id) {
+      this.$router.push({ path: `/root-admin/accounts-detail/${id}` });
     }
   }
 };
