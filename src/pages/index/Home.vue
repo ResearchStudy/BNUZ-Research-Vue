@@ -4,24 +4,25 @@
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
   <div style="margin-top: 10px;display: flex">
-    <div style="border: 1px solid black;width: 20%">
-      <div style="border-bottom: 1px solid #f2f2f2;padding: 10px 15px">
-        <span @click="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''">最新课程</span> | <span @click="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''">最新资讯</span>
+    <div style="background: #f8f8f8;width: 25%">
+      <div style="padding: 10px">
+        <span @click="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
+        <span @click="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
       </div>
       <div>
-        <div style="display: flex;justify-content: space-between;border-bottom: 1px #999999 dotted" v-for="item in infoList" :key="item.id">
-          <div style="font-size: 13px">{{item.title}}</div>
+        <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 0px 5px" v-for="item in infoList" :key="item.id">
+          <el-link  style="font-size: 14px;" @click="navigateToDetail(item.id)">{{item.title.length > 20 ? item.title.substring(0, 20) + '...' : item.title}}</el-link>
         </div>
       </div>
     </div>
-    <div style="margin-left: 30px;width: 55%">
+    <div style="width: 55%">
       <el-carousel height="312px" style="width: 100%">
         <el-carousel-item v-for="item in carouselList" :key="item" >
           <img :src="item" alt="" style="width: 100%;height: 312px">
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="margin-left: 30px;width: 25%">
+    <div style="margin-left: 30px;width: 20%">
       <el-row style="text-align: right">
         <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
         <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
@@ -127,9 +128,9 @@
             },
             async getNewestCoursesList() {
                 const courseList = await getCoursesList();
-                this.coursesList = courseList.courses
+                this.coursesList = courseList.courses.slice(0,8)
                 const informationList = await getInformationList();
-                this.informationList = informationList.informations
+                this.informationList = informationList.informations.slice(0,8)
                 const carouseMap = this.coursesList.map((item) => {
                     return `/api/resources/${item.cover}`
                 })
@@ -143,6 +144,14 @@
                         this.$refs.hotCityGroup.scrollLeft += 150
                     }
                 })
+            },
+            navigateToDetail(id){
+                if(this.activeTab === 'course'){
+                    this.$router.push({path: `/courses/${id}`})
+                }else{
+                    this.$router.push({path: `/informations/${id}`})
+
+                }
             }
         }
     }
