@@ -33,7 +33,7 @@
     <el-divider></el-divider>
   </div>
   <div class="search-group">
-    <div v-for="information in informationList" :key="information.id">
+    <div v-for="information in informationList" :key="information.id" style="cursor: pointer" @click="navigateToInformation(information.id)">
       <div style="display: flex;padding: 10px 15px">
         <div style="width: 400px;height: 200px">
           <img :src="'api/resources/' + information.cover" alt="" style="width: 400px;height: 200px">
@@ -137,6 +137,9 @@
             handleCurrentChange(page) {
                 this.page = page
                 this.getInformationList(page, this.limit)
+            },
+            navigateToInformation(id){
+                this.$router.push({path: `/informations/${id}`})
             }
         }
     }

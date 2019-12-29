@@ -19,6 +19,7 @@ import OrganizationDetail from "@/pages/organization/OrganizationDetail";
 import CoursesDetail from "../pages/courses/CoursesDetail";
 import CoursesList from "../pages/courses/CoursesList";
 import InformationsList from "../pages/infomations/List";
+import InformationDetail from "../pages/infomations/Detail";
 Vue.use(VueRouter);
 
 const routes = [
@@ -43,7 +44,8 @@ const routes = [
             },
             {
                 path: 'informations/', component: CoursesIndex, children: [
-                    {path: '',component: InformationsList }
+                    {path: '',component: InformationsList },
+                    {path: ':id',component: InformationDetail }
                 ]
             }
         ]
