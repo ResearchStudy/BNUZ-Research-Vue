@@ -29,8 +29,7 @@ export function getInformationList(params) {
     console.log(params)
     return request({
         url: `${prefix}/list`,
-        param: params,
-        method: 'get'
+        params:params
     })
 }
 

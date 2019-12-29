@@ -19,11 +19,11 @@
   <div style="width: 70%;margin-top: 10px;margin-left: 15%;display: flex">
     <div style="border: 1px solid black;width: 25%">
       <div style="border-bottom: 1px solid #f2f2f2;padding: 10px 15px">
-        <span>最新课程</span> | <span>最新资讯</span>
+        <span @click="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''">最新课程</span> | <span @click="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''">最新资讯</span>
       </div>
       <div>
-        <div style="display: flex;justify-content: space-between;padding: 10px 15px" v-for="course in coursesList" :key="course.id">
-          <div style="font-weight: bold">{{course.title}}</div>
+        <div style="display: flex;justify-content: space-between;border-bottom: 1px #999999 dotted" v-for="item in infoList" :key="item.id">
+          <div style="font-size: 13px">{{item.title}}</div>
         </div>
       </div>
     </div>
@@ -110,6 +110,7 @@
 <script>
     import {getTags} from "../../api/tags";
     import {getCoursesList} from "../../api/courses";
+    import {getInformationList} from "../../api/information";
     export default {
         name: "Home",
         data(){
@@ -117,8 +118,15 @@
               tagList: [],
               searchValue: '',
               coursesList: [],
-              showArrow: false
+              informationList: [],
+              showArrow: false,
+              activeTab: 'course'
           }
+        },
+        computed:{
+          infoList(){
+              return this.activeTab === 'course' ? this.coursesList : this.informationList;
+            }
         },
         mounted(){
           this.getTags();
@@ -130,15 +138,17 @@
                 this.tagList = result.tags;
             },
             async getNewestCoursesList() {
-                const result = await getCoursesList();
-                this.coursesList = result.courses.slice(result.total - 5)
+                const courseList = await getCoursesList();
+                this.coursesList = courseList.courses.slice()
+                const informationList = await getInformationList();
+                this.informationList = informationList.informations.slice(informationList.total - 7)
             },
             scroll(isLeft){
                 this.$nextTick(() => {
                     if(isLeft){
-                        this.$refs.hotCityGroup.scrollLeft -= 100
+                        this.$refs.hotCityGroup.scrollLeft -= 150
                     }else {
-                        this.$refs.hotCityGroup.scrollLeft += 100
+                        this.$refs.hotCityGroup.scrollLeft += 150
                     }
                 })
             }
