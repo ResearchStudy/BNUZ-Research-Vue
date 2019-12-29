@@ -5,7 +5,7 @@
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>
-  <div style="padding-right: 100px">
+  <div style="padding-right: 220px;padding-left: 220px" >
     <div v-for="footerMsg in footerRightArr" :key="footerMsg.title">
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
