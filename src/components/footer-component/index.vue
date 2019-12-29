@@ -5,7 +5,7 @@
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>
-  <div style="padding-right: 100px">
+  <div style="padding-right: 1%">
     <div v-for="footerMsg in footerRightArr" :key="footerMsg.title">
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
@@ -50,8 +50,8 @@
 <style scoped>
 #footer{
   display: flex;
-  justify-content: space-between;
-  width: 80%;
-  margin-left: 10%;
+  margin-left: 4%;
+  padding-left: 10%;
+  margin-top: 30px;
 }
 </style>

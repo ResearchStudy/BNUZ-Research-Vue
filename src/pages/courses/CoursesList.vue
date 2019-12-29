@@ -1,37 +1,33 @@
 <template>
 <div>
-  <div class="search-group">
-    <el-input placeholder="请输入内容" v-model="searchValue">
-      <el-button slot="append" icon="el-icon-search" type="primary"></el-button>
-    </el-input>
-  </div>
   <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px">
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">类别 :</div>
-      <div class="tag-item">知识科普型</div>
-      <div class="tag-item">自然观赏型</div>
-      <div class="tag-item">体验考察型</div>
-      <div class="tag-item">励志拓展型</div>
-      <div class="tag-item">文化康乐型</div>
+      <div class="tag-item" @click="searchByCourseType(1)" style="cursor: pointer"><el-tag :effect="course_type === 1 ? 'dark' : 'plain'">知识科普型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(2)" style="cursor: pointer"><el-tag :effect="course_type === 2 ? 'dark' : 'plain'">自然观赏型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(4)" style="cursor: pointer"><el-tag :effect="course_type === 4 ? 'dark' : 'plain'">体验考察型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(8)" style="cursor: pointer"><el-tag :effect="course_type === 8 ? 'dark' : 'plain'">励志拓展型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(16)" style="cursor: pointer"><el-tag :effect="course_type === 16 ? 'dark' : 'plain'">文化康乐型</el-tag></div>
     </div>
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">标签 :</div>
       <div v-for="tag in tagList" class="tag-item" :key="tag.id">
-        {{tag.name}}
+        <el-tag :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'" @click="searchByTag(tag.id)">{{tag.name}}</el-tag>
       </div>
     </div>
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">营期 :</div>
-      <div class="tag-item">1-3天</div>
-      <div class="tag-item">3-5天</div>
-      <div class="tag-item">5-7天</div>
-      <div class="tag-item">7-10天</div>
-      <div class="tag-item">10-12天</div>
-      <div class="tag-item">12-15天</div>
-      <div class="tag-item">15-28天</div>
-      <div class="tag-item">28天以上</div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(1)" :effect="travel === 1 ? 'dark' : 'plain'">1-3天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(2)" :effect="travel === 2 ? 'dark' : 'plain'">3-5天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(3)" :effect="travel === 3 ? 'dark' : 'plain'">5-7天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(4)" :effect="travel === 4 ? 'dark' : 'plain'">7-10天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(5)" :effect="travel === 5 ? 'dark' : 'plain'">10-12天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(6)" :effect="travel === 6 ? 'dark' : 'plain'">12-15天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(7)" :effect="travel === 7 ? 'dark' : 'plain'">15-28天</el-tag></div>
+      <div class="tag-item"><el-tag @click="searchByCourseTravel(8)" :effect="travel === 8 ? 'dark' : 'plain'">28天以上</el-tag></div>
     </div>
-    <div>
+    <div style="display: inline-flex">
+      <el-input placeholder="请输入内容" v-model="title" style="width: 300px;padding-right: 10px"></el-input>
       <el-select v-model="country_id" placeholder="国家" @change="getProvinceList">
         <el-option
                 v-for="item in countryList"
@@ -56,9 +52,11 @@
                 :value="item.id">
         </el-option>
       </el-select>
+      <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
+      <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
   </div>
-  <div class="search-group" style="border: 1px solid #f2f2f2;padding: 5px 20px;margin-top: 0px;display: flex;justify-content: space-between;">
+  <div class="search-group" style="border: 1px solid #f2f2f2;padding: 5px 30px;margin-top: 0px;display: flex;justify-content: space-between;">
     <div style="padding-top: 10px">
       <span>综合</span>
       <span style="padding-left: 10px">最新</span>
@@ -69,12 +67,15 @@
       <img src="../../assets/img/list_icon.png" alt="" @click="displayType = 'list'">
     </div>
   </div>
-  <div class="search-group" style="margin-top: 0px;background-color: #f2f2f2" v-show="displayType === 'card'">
-    <el-row style="padding-top: 15px">
-      <el-col :span="8" v-for="course in coursesList" :key="course.id" style="padding: 15px 30px;cursor: pointer"  @click.native="detail(course.id)" >
+  <div  style="margin-top: 0px;background-color: #f2f2f2" v-show="displayType === 'card'">
+    <el-row style="padding: 15px">
+      <el-col :span="8" v-for="course in coursesList" :key="course.id" style="padding: 10px; cursor: pointer"  @click.native="detail(course.id)" >
         <card  :title="course.title" :img-src="'/api/resources/' + course.cover" :course-type="course.courseType" :tag-name="course.tagName"/>
       </el-col>
     </el-row>
+
+
+
   </div>
   <div class="search-group" v-show="displayType === 'list'">
     <el-table
@@ -125,7 +126,7 @@
       data(){
         return {
             tagList: [],
-            searchValue: '',
+            title: '',
             countryList: [],
             provinceList: [],
             cityList: [],
@@ -133,13 +134,17 @@
             province_id: '',
             city_id: '',
             coursesList: '',
-            displayType: 'card'
+            displayType: 'card',
+            course_type: '',
+            tags: [],
+            travel: ''
+
         }
       },
       mounted(){
           this.getTags();
           this.getAllCountry();
-          this.getCoursesList(0,8);
+          this.getCoursesList({page:1,limit:8});
       },
       methods: {
           async getTags(){
@@ -163,8 +168,8 @@
               });
               this.cityList = result.address;
           },
-          async getCoursesList(page, limit) {
-              const result = await getCoursesList({page, limit})
+          async getCoursesList(params) {
+              const result = await getCoursesList(params)
               const ids = result.courses.map((item) => item.id)
               const courseList = await mGetCoursesInfo({ids});
               this.coursesList = courseList.map((item) => {
@@ -176,8 +181,52 @@
               })
           },
           detail(id){
-              console.log(id)
               this.$router.push({path: `/courses/${id}`})
+          },
+          async search(){
+            const course_type = this.course_type;
+            const tag = this.tags.join(",");
+            const title = this.title;
+            const travel = this.travel
+            const city = this.city_id
+            const province = this.province_id
+            const country = this.country_id
+            this.getCoursesList({course_type, tag, title, travel, city, province, country})
+          },
+          reset(){
+            this.course_type = ''
+            this.tags = []
+            this.title = ''
+            this.travel = ''
+              this.city_id = ''
+              this.province_id = ''
+              this.country_id = ''
+            this.search()
+          },
+          searchByCourseType(typeId){
+              if(typeId === this.course_type){
+                  this.course_type = ''
+              }else{
+                  this.course_type = typeId
+              }
+              this.search()
+          },
+          searchByCourseTravel(travelId){
+              if(travelId === this.travel){
+                  this.travel = ''
+              }else{
+                  this.travel = travelId
+              }
+              this.search()
+          },
+          searchByTag(id){
+              if(this.tags.indexOf(id) !== -1){
+                  const tags = this.tags.splice(this.tags.indexOf(id) + 1, 1);
+                  this.tags = tags;
+              }else{
+                  this.tags.push(id)
+              }
+              this.search();
           }
       }
     }
@@ -185,8 +234,6 @@
 
 <style scoped>
   .search-group{
-    width: 70%;
-    margin-left: 15%;
     margin-top: 30px;
   }
   .tag-item{
