@@ -3,7 +3,7 @@
 <div>
   <img :src="imgSrc" alt="courseIcon" style="width: 150px;height: 150px">
 </div>
-<div style="padding-left: 20px">
+<div style="padding-left: 10px">
   <h4>{{title}}</h4>
   <span>{{courseType}} | {{tagName}}</span>
 </div>
