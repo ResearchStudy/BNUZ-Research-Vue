@@ -157,6 +157,7 @@
       navigateToInformation(id){
         this.$router.push({path: `/institutions/${id}`})
       }
+
     }
   }
 </script>
