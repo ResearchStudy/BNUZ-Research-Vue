@@ -32,6 +32,7 @@
     </el-select>
     <el-divider></el-divider>
   </div>
+
   <div class="search-group">
     <div v-for="information in informationList" :key="information.id" style="cursor: pointer" @click="navigateToInformation(information.id)">
       <div style="display: flex;padding: 10px 15px">
@@ -52,6 +53,8 @@
       <el-divider></el-divider>
     </div>
   </div>
+
+
   <div style="display: flex;justify-content: center;margin-top: 20px">
     <el-pagination
             @size-change="handleSizeChange"

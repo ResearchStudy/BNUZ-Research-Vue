@@ -49,3 +49,19 @@ export function institutionsFilesUpload(id,data) {
 }
 
 
+export function getInstitutionList(params) {
+    console.log(params)
+    return request({
+        url: `${prefix}/list`,
+        params:params
+    })
+}
+
+export function mGetInstitutionList(data) {
+    return request({
+        url: `${prefix}/_mget`,
+        data: data,
+        method: 'post'
+    })
+}
+
