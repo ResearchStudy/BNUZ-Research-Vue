@@ -30,7 +30,7 @@ export default {
         },
         {
           name: "课程",
-          href: "/courses/list"
+          href: "/courses"
         },
         {
           name: "机构",
@@ -41,8 +41,8 @@ export default {
           href: "/app"
         },
         {
-          name: "咨询",
-          href: "/advisory"
+          name: "资讯",
+          href: "/informations"
         },
         {
           name: "掠影",

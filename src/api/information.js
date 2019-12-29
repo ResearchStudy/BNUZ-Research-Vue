@@ -24,3 +24,20 @@ export function getInformationById(id) {
         method: 'get'
     })
 }
+
+export function getInformationList(params) {
+    console.log(params)
+    return request({
+        url: `${prefix}/list`,
+        param: params,
+        method: 'get'
+    })
+}
+
+export function mGetInformationList(data) {
+    return request({
+        url: `${prefix}/_mget`,
+        data: data,
+        method: 'post'
+    })
+}
