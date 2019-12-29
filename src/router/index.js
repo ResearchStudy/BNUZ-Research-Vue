@@ -37,7 +37,7 @@ const routes = [
                 ]},
             {
                 path: 'courses/', component: CoursesIndex, children: [
-                    {path: '',component: CoursesList },
+                    {path: '',component: CoursesList, name: 'CoursesList' },
                     {path: 'form',component: CoursesForm },
                     {path: ':id',component: CoursesDetail },
                 ]

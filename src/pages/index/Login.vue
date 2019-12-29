@@ -1,11 +1,12 @@
 <template>
   <div style="padding-top: 45px">
     <el-row>
-      <el-col :span="14" :offset="1">
+      <el-col :span="13" :offset="1">
         <div class="banner ">
+          <img src="../../assets/img/logo-banner.jpeg" alt="" style="height: 450px">
         </div>
       </el-col>
-      <el-col :span="7" :offset="1">
+      <el-col :span="8" :offset="1">
         <div class="banner ">
           <div style="text-align: center;font-size: 37px;font-weight: bold;padding-top: 95px">欢迎登录</div>
           <div>
@@ -78,7 +79,7 @@
 <style scoped>
 
   .banner {
-    height: 500px;
-    border: 1px solid black;
+    height: 450px;
+    overflow: hidden;
   }
 </style>

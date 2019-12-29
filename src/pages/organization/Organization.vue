@@ -2,11 +2,41 @@
 <div id="organization">
   <div class="banner"></div>
   <div class="search-group">
-    <el-input placeholder="请输入内容" v-model="searchValue">
-      <el-button slot="append" icon="el-icon-search" type="primary"></el-button>
-    </el-input>
   </div>
-  <div style="margin-left: 5%">
+  <div style="display: inline-flex;justify-content: center;width: 90%;margin-left: 5%;margin-top: 15px;">
+    <div style="width: 30%;margin-right: 10px">
+      <el-input placeholder="请输入内容" v-model="name"></el-input>
+    </div>
+    <div>
+      <el-select v-model="country_id" placeholder="国家" @change="getProvinceList">
+        <el-option
+                v-for="item in countryList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="province_id" placeholder="省份" style="padding-left: 10px" @change="getCityList">
+        <el-option
+                v-for="item in provinceList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+        </el-option>
+      </el-select>
+      <el-select v-model="city_id" placeholder="城市" style="padding-left: 10px">
+        <el-option
+                v-for="item in cityList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+        </el-option>
+      </el-select>
+      <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
+      <el-button style="margin-left: 10px" @click="reset">重置</el-button>
+    </div>
+  </div>
+  <div style="display: flex;justify-content: flex-end;width: 90%; margin-left: 5%;margin-top: 15px">
     <el-button type="primary" @click="naviateToRegister()">我要入驻</el-button>
   </div>
 
@@ -50,6 +80,7 @@
 </template>
 
 <script>
+
   import {getAddressById} from "../../api/address";
   import {getInstitutionList, mGetInstitutionList} from "../../api/institutions";
 
@@ -124,6 +155,8 @@
       navigateToInformation(id){
         this.$router.push({path: `/institutions/${id}`})
       }
+
+
     }
   }
 </script>

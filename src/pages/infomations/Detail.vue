@@ -10,9 +10,6 @@
       来源：{{informationDetail.institution_name}}
     </div>
   </div>
-  <div style="background-color: #f2f2f2;width: 95%;padding: 2.5%;margin-top: 20px">
-    {{informationDetail.abstract}}
-  </div>
   <div v-html="informationDetail.content">
   </div>
 </div>
