@@ -157,6 +157,7 @@ export default {
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
     },
+
     generateRole(role) {
       const roleList = {
         1: "学生",
@@ -167,6 +168,7 @@ export default {
       };
       return roleList[role] || "无";
     },
+
     async handleAddClick() {
       this.isDialogShow = true;
     },

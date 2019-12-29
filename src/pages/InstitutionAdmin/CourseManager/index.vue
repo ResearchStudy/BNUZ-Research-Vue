@@ -52,7 +52,7 @@
           </el-table-column>
 
           <el-table-column prop="type" label="类型"  width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{scope.row.course_type}}</template>
+            <template slot-scope="scope">{{generateCourseType(scope.row.course_type)}}</template>
           </el-table-column>
 
           <el-table-column prop="travelDays" label="行程天数" width="100" align="center" show-overflow-tooltip>
@@ -135,8 +135,6 @@ export default {
         status:"",
         course_type: ""
       });
-
-
       const idList = courses.map(infors => infors.id);
 
       const { data: courseList } = await this.$http.post(
@@ -150,6 +148,18 @@ export default {
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
     },
+
+    generateCourseType(type) {
+      const typeList = {
+        1: "知识科普",
+        2: "自然观赏",
+        4: "体验考察",
+        8: "励志拓展",
+        16: "文化康乐"
+      };
+      return typeList[type] || "无";
+    },
+
 
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;

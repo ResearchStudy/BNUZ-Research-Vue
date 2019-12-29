@@ -3,7 +3,7 @@
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-      <el-breadcrumb-item>机构管理中心-TAG管理</el-breadcrumb-item>
+      <el-breadcrumb-item>TAG管理</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="tabs-manager__wrap">
       <div class="tabs-manager__header">

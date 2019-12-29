@@ -59,11 +59,11 @@
           <el-table-column
             prop="status"
             label="状态"
-            width="60"
+            width="100"
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">{{scope.row.status}}</template>
+            <template slot-scope="scope">{{generateStatus(scope.row.status)}}</template>
 
 
           </el-table-column>
@@ -163,6 +163,17 @@ export default {
       } else {
         this.$refs.multipleTable.clearSelection();
       }
+    },
+
+    generateStatus(status) {
+      const statusList = {
+        1: "待审核",
+        2: "已发布",
+        4: "驳回",
+        8: "下架",
+        16: "草稿"
+      };
+      return statusList[status] || "无";
     },
 
     naviateToPublish(){
