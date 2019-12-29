@@ -26,7 +26,6 @@ export function getInformationById(id) {
 }
 
 export function getInformationList(params) {
-    console.log(params)
     return request({
         url: `${prefix}/list`,
         params:params

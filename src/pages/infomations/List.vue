@@ -1,11 +1,7 @@
 <template>
 <div>
   <div class="search-group">
-    <el-input placeholder="请输入内容" v-model="searchValue">
-      <el-button slot="append" icon="el-icon-search" type="primary"></el-button>
-    </el-input>
-  </div>
-  <div class="search-group">
+    <el-input placeholder="请输入内容" v-model="title" style="width: 300px;padding-right: 10px"></el-input>
     <el-select v-model="country_id" placeholder="国家" @change="getProvinceList">
       <el-option
               v-for="item in countryList"
@@ -30,6 +26,8 @@
               :value="item.id">
       </el-option>
     </el-select>
+    <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
+    <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     <el-divider></el-divider>
   </div>
   <div class="search-group">
@@ -76,11 +74,11 @@
         name: "List",
         mounted(){
             this.getAllCountry();
-            this.getInformationList(1, 5);
+            this.getInformationList({page:1, limit: 5});
         },
         data(){
             return{
-                searchValue: '',
+                title: '',
                 countryList: [],
                 provinceList: [],
                 cityList: [],
@@ -100,19 +98,21 @@
             },
             async getProvinceList() {
                 const countryId = this.country_id
+                this.province_id = ''
                 const result = await getAddressById({target: 2,parent: countryId});
                 this.provinceList = result.address;
             },
             async getCityList() {
                 const provinceId = this.province_id;
+                this.city_id = ''
                 const result = await getAddressById({
                     target: 3,
                     parent: provinceId
                 });
                 this.cityList = result.address;
             },
-            async getInformationList(page, limit){
-                const result = await getInformationList({page, limit});
+            async getInformationList(params){
+                const result = await getInformationList(params);
                 const ids = result.informations.map((item) => item.id);
                 this.page = result.page
                 this.limit = result.limit
@@ -132,15 +132,29 @@
             },
             handleSizeChange(limit){
                 this.limit = limit
-                this.getInformationList(this.page, limit)
+                this.getInformationList({page: this.page, limit: limit})
             },
             handleCurrentChange(page) {
                 this.page = page
-                this.getInformationList(page, this.limit)
+                this.getInformationList({page:page, limit: this.limit})
             },
             navigateToInformation(id){
                 this.$router.push({path: `/informations/${id}`})
-            }
+            },
+            async search(){
+                const title = this.title
+                const city = this.city_id
+                const province = this.province_id
+                const country = this.country_id
+                this.getInformationList({title, city, province, country})
+            },
+            reset(){
+                this.title = ''
+                this.city_id = ''
+                this.province_id = ''
+                this.country_id = ''
+                this.search()
+            },
         }
     }
 </script>
