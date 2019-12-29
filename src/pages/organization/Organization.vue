@@ -1,6 +1,8 @@
 <template>
 <div id="organization">
-  <div class="banner"></div>
+  <div class="banner">
+    <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
+  </div>
   <div class="search-group">
   </div>
   <div style="display: inline-flex;justify-content: center;width: 90%;margin-left: 5%;margin-top: 15px;">
@@ -155,8 +157,6 @@
       navigateToInformation(id){
         this.$router.push({path: `/institutions/${id}`})
       }
-
-
     }
   }
 </script>
