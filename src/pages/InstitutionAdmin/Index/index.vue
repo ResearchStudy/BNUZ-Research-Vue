@@ -18,10 +18,11 @@
 </template>
 
 <script>
-import Header from "@/components/InstitutionAdmin/Header";
+//import Header from "@/components/InstitutionAdmin/Header";
+import appHeader from '../../../components/header-component/index.vue';
 import SiderNav from "@/components/InstitutionAdmin/SiderNav";
 export default {
-  components: { MyHeader: Header, SiderNav },
+  components: { MyHeader: appHeader, SiderNav },
   data() {
     return {};
   }

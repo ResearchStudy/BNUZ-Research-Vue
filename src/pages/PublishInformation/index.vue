@@ -1,5 +1,6 @@
 <template>
   <div style="padding: 50px">
+    <v-header></v-header>
     <div style="width: 80%;margin-left: 10%">
       <div>
         <h1>发布资讯</h1>
@@ -95,6 +96,7 @@
         </el-row>
       </el-form>
     </div>
+    <v-footer></v-footer>
   </div>
 </template>
 
@@ -103,8 +105,15 @@
 
   import {saveInformation,submitInformation} from "../../api/information";
 
+  //import appHeader from '../../components/header-component/index.vue';
+  import appFooter from '../../components/footer-component/index.vue';
+
   export default {
     name: "InformationForm",
+    components:{
+      //'v-header':appHeader,
+      'v-footer':appFooter
+    },
     data() {
       return {
         fullscreenLoading: false,
