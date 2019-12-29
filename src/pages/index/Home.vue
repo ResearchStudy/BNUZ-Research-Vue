@@ -3,21 +3,8 @@
   <div class="banner">
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
-  <!--<div class="search-group">-->
-    <!--<el-input placeholder="请输入内容" v-model="searchValue">-->
-      <!--<el-button slot="append" icon="el-icon-search" type="primary"></el-button>-->
-    <!--</el-input>-->
-  <!--</div>-->
-  <!--<div style="margin-top: 10px;width: 70%;margin-left: 15%">-->
-    <!--<el-tag-->
-            <!--v-for="tag in tagList"-->
-            <!--:key="tag.id"-->
-            <!--effect="plain" style="margin: 5px">-->
-      <!--{{ tag.name }}-->
-    <!--</el-tag>-->
-  <!--</div>-->
-  <div style="width: 70%;margin-top: 10px;margin-left: 15%;display: flex">
-    <div style="border: 1px solid black;width: 25%">
+  <div style="margin-top: 10px;display: flex">
+    <div style="border: 1px solid black;width: 20%">
       <div style="border-bottom: 1px solid #f2f2f2;padding: 10px 15px">
         <span @click="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''">最新课程</span> | <span @click="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''">最新资讯</span>
       </div>
@@ -27,14 +14,14 @@
         </div>
       </div>
     </div>
-    <div style="margin-left: 30px;width: 35%">
+    <div style="margin-left: 30px;width: 55%">
       <el-carousel height="312px" style="width: 100%">
-        <el-carousel-item v-for="item in 4" :key="item" >
-          <h3 class="small">{{ item }}</h3>
+        <el-carousel-item v-for="item in carouselList" :key="item" >
+          <img :src="item" alt="" style="width: 100%;height: 312px">
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="margin-left: 30px;width: 40%">
+    <div style="margin-left: 30px;width: 25%">
       <el-row style="text-align: right">
         <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
         <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
@@ -120,7 +107,8 @@
               coursesList: [],
               informationList: [],
               showArrow: false,
-              activeTab: 'course'
+              activeTab: 'course',
+              carouselList: []
           }
         },
         computed:{
@@ -139,9 +127,13 @@
             },
             async getNewestCoursesList() {
                 const courseList = await getCoursesList();
-                this.coursesList = courseList.courses.slice()
+                this.coursesList = courseList.courses
                 const informationList = await getInformationList();
-                this.informationList = informationList.informations.slice(informationList.total - 7)
+                this.informationList = informationList.informations
+                const carouseMap = this.coursesList.map((item) => {
+                    return `/api/resources/${item.cover}`
+                })
+                this.carouselList = carouseMap
             },
             scroll(isLeft){
                 this.$nextTick(() => {
@@ -157,11 +149,6 @@
 </script>
 
 <style scoped>
-  .search-group{
-    width: 70%;
-    margin-left: 15%;
-    margin-top: 30px;
-  }
   .hot-city{
     width: 200px;
     background-image: url("../../assets/img/beijing.jpeg");
@@ -177,21 +164,15 @@
   .right-arrow{
     position: absolute;
     margin-top: 100px;
-    margin-left: calc(67%);
+    margin-left: calc(95%);
     cursor: pointer;
   }
   .hot-city-group{
-    width: 70%;
-    margin-left: 15%;
     overflow-x: auto;
     scroll-behavior:smooth
   }
   .hot-city-group::-webkit-scrollbar{
     display:none
-  }
-  .banner{
-    margin-left: 15%;
-    width: 70%;
   }
   .el-carousel__item h3 {
     color: #475669;
