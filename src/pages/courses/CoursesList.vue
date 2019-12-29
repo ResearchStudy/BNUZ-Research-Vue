@@ -63,8 +63,8 @@
       <span style="padding-left: 10px">最热</span>
     </div>
     <div style="display: flex;align-items: center">
-      <img src="../../assets/img/card_list_icon.png" alt="" @click="displayType = 'card'">
-      <img src="../../assets/img/list_icon.png" alt="" @click="displayType = 'list'">
+      <img src="../../assets/img/apps.png" alt="" @click="displayType = 'card'" style="width: 30px;height: 30px">
+      <img src="../../assets/img/list.png" alt="" @click="displayType = 'list'" style="width: 30px;height: 30px">
     </div>
   </div>
   <div  style="margin-top: 0px;background-color: #f2f2f2" v-show="displayType === 'card'">
