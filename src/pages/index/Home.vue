@@ -26,20 +26,79 @@
       </div>
     </div>
   </div>
+  <div class="hot-city-group" ref="hotCityGroup">
+    <div><h2>热门城市 | </h2></div>
+    <div @mouseenter="showArrow = true" @mouseleave="showArrow = false">
+      <div class="left-arrow" v-show="showArrow" @click="scroll(true)"><img src="../../assets/img/arrow-left.png" alt=""></div>
+      <div class="right-arrow" v-show="showArrow" @click="scroll(false)"><img src="../../assets/img/arrow-right.png" alt=""></div>
+      <div style="display: inline-flex;">
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+      </div>
+      <div style="display: inline-flex;margin-top: 30px">
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+        <div class="hot-city">
+          <h3 style="color: white">北京</h3>
+          <h4 style="color: white">Beijing</h4>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
     import {getTags} from "../../api/tags";
     import {getCoursesList, mGetCoursesInfo} from "../../api/courses";
-
     export default {
         name: "Home",
         data(){
           return{
               tagList: [],
               searchValue: '',
-              coursesList: []
+              coursesList: [],
+              showArrow: false
           }
         },
         mounted(){
@@ -57,6 +116,15 @@
                 const courseList = await mGetCoursesInfo({ids});
                 this.coursesList = courseList
             },
+            scroll(isLeft){
+                this.$nextTick(() => {
+                    if(isLeft){
+                        this.$refs.hotCityGroup.scrollLeft -= 100
+                    }else {
+                        this.$refs.hotCityGroup.scrollLeft += 100
+                    }
+                })
+            }
         }
     }
 </script>
@@ -66,5 +134,33 @@
     width: 70%;
     margin-left: 15%;
     margin-top: 30px;
+  }
+  .hot-city{
+    width: 200px;
+    background-image: url("../../assets/img/beijing.jpeg");
+    background-size: cover;
+    padding-left: 20px;
+    margin-right: 30px;
+  }
+  .left-arrow{
+    position: absolute;
+    margin-top: 100px;
+    cursor: pointer;
+  }
+  .right-arrow{
+    position: absolute;
+    margin-top: 100px;
+    margin-left: calc(67%);
+    cursor: pointer;
+  }
+  .hot-city-group{
+    width: 70%;
+    margin-left: 15%;
+    overflow-x: auto;
+    scroll-behavior:smooth
+  }
+  .hot-city-group::-webkit-scrollbar{
+    display:none
+
   }
 </style>

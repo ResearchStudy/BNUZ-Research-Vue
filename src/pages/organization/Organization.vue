@@ -90,7 +90,7 @@
                             const institutionDetail = item.institution_details;
                             const address = institutionDetail.address
                             return {
-                              id: institutionDetail.id,
+                              id: item.id,
                               name: institutionDetail.name,
                               registerCapital:institutionDetail.registered_money,
                               startDate: institutionDetail.establish_time,
