@@ -15,8 +15,11 @@ import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
 import insitutionAdminRoutes from "./institutionAdmin";
 import OrganizationRegister from "@/pages/organization/OrganizationRegister";
+import OrganizationDetail from "@/pages/organization/OrganizationDetail";
 import CoursesDetail from "../pages/courses/CoursesDetail";
 import CoursesList from "../pages/courses/CoursesList";
+import InformationsList from "../pages/infomations/List";
+import InformationDetail from "../pages/infomations/Detail";
 Vue.use(VueRouter);
 
 const routes = [
@@ -29,13 +32,20 @@ const routes = [
             { path: 'register', component: Register },
             {path: 'organization/', component: OrganizationIndex, children: [
                     {path: '', component: Organization},
-                    {path: 'register', component: OrganizationRegister}
+                    {path: 'register', component: OrganizationRegister},
+                    {path: ':id', component: OrganizationDetail},
                 ]},
             {
                 path: 'courses/', component: CoursesIndex, children: [
+                    {path: '',component: CoursesList },
                     {path: 'form',component: CoursesForm },
-                    {path: 'list',component: CoursesList },
                     {path: ':id',component: CoursesDetail },
+                ]
+            },
+            {
+                path: 'informations/', component: CoursesIndex, children: [
+                    {path: '',component: InformationsList },
+                    {path: ':id',component: InformationDetail }
                 ]
             }
         ]

@@ -12,7 +12,6 @@
   <div style="margin-top: 30px; width: 90%;margin-left: 5%">
     <el-table
             :data="insitutions"
-            border
             style="width: 100%">
       <el-table-column
               prop="name"
@@ -40,6 +39,13 @@
       <el-table-column
               prop="phoneNumber"
               label="电话">
+      </el-table-column>
+      <el-table-column
+              label="操作"
+              width="100">
+        <template slot-scope="scope">
+          <el-button @click="detail(scope.row.id)" type="text" size="small">查看</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -84,7 +90,7 @@
                             const institutionDetail = item.institution_details;
                             const address = institutionDetail.address
                             return {
-                              id: institutionDetail.id,
+                              id: item.id,
                               name: institutionDetail.name,
                               registerCapital:institutionDetail.registered_money,
                               startDate: institutionDetail.establish_time,
@@ -107,6 +113,9 @@
             },
             naviateToRegister(){
                 this.$router.push({path: 'organization/register'})
+            },
+            detail(id) {
+                this.$router.push({path: `/organization/${id}`})
             }
         }
     }

@@ -10,6 +10,13 @@ export function getInstitutionsIds(params) {
     })
 }
 
+export function getInstitutionsInfo(id) {
+    return request({
+        url: `${prefix}/${id}`,
+        method: 'get'
+    })
+}
+
 export function getInstitutionDetails(ids) {
     return request({
         url: `${prefix}/_mget`,
