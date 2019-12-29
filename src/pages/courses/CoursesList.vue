@@ -142,9 +142,10 @@
         }
       },
       mounted(){
+          const params = this.$route.params
           this.getTags();
           this.getAllCountry();
-          this.getCoursesList({page:1,limit:8});
+          this.getCoursesList({page:1,limit:8, ...params});
       },
       methods: {
           async getTags(){

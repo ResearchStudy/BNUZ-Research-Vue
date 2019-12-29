@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="padding: 0px 10px">
   <div class="banner">
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
@@ -22,16 +22,16 @@
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="margin-left: 30px;width: 20%">
-      <el-row style="text-align: right">
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-        <el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>
-      </el-row>
-    </div>
+    <!--<div style="margin-left: 30px;width: 20%">-->
+      <!--<el-row style="text-align: right">-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+        <!--<el-col :span="8"><img src="../../assets/img/default-cover.jpeg" alt="" class="default-cover"></el-col>-->
+      <!--</el-row>-->
+    <!--</div>-->
   </div>
   <div class="hot-city-group" ref="hotCityGroup">
     <div><h2>热门城市 | </h2></div>
@@ -39,55 +39,59 @@
       <div class="left-arrow" v-show="showArrow" @click="scroll(true)"><img src="../../assets/img/arrow-left.png" alt=""></div>
       <div class="right-arrow" v-show="showArrow" @click="scroll(false)"><img src="../../assets/img/arrow-right.png" alt=""></div>
       <div style="display: inline-flex;">
-        <div class="hot-city">
+        <div class="hot-city beijing" @click="navigateCourse({province: 1})">
           <h3 style="color: white">北京</h3>
           <h4 style="color: white">Beijing</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city changsha" @click="navigateCourse({city:184})">
+          <h3 style="color: white">长沙</h3>
+          <h4 style="color: white">Changsha</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city chengdu" @click="navigateCourse({city: 240})">
+          <h3 style="color: white">成都</h3>
+          <h4 style="color: white">Chengdu</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city guangzhou" @click="navigateCourse({city: 198})">
+          <h3 style="color: white">广州</h3>
+          <h4 style="color: white">Gangzhou</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city hangzhou" @click="navigateCourse({city: 88})">
+          <h3 style="color: white">杭州</h3>
+          <h4 style="color: white">Hangzhou</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city qingdao" @click="navigateCourse({city: 136})">
+          <h3 style="color: white">青岛</h3>
+          <h4 style="color: white">Qingdao</h4>
+        </div>
+        <div class="hot-city zhengzhou" @click="navigateCourse({city: 152})">
+          <h3 style="color: white">郑州</h3>
+          <h4 style="color: white">Zhengzhou</h4>
         </div>
       </div>
       <div style="display: inline-flex;margin-top: 30px">
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city shanghai" @click="navigateCourse({province: 9})">
+          <h3 style="color: white">上海</h3>
+          <h4 style="color: white">Shanghai</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city suzhou" @click="navigateCourse({city: 79})">
+          <h3 style="color: white">苏州</h3>
+          <h4 style="color: white">Suzhou</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city tianjin" @click="navigateCourse({province: 2})">
+          <h3 style="color: white">天津</h3>
+          <h4 style="color: white">Tianjin</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city wuhan" @click="navigateCourse({city: 170})">
+          <h3 style="color: white">武汉</h3>
+          <h4 style="color: white">Wuhan</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city xiamen" @click="navigateCourse({city: 116})">
+          <h3 style="color: white">厦门</h3>
+          <h4 style="color: white">Xiamen</h4>
         </div>
-        <div class="hot-city">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
+        <div class="hot-city xian" @click="navigateCourse({city: 293})">
+          <h3 style="color: white">西安</h3>
+          <h4 style="color: white">Xian</h4>
         </div>
       </div>
     </div>
@@ -152,6 +156,9 @@
                     this.$router.push({path: `/informations/${id}`})
 
                 }
+            },
+            navigateCourse(info) {
+              this.$router.push({name: 'CoursesList', params: info})
             }
         }
     }
@@ -160,10 +167,49 @@
 <style scoped>
   .hot-city{
     width: 200px;
-    background-image: url("../../assets/img/beijing.jpeg");
     background-size: cover;
     padding-left: 20px;
     margin-right: 30px;
+    cursor: pointer;
+  }
+  .hot-city.beijing{
+    background-image: url("../../assets/img/city/beijing.jpeg");
+  }
+  .hot-city.changsha{
+    background-image: url("../../assets/img/city/changsha.jpeg");
+  }
+  .hot-city.chengdu{
+    background-image: url("../../assets/img/city/chengdu.jpg");
+  }
+  .hot-city.guangzhou{
+    background-image: url("../../assets/img/city/guangzhou.png");
+  }
+  .hot-city.hangzhou{
+    background-image: url("../../assets/img/city/hangzhou.jpg");
+  }
+  .hot-city.qingdao{
+    background-image: url("../../assets/img/city/qingdao.jpg");
+  }
+  .hot-city.shanghai{
+    background-image: url("../../assets/img/city/shanghai.jpg");
+  }
+  .hot-city.suzhou{
+    background-image: url("../../assets/img/city/suzhou.jpg");
+  }
+  .hot-city.tianjin{
+    background-image: url("../../assets/img/city/tianjin.jpg");
+  }
+  .hot-city.wuhan{
+    background-image: url("../../assets/img/city/wuhan.jpg");
+  }
+  .hot-city.xiamen{
+    background-image: url("../../assets/img/city/xiamen.jpeg");
+  }
+  .hot-city.xian{
+    background-image: url("../../assets/img/city/xian.jpg");
+  }
+  .hot-city.zhengzhou{
+    background-image: url("../../assets/img/city/zhengzhou.jpg");
   }
   .left-arrow{
     position: absolute;
