@@ -44,9 +44,9 @@
 
   <div class="search-group">
     <div v-for="institution in institutionList" :key="institution.stauts" style="cursor: pointer" @click="navigateToInformation(information.id)">
-      <div style="display: flex;padding: 10px 15px">
-        <div style="width: 400px;height: 200px">
-          <img :src="'api/resources/' + institution.institution_details.logo" alt="" style="width: 400px;height: 200px">
+      <div style="display: flex;padding: 10px 10px">
+        <div style="width: 400px;height: 150px">
+          <img :src="'api/resources/' + institution.institution_details.logo" alt="" style="width: 400px;height: 150px">
         </div>
         <div style="width: 100%;padding-left: 30px">
           <h2>{{institution.name}}</h2>
