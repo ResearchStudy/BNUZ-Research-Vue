@@ -119,6 +119,12 @@
         const result = await getAddressById({target: 2,parent: countryId});
         this.provinceList = result.address;
       },
+
+
+      naviateToRegister(){
+        this.$router.push({path: 'organization/register'})
+      },
+      
       async getCityList() {
         const provinceId = this.province_id;
         const result = await getAddressById({
