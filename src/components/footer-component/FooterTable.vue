@@ -1,5 +1,5 @@
 <template>
-<div style="padding-left: 50px" :class="position">
+<div :class="position">
   <table>
     <tr>
       <th>{{title}}</th>

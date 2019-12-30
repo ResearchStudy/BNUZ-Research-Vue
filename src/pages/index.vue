@@ -32,6 +32,8 @@
     }
     .el-footer{
         line-height: 30px !important;
+        display: flex;
+        justify-content: center;
     }
     .el-container{
         height: 100%;

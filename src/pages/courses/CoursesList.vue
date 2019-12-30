@@ -73,10 +73,8 @@
         <card  :title="course.title" :img-src="'/api/resources/' + course.cover" :course-type="course.courseType" :tag-name="course.tagName"/>
       </el-col>
     </el-row>
-
-
-
   </div>
+  
   <div class="search-group" v-show="displayType === 'list'">
     <el-table
             :data="coursesList"
@@ -108,6 +106,17 @@
       </el-table-column>
     </el-table>
   </div>
+  <div style="display: flex;justify-content: center;margin-top: 20px">
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page"
+            :page-sizes="[9,18,27]"
+            :page-size="limit"
+            :total="total"
+            layout=" prev, pager, next, sizes, jumper">
+    </el-pagination>
+  </div>
 </div>
 </template>
 
@@ -137,7 +146,10 @@
             displayType: 'card',
             course_type: '',
             tags: [],
-            travel: ''
+            travel: '',
+            page: 1,
+            limit: 9,
+            total: 0
 
         }
       },
@@ -145,7 +157,7 @@
           const params = this.$route.params
           this.getTags();
           this.getAllCountry();
-          this.getCoursesList({page:1,limit:8, ...params});
+          this.getCoursesList({page:1,limit:9, ...params});
       },
       methods: {
           async getTags(){
@@ -171,6 +183,9 @@
           },
           async getCoursesList(params) {
               const result = await getCoursesList(params)
+              this.page = result.page
+              this.limit = result.limit
+              this.total = result.total
               const ids = result.courses.map((item) => item.id)
               const courseList = await mGetCoursesInfo({ids});
               this.coursesList = courseList.map((item) => {
@@ -228,7 +243,15 @@
                   this.tags.push(id)
               }
               this.search();
-          }
+          },
+          handleSizeChange(limit){
+              this.limit = limit
+              this.getCoursesList({page: this.page, limit})
+          },
+          handleCurrentChange(page) {
+              this.page = page
+              this.getInstitutionList({page, limit: this.limit})
+          },
       }
     }
 </script>

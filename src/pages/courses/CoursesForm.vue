@@ -144,7 +144,7 @@
                             ref="myQuillEditor" class="warrper">
               </quill-editor>
             </div>
-            <div>
+            <div style="margin-top: 30px;text-align: center">
               <el-button @click="submit()" type="primary" v-loading.fullscreen.lock="fullscreenLoading">立即创建</el-button>
             </div>
           </el-tab-pane>
@@ -329,6 +329,7 @@
                             isSingle: true,
                             duration: 5000
                         });
+                        this.$router.push({path: '/courses/'})
                     })
                 })
                 this.fullscreenLoading = false

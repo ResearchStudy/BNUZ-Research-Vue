@@ -166,7 +166,6 @@
 .banner{
   width: 90%;
   height: 150px;
-  border: 1px solid black;
   align-items: center;
   margin-left: 5%;
 }
