@@ -50,8 +50,6 @@
 <style scoped>
 #footer{
   display: flex;
-  margin-left: 4%;
-  padding-left: 10%;
   margin-top: 30px;
 }
 </style>
