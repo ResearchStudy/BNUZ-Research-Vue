@@ -1,12 +1,12 @@
 <template>
 <div id="footer">
   <div style="display: flex">
-    <div v-for="footerMsg in footerLeftArr" :key="footerMsg.title">
+    <div v-for="(footerMsg, index) in footerLeftArr" :key="footerMsg.title" :style="index === 0 ? {paddingLeft: '30px'} : {paddingLeft: '150px'}">
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>
   <div style="padding-right: 1%">
-    <div v-for="footerMsg in footerRightArr" :key="footerMsg.title">
+    <div v-for="footerMsg in footerRightArr" :key="footerMsg.title" style="padding-left: 50px">
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>

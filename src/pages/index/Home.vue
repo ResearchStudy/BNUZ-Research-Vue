@@ -229,7 +229,7 @@
   .right-arrow{
     position: absolute;
     margin-top: 100px;
-    margin-left: calc(95%);
+    margin-left: calc(88%);
     cursor: pointer;
   }
   .hot-city-group{
