@@ -17,8 +17,8 @@
     </div>
     <div style="width: 55%">
       <el-carousel height="312px" style="width: 100%">
-        <el-carousel-item v-for="item in carouselList" :key="item" >
-          <img :src="item" alt="" style="width: 100%;height: 312px">
+        <el-carousel-item v-for="item in carouselList" :key="item.id" @click.native="navigateToCourseDetail(item.id)" style="cursor: pointer">
+          <img :src="item.src" alt="" style="width: 100%;height: 312px">
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -33,14 +33,6 @@
         <img src="../../assets/img/default-cover/culture.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 16})">
         <img src="../../assets/img/default-cover/recommend.jpeg" alt="" class="default-cover" @click="navigateCourse({})">
       </div>
-<!--      <el-row style="text-align: right">-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/knowledge.png" alt="" class="default-cover" @click="navigateCourse({course_type: 1})"></el-col>-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/nature.png" alt="" class="default-cover" @click="navigateCourse({course_type: 2})"></el-col>-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/partice.png" alt="" class="default-cover" @click="navigateCourse({course_type: 4})"></el-col>-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/determin.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 8})"></el-col>-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/culture.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 16})"></el-col>-->
-<!--        <el-col :span="8"><img src="../../assets/img/default-cover/recommend.jpeg" alt="" class="default-cover" @click="navigateCourse({})"></el-col>-->
-<!--      </el-row>-->
     </div>
   </div>
   <div class="hot-city-group" ref="hotCityGroup">
@@ -146,7 +138,10 @@
                 const informationList = await getInformationList();
                 this.informationList = informationList.informations.slice(0,8)
                 const carouseMap = this.coursesList.map((item) => {
-                    return `/api/resources/${item.cover}`
+                    return {
+                        id: item.id,
+                        src: `/api/resources/${item.cover}`
+                    }
                 })
                 this.carouselList = carouseMap
             },
@@ -169,6 +164,9 @@
             },
             navigateCourse(info) {
               this.$router.push({name: 'CoursesList', params: info})
+            },
+            navigateToCourseDetail(id){
+                this.$router.push({path: `/courses/${id}`})
             }
         }
     }
