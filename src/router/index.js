@@ -62,7 +62,7 @@ const router = new VueRouter({
     routes
 });
 
-const permitAllRoutes = ['/login', '/register', '/home', '/organization'];
+const permitAllRoutes = ['/login', '/register', '/home', '/organization','/courses','/informations'];
 
 
 router.beforeEach((to, from, next) => {
