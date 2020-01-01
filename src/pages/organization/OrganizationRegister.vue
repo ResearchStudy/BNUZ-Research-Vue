@@ -227,6 +227,8 @@
   export default {
         name: "OrganizationRegister",
         mounted(){
+
+
             this.getProvinceList();
         },
         data(){

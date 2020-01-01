@@ -6,8 +6,9 @@
       <el-breadcrumb-item>待审核机构</el-breadcrumb-item>
       <el-breadcrumb-item>{{institutionDetails.name}}</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="audit-pending-detail__wrap">
+    <div class="audit-pending-detail__wrap" style="width: 60%;margin-left: 8%">
       <div class="audit-pending-detail__title">基本信息</div>
+      <el-divider></el-divider>
       <el-form ref="form" label-width="120px" label-suffix=":">
         <el-form-item label="企业名称">
           <div class="content">{{institutionDetails.name}}</div>
@@ -18,6 +19,8 @@
         <el-form-item label="企业类型">
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
+
+
         <el-form-item label="详细地址" v-if="institutionDetails.address">
           <div class="content">{{details}}</div>
         </el-form-item>
@@ -29,6 +32,7 @@
             class="content"
           >{{new Date(institutionDetails.establish_time*1000).toLocaleDateString()}}</div>
         </el-form-item>
+
         <el-form-item label="注册资金">
           <div class="content">{{institutionDetails.registered_money}}</div>
         </el-form-item>
@@ -48,6 +52,7 @@
             class="content"
           >{{new Date(institutionDetails.approval_time *1000).toLocaleDateString()}}</div>
         </el-form-item>
+        <el-divider></el-divider>
         <el-form-item label="营业执照">
           <div
             class="logo"
@@ -55,6 +60,7 @@
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
           ></div>
         </el-form-item>
+        <el-divider></el-divider>
         <el-form-item label="附件列表">
           <div class="content">
             <enclousure-list :resources="resources"></enclousure-list>
