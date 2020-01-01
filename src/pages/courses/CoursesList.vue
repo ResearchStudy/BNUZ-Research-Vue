@@ -1,5 +1,5 @@
 <template>
-<div style="width: 92.5%;margin-left: 3.75%">
+<div style="width: 85%;margin-left: 7.5%">
   <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px">
     <el-input placeholder="请输入内容" v-model="title" style="width: 490px;padding-right: 10px;margin-left: 10px"></el-input>
     <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
