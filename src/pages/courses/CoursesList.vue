@@ -1,5 +1,5 @@
 <template>
-<div>
+<div style="width: 90%;margin-left: 5%">
   <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px">
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">类别 :</div>
@@ -8,12 +8,6 @@
       <div class="tag-item" @click="searchByCourseType(4)" style="cursor: pointer"><el-tag :effect="course_type === 4 ? 'dark' : 'plain'">体验考察型</el-tag></div>
       <div class="tag-item" @click="searchByCourseType(8)" style="cursor: pointer"><el-tag :effect="course_type === 8 ? 'dark' : 'plain'">励志拓展型</el-tag></div>
       <div class="tag-item" @click="searchByCourseType(16)" style="cursor: pointer"><el-tag :effect="course_type === 16 ? 'dark' : 'plain'">文化康乐型</el-tag></div>
-    </div>
-    <div style="display: flex;justify-content: start">
-      <div class="tag-item" style="color: #409eff">标签 :</div>
-      <div v-for="tag in tagList" class="tag-item" :key="tag.id">
-        <el-tag :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'" @click="searchByTag(tag.id)">{{tag.name}}</el-tag>
-      </div>
     </div>
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">营期 :</div>
@@ -25,6 +19,12 @@
       <div class="tag-item"><el-tag @click="searchByCourseTravel(6)" :effect="travel === 6 ? 'dark' : 'plain'">12-15天</el-tag></div>
       <div class="tag-item"><el-tag @click="searchByCourseTravel(7)" :effect="travel === 7 ? 'dark' : 'plain'">15-28天</el-tag></div>
       <div class="tag-item"><el-tag @click="searchByCourseTravel(8)" :effect="travel === 8 ? 'dark' : 'plain'">28天以上</el-tag></div>
+    </div>
+    <div style="display: flex;justify-content: start">
+      <div class="tag-item" style="color: #409eff">标签 :</div>
+      <div v-for="tag in tagList" class="tag-item" :key="tag.id">
+        <el-tag :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'" @click="searchByTag(tag.id)">{{tag.name}}</el-tag>
+      </div>
     </div>
     <div style="display: inline-flex">
       <el-input placeholder="请输入内容" v-model="title" style="width: 300px;padding-right: 10px"></el-input>
@@ -74,7 +74,7 @@
       </el-col>
     </el-row>
   </div>
-  
+
   <div class="search-group" v-show="displayType === 'list'">
     <el-table
             :data="coursesList"

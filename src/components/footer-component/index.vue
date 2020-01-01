@@ -51,5 +51,7 @@
 #footer{
   display: flex;
   margin-top: 30px;
+  width: 88%;
+  margin-left: 6%;
 }
 </style>
