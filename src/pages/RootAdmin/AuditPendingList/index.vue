@@ -68,6 +68,16 @@
               slot-scope="scope"
             >{{new Date(scope.row.create_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
+          <el-table-column prop="applyTime" label="联系人" align="center" show-overflow-tooltip>
+            <template
+                    slot-scope="scope"
+            >{{scope.row.institution_details.contact_man}}</template>
+          </el-table-column>
+          <el-table-column prop="applyTime" label="手机号码" align="center" show-overflow-tooltip>
+            <template
+                    slot-scope="scope"
+            >{{scope.row.institution_details.contact_number}}</template>
+          </el-table-column>
           <el-table-column prop="description" label="机构简介" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.institution_details.remarks}}</template>
           </el-table-column>
