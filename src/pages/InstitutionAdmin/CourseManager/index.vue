@@ -192,7 +192,7 @@ export default {
 
 
     naviateToPublish(){
-      this.$router.push({path: '/courses/form'})
+      this.$router.push({path: '/insitution-admin/coursesForm'})
     },
 
     handleSelectionChange(val) {

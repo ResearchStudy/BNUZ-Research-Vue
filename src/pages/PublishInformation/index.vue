@@ -3,7 +3,7 @@
     <v-header></v-header>
     <div style="width: 80%;margin-left: 10%">
       <div>
-        <h1>发布资讯</h1>
+        <h1 style="font-size:25px" align="center">发布资讯</h1>
         <el-divider></el-divider>
       </div>
       <el-form :model="form" ref="form" label-width="80px">
