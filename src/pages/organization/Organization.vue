@@ -38,10 +38,13 @@
       <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
   </div>
+
+  <!--
   <div style="display: flex;justify-content: flex-end;width: 90%; margin-left: 5%;margin-top: 15px">
     <el-button type="primary" @click="naviateToRegister()">我要入驻</el-button>
   </div>
-
+-->
+  
   <div class="search-group">
     <div v-for="institution in institutionList" :key="institution.id" style="cursor: pointer" @click="navigateToInformation(institution.id)">
       <div style="display: flex;padding: 10px 10px">
