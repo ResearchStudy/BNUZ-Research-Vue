@@ -5,9 +5,12 @@
   </div>
   <div style="margin-top: 10px;display: flex">
     <div style="background: #f8f8f8;width: 25%">
-      <div style="padding: 10px">
-        <span @click="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
-        <span @click="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
+      <div style="padding: 10px;display: flex;justify-content: space-between">
+        <div>
+          <span @mouseenter="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
+          <span @mouseenter="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
+        </div>
+        <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
       </div>
       <div>
         <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 0px 5px" v-for="item in infoList" :key="item.id">
@@ -255,6 +258,10 @@
   .default-cover{
     height: 150px;
     width: 33.3%;
+    cursor: pointer;
+  }
+  .more:hover{
+    color: #409EFF;
     cursor: pointer;
   }
 </style>
