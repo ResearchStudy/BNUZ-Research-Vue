@@ -3,7 +3,7 @@
   <div class="banner">
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
-  <div style="margin-top: 10px;display: flex;width: 90%;margin-left: 5%">
+  <div style="margin-top: 10px;display: flex">
     <div style="background: #f8f8f8;width: 30%">
       <div style="padding: 10px;display: flex;justify-content: space-between">
         <div>
@@ -32,11 +32,22 @@
       <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
     </div>
     <div style="display: flex;">
-      <el-card :body-style="{ padding: '0px' }"  v-for="course in coursesList.slice(0,2)" shadow="hover" :key="course.id" style="width: 40%;margin-right: 100px" @click.native="$router.push({path: '/courses/' + course.id})">
+      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(0,3)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
         <img :src="'api/resources/' + course.cover" class="image">
         <div style="padding: 14px;">
-          <span>{{course.title.length > 20 ? course.title.substring(0, 20) + '...' : course.title}}</span>
-          <div class="bottom clearfix">
+          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
+          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
+            {{course.description}}
+          </div>
+        </div>
+      </el-card>
+    </div>
+    <div style="display: flex;margin-top: 30px">
+      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(3,6)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
+        <img :src="'api/resources/' + course.cover" class="image">
+        <div style="padding: 14px;">
+          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
+          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
             {{course.description}}
           </div>
         </div>
