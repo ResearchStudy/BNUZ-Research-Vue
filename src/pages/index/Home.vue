@@ -248,12 +248,20 @@
     margin: 0;
   }
 
-  .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
-  }
-
-  .el-carousel__item:nth-child(2n+1) {
-    background-color: #d3dce6;
+  /deep/ .el-carousel__button {
+    display: block;
+    opacity: .48;
+    width: 10px;
+    height: 10px;
+    background-color: #FFF;
+    border: none;
+    outline: 0;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-radius: 10px;
   }
   .default-cover{
     height: 150px;
