@@ -1,16 +1,16 @@
 <template>
-<div style="padding: 0px 10px;width: 90%;margin-left: 5%">
+<div style="width: 87%;margin-left: 6.5%">
   <div class="banner">
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
   <div style="margin-top: 10px;display: flex">
-    <div style="background: #f8f8f8;width: 25%">
+    <div style="background: #f8f8f8;width: 30%">
       <div style="padding: 10px;display: flex;justify-content: space-between">
         <div>
           <span @mouseenter="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
           <span @mouseenter="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
         </div>
-        <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
+        <span class="more" @click="moreClick"><i class="el-icon-circle-plus-outline"></i>MORE</span>
       </div>
       <div>
         <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 0px 5px" v-for="item in infoList" :key="item.id">
@@ -18,24 +18,40 @@
         </div>
       </div>
     </div>
-    <div style="width: 55%">
+    <div style="width: 70%">
       <el-carousel height="312px" style="width: 100%">
         <el-carousel-item v-for="item in carouselList" :key="item.id" @click.native="navigateToCourseDetail(item.id)" style="cursor: pointer">
           <img :src="item.src" alt="" style="width: 100%;height: 312px">
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="margin-left: 5px;width: 20%">
-      <div style="display: flex;justify-content: space-around">
-        <img src="../../assets/img/default-cover/knowledge.png" alt="" class="default-cover" @click="navigateCourse({course_type: 1})">
-        <img src="../../assets/img/default-cover/nature.png" alt="" class="default-cover" @click="navigateCourse({course_type: 2})">
-        <img src="../../assets/img/default-cover/partice.png" alt="" class="default-cover" @click="navigateCourse({course_type: 4})">
-      </div>
-      <div style="display: flex;justify-content: space-around">
-        <img src="../../assets/img/default-cover/determin.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 8})">
-        <img src="../../assets/img/default-cover/culture.jpeg" alt="" class="default-cover" @click="navigateCourse({course_type: 16})">
-        <img src="../../assets/img/default-cover/recommend.jpeg" alt="" class="default-cover" @click="navigateCourse({})">
-      </div>
+  </div>
+  <div>
+    <div style="display: flex;justify-content: space-between">
+      <h2>热门课程 |</h2>
+      <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
+    </div>
+    <div style="display: flex;">
+      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(0,3)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
+        <img :src="'api/resources/' + course.cover" class="image">
+        <div style="padding: 14px;">
+          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
+          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
+            {{course.description}}
+          </div>
+        </div>
+      </el-card>
+    </div>
+    <div style="display: flex;margin-top: 30px">
+      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(3,6)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
+        <img :src="'api/resources/' + course.cover" class="image">
+        <div style="padding: 14px;">
+          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
+          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
+            {{course.description}}
+          </div>
+        </div>
+      </el-card>
     </div>
   </div>
   <div class="hot-city-group" ref="hotCityGroup">
@@ -138,6 +154,7 @@
             async getNewestCoursesList() {
                 const courseList = await getCoursesList();
                 this.coursesList = courseList.courses.slice(0,8)
+                console.log(this.coursesList)
                 const informationList = await getInformationList();
                 this.informationList = informationList.informations.slice(0,8)
                 const carouseMap = this.coursesList.map((item) => {
@@ -170,6 +187,13 @@
             },
             navigateToCourseDetail(id){
                 this.$router.push({path: `/courses/${id}`})
+            },
+            moreClick(){
+                if(this.activeTab === 'course'){
+                    this.$router.push({path: '/courses/'})
+                }else{
+                    this.$router.push({path: '/informations/'})
+                }
             }
         }
     }
@@ -268,8 +292,24 @@
     width: 33.3%;
     cursor: pointer;
   }
+  .more{
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
   .more:hover{
     color: #409EFF;
     cursor: pointer;
+  }
+  .image {
+    width: 100%;
+    height: 150px;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
   }
 </style>

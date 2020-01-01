@@ -1,19 +1,16 @@
 <template>
-<div>
+<div style="width: 90%;margin-left: 5%">
   <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px">
+    <el-input placeholder="请输入内容" v-model="title" style="width: 490px;padding-right: 10px;margin-left: 10px"></el-input>
+    <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
+    <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">类别 :</div>
-      <div class="tag-item" @click="searchByCourseType(1)" style="cursor: pointer"><el-tag :effect="course_type === 1 ? 'dark' : 'plain'">知识科普型</el-tag></div>
-      <div class="tag-item" @click="searchByCourseType(2)" style="cursor: pointer"><el-tag :effect="course_type === 2 ? 'dark' : 'plain'">自然观赏型</el-tag></div>
-      <div class="tag-item" @click="searchByCourseType(4)" style="cursor: pointer"><el-tag :effect="course_type === 4 ? 'dark' : 'plain'">体验考察型</el-tag></div>
-      <div class="tag-item" @click="searchByCourseType(8)" style="cursor: pointer"><el-tag :effect="course_type === 8 ? 'dark' : 'plain'">励志拓展型</el-tag></div>
-      <div class="tag-item" @click="searchByCourseType(16)" style="cursor: pointer"><el-tag :effect="course_type === 16 ? 'dark' : 'plain'">文化康乐型</el-tag></div>
-    </div>
-    <div style="display: flex;justify-content: start">
-      <div class="tag-item" style="color: #409eff">标签 :</div>
-      <div v-for="tag in tagList" class="tag-item" :key="tag.id">
-        <el-tag :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'" @click="searchByTag(tag.id)">{{tag.name}}</el-tag>
-      </div>
+      <div class="tag-item" @click="searchByCourseType(1)" style="cursor: pointer;padding-right: 42px"><el-tag :effect="course_type === 1 ? 'dark' : 'plain'">知识科普型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(2)" style="cursor: pointer;padding-right: 42px"><el-tag :effect="course_type === 2 ? 'dark' : 'plain'">自然观赏型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(4)" style="cursor: pointer;padding-right: 42px"><el-tag :effect="course_type === 4 ? 'dark' : 'plain'">体验考察型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(8)" style="cursor: pointer;padding-right: 42px"><el-tag :effect="course_type === 8 ? 'dark' : 'plain'">励志拓展型</el-tag></div>
+      <div class="tag-item" @click="searchByCourseType(16)" style="cursor: pointer;padding-right: 42px"><el-tag :effect="course_type === 16 ? 'dark' : 'plain'">文化康乐型</el-tag></div>
     </div>
     <div style="display: flex;justify-content: start">
       <div class="tag-item" style="color: #409eff">营期 :</div>
@@ -26,9 +23,15 @@
       <div class="tag-item"><el-tag @click="searchByCourseTravel(7)" :effect="travel === 7 ? 'dark' : 'plain'">15-28天</el-tag></div>
       <div class="tag-item"><el-tag @click="searchByCourseTravel(8)" :effect="travel === 8 ? 'dark' : 'plain'">28天以上</el-tag></div>
     </div>
-    <div style="display: inline-flex">
-      <el-input placeholder="请输入内容" v-model="title" style="width: 300px;padding-right: 10px"></el-input>
-      <el-select v-model="country_id" placeholder="国家" @change="getProvinceList">
+    <div style="display: flex;justify-content: start">
+      <div class="tag-item" style="color: #409eff">标签 :</div>
+      <div v-for="tag in tagList" class="tag-item" :key="tag.id">
+        <el-tag :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'" @click="searchByTag(tag.id)">{{tag.name}}</el-tag>
+      </div>
+    </div>
+    <div style="display: inline-flex; align-items: center">
+      <label style="padding-left: 10px">国家：</label>
+      <el-select v-model="country_id" placeholder="国家" @change="getProvinceList" style="margin-right: 20px">
         <el-option
                 v-for="item in countryList"
                 :key="item.id"
@@ -36,7 +39,8 @@
                 :value="item.id">
         </el-option>
       </el-select>
-      <el-select v-model="province_id" placeholder="省份" style="padding-left: 10px" @change="getCityList">
+      <label>省份：</label>
+      <el-select v-model="province_id" placeholder="省份" style="padding-left: 10px;margin-right: 20px" @change="getCityList">
         <el-option
                 v-for="item in provinceList"
                 :key="item.id"
@@ -44,7 +48,8 @@
                 :value="item.id">
         </el-option>
       </el-select>
-      <el-select v-model="city_id" placeholder="城市" style="padding-left: 10px">
+      <label>城市：</label>
+      <el-select v-model="city_id" placeholder="城市" style="padding-left: 10px;margin-right: 20px">
         <el-option
                 v-for="item in cityList"
                 :key="item.id"
@@ -52,8 +57,6 @@
                 :value="item.id">
         </el-option>
       </el-select>
-      <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
-      <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
   </div>
   <div class="search-group" style="border: 1px solid #f2f2f2;padding: 5px 30px;margin-top: 0px;display: flex;justify-content: space-between;">
@@ -74,7 +77,7 @@
       </el-col>
     </el-row>
   </div>
-  
+
   <div class="search-group" v-show="displayType === 'list'">
     <el-table
             :data="coursesList"
