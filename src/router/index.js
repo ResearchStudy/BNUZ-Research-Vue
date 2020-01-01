@@ -67,16 +67,17 @@ const permitAllRoutes = ['/login', '/register', '/home', '/organization','/cours
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("/logout")) {
+        next({ path: '/login' })
         localStorage.setItem("id", "");
         store.dispatch('setRole', "")
-        next({ path: '/login' })
     }
     if (permitAllRoutes.includes(to.path) || store.getters.role.length !== 0) {
         next()
     }
     else {
         if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
-            alert("请先登录！");
+            alert(localStorage.getItem("id"));
+            //alert("请先登录！");
             next({ path: '/login' })
         } else {
             if (store.getters.role.length === 0) {
