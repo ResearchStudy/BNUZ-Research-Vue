@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="width: 80%;margin-left: 10%;margin-top: 3%">
+    <div style="width: 60%;margin-left: 22%;margin-top: 3%">
       <el-steps :active="active">
         <el-step title="步骤 1" description="填写机构基本信息"></el-step>
         <el-step title="步骤 2" description="上传附件材料"></el-step>
@@ -10,7 +10,7 @@
 
     <div style="margin-top: 20px; width:50%; margin-left: 25%" v-if="active === 1">
       <div>
-        <el-divider content-position="center" ><span style="font-size: 20px">基本资料</span></el-divider>
+        <el-divider  content-position="center" ><span style="font-size: 20px">基本资料</span></el-divider>
       </div>
       <el-form ref="form" :model="form" label-width="100px" >
         <el-form-item label="企业名称">
@@ -23,14 +23,20 @@
           <el-input v-model="form.institution_type"></el-input>
         </el-form-item>
         <el-row>
-          <el-col :span="10">
+          <el-col :span="8">
+            <el-form-item label="成立时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.establish_time" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="省份">
               <el-select v-model="form.address.province_id" placeholder="请选择省份" @change="getCityList(form.address.province_id)">
                 <el-option v-for="province in provinceList" :label="province.name" :key="province.id" :value="province.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="8">
             <el-form-item label="城市">
               <el-select v-model="form.address.city_id" placeholder="请选择城市">
                 <el-option v-for="city in cityList" :label="city.name" :key="city.id" :value="city.id"></el-option>
@@ -41,40 +47,75 @@
         <el-form-item label="详细地址">
           <el-input v-model="form.address.details"></el-input>
         </el-form-item>
-        <el-form-item label="法定代表人">
-          <el-input v-model="form.legal_person"></el-input>
-        </el-form-item>
-        <el-form-item label="成立时间">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.establish_time" style="width: 100%;"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="注册资金">
-          <el-input v-model="form.registered_money" type="number"></el-input>
-        </el-form-item>
-        <el-form-item label="营业期限">
-          <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_start_time" style="width: 100%;"></el-date-picker>
+
+
+
+        <el-row>
+          <el-col span="8">
+            <el-form-item label="法人">
+              <el-input v-model="form.legal_person"></el-input>
+            </el-form-item>
           </el-col>
-          <el-col :span="1" :offset="1">
-            <span style="font-size: 10px">-</span>
+
+          <el-col span="8">
+            <el-form-item label="联系电话">
+              <el-input v-model="form.phone"></el-input>
+            </el-form-item>
           </el-col>
-          <el-col :span="11">
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_end_time" style="width: 100%;"></el-date-picker>
+          <el-col span="8">
+            <el-form-item label="核准时间">
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.approval_time" style="width: 100%;"></el-date-picker>
+            </el-form-item>
           </el-col>
-        </el-form-item>
+        </el-row>
+
+        <el-row>
+          <el-col span="16">
+            <el-form-item label="营业期限">
+              <el-col :span="11">
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_start_time" style="width: 100%;"></el-date-picker>
+              </el-col>
+              <el-col :span="1" :offset="1">
+                <span style="font-size: 10px">-</span>
+              </el-col>
+              <el-col :span="11">
+                <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_end_time" style="width: 100%;"></el-date-picker>
+              </el-col>
+            </el-form-item>
+          </el-col>
+
+          <el-col span="8">
+            <el-form-item label="注册资金">
+              <el-input v-model="form.registered_money" type="number"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
+
         <el-form-item label="登记机关">
           <el-input v-model="form.registration_authority"></el-input>
         </el-form-item>
-        <el-form-item label="核准时间">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.approval_time" style="width: 100%;"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="联系电话">
-          <el-input v-model="form.phone"></el-input>
-        </el-form-item>
+
+
         <el-form-item label="经营范围">
           <el-input type="textarea" v-model="form.business_scope"></el-input>
         </el-form-item>
+        <el-row>
+          <el-col span="12">
+            <el-form-item label="联系人">
+              <el-input v-model="form.contact_man"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col span="12">
+            <el-form-item label="手机号码">
+              <el-input v-model="form.contact_number"></el-input>
+            </el-form-item>
+          </el-col>
+
+        </el-row>
         <p style="text-align: center;font-size: 20px;color:red;font-weight: bold">
-          注：以上信息应与机构在当地工商部门登记的保持一致，机构需确保信息真实有效！
+          注：以上信息均为必填项且应与机构在当地工商部门登记的保持一致，机构需确保信息真实有效！
         </p>
         <div>
           <el-divider content-position="center" ></el-divider>
