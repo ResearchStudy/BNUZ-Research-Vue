@@ -1,5 +1,5 @@
 <template>
-<div style="padding: 0px 10px;width: 90%;margin-left: 5%">
+<div style="width: 92.5%;margin-left: 3.75%">
   <div class="banner">
     <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
   </div>
