@@ -205,8 +205,7 @@
               })
           },
           detail(id){
-              const similarCourses = this.coursesList.filter((course) => course.id !== id).slice(0,3)
-              this.$router.push({name: `CoursesDetail`, params: {id,similarCourses}})
+              this.$router.push({name: `CoursesDetail`, params: {id}})
           },
 
           async search(){

@@ -133,7 +133,6 @@
           this.id = this.$route.params.id
         },
         id(){
-          this.similarCourses = this.$route.params.similarCourses
           this.getCoursesInfo()
         }
       },
@@ -144,6 +143,9 @@
       methods: {
         async getCoursesInfo(){
             this.info = await getCoursesById(this.$route.params.id);
+            const temp = await getCoursesList();
+            const similarCourses = temp.courses.filter((course) => course.id !== this.$route.params.id).slice(0,3);
+            this.similarCourses = similarCourses;
             this.info.src = `/api/resources/${this.info.cover}`
             this.info.startTime = new Date(this.info.start_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.start_time * 1000).getMonth() + 1
             this.info.endTime = new Date(this.info.end_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.end_time * 1000).getMonth() + 1
@@ -169,9 +171,7 @@
           }
         },
           async navigateToCoursesById(id){
-            const temp = await getCoursesList();
-            const similarCourses = temp.courses.filter((course) => course.id !== id).slice(0,3);
-            this.$router.push({name: `CoursesDetail`, params: {id, similarCourses}})
+            this.$router.push({name: `CoursesDetail`, params: {id}})
           }
       }
     }
