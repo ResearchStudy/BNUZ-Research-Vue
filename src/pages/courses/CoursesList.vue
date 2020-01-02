@@ -1,6 +1,7 @@
 <template>
 
     <div style="width: 78%;margin-left: 11%">
+      <div style="width: 97%;margin-left: 1.2%">
       <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px; background: #F6F6F8" >
         <div style="width: 100%;margin-left:2%">
           <el-input placeholder="请输入内容" v-model="title" style="width: 490px;padding-right: 10px;margin-left: 10px"></el-input>
@@ -63,11 +64,11 @@
         </div>
 
       </div>
-
+      </div>
 
       <div class="search-group" style="padding: 0px 1px;margin-top: 0px;display: flex;justify-content: space-between; ">
-        <div style="display: flex;justify-content: space-between">
-          <h3>搜索</h3>
+        <div style="display: flex;justify-content: space-between;margin-left: 1%">
+          <h3 style="">搜索</h3>
         </div>
         <!--
         <div style="display: flex;align-items: center;">
@@ -78,9 +79,9 @@
       </div>
 
 
-      <div  style="margin-top: 5px;background-color: #f2f2f2" v-show="displayType === 'card'">
-        <el-row style="padding: 15px">
-          <el-col :span="6" v-for="course in coursesList" :key="course.id" style="padding: 10px; cursor: pointer"  @click.native="detail(course.id)" >
+      <div  style="margin-top: 5px;background-color: #ffffff" v-show="displayType === 'card'">
+        <el-row >
+          <el-col :span="6" v-for="course in coursesList" :key="course.id" style="padding: 0px; cursor: pointer"  @click.native="detail(course.id)" >
             <card  :title="course.title" :img-src="'/api/resources/' + course.cover" :description="course.description" :tag-name="course.tagName"/>
           </el-col>
         </el-row>
