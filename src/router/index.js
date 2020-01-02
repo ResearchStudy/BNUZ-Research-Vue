@@ -27,25 +27,25 @@ const routes = [
         path: '/',
         component: index,
         children: [
-            { path: '', component: Home },
-            { path: 'login', component: Login },
-            { path: 'register', component: Register },
+            { path: '', component: Home, name: 'Home' },
+            { path: 'login', component: Login, name: 'Login' },
+            { path: 'register', component: Register, name: 'Register' },
             {path: 'organization/', component: OrganizationIndex, children: [
-                    {path: '', component: Organization},
-                    {path: 'register', component: OrganizationRegister},
-                    {path: ':id', component: OrganizationDetail},
+                    {path: '', component: Organization, name: 'Organization'},
+                    {path: 'register', component: OrganizationRegister, name: 'OrganizationRegister'},
+                    {path: ':id', component: OrganizationDetail, name: 'OrganizationDetail'},
                 ]},
             {
                 path: 'courses/', component: CoursesIndex, children: [
                     {path: '',component: CoursesList, name: 'CoursesList' },
-                    {path: 'form',component: CoursesForm },
+                    {path: 'form',component: CoursesForm, name: 'CoursesForm' },
                     {path: ':id',component: CoursesDetail, name: 'CoursesDetail' },
                 ]
             },
             {
                 path: 'informations/', component: CoursesIndex, children: [
-                    {path: '',component: InformationsList },
-                    {path: ':id',component: InformationDetail }
+                    {path: '',component: InformationsList, name: 'InformationsList' },
+                    {path: ':id',component: InformationDetail, name: 'InformationDetail' }
                 ]
             }
         ]
@@ -62,7 +62,14 @@ const router = new VueRouter({
     routes
 });
 
-const permitAllRoutes = ['/login', '/register', '/', '/organization','/courses','/informations'];
+const permitAllRoutes = [
+    '/login',
+    '/register',
+    '/',
+    '/organization',
+    '/courses',
+    '/informations'
+];
 
 
 router.beforeEach((to, from, next) => {
@@ -71,8 +78,8 @@ router.beforeEach((to, from, next) => {
         store.dispatch('setRole', "")
         next({ path: '/login' })
     }
-    if (permitAllRoutes.includes(to.path) || store.getters.role.length !== 0) {
-        if(localStorage.getItem("id").length !== 0){
+    if (permitAllRoutes.some((item) => to.path.indexOf(item) !== -1) || store.getters.role.length !== 0) {
+        if(localStorage.getItem("id") && localStorage.getItem("id").length !== 0){
             getUserInfo(localStorage.getItem("id")).then((res) => {
                 store.dispatch('setUserInfoAndRole', res);
                 if (res.role === 99) {

@@ -149,8 +149,12 @@
             this.info.endTime = new Date(this.info.end_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.end_time * 1000).getMonth() + 1
         },
         async preEnroll(){
-          this.dialogFormVisible = true
-          this.termList = await getTermByCoursesId(this.$route.params.id)
+          if(!localStorage.getItem("id") || localStorage.getItem("id").length === 0 ){
+              this.$router.push({path: '/login'})
+          }  else {
+              this.dialogFormVisible = true
+              this.termList = await getTermByCoursesId(this.$route.params.id)
+          }
         },
         preEnrollSubmit(){
             this.enroll.age = parseInt(this.enroll.age)
@@ -161,7 +165,7 @@
         },
         handleClick(tab){
           if(tab.name === 'four'){
-              this.dialogFormVisible = true
+              this.preEnroll()
           }
         },
           async navigateToCoursesById(id){
