@@ -1,123 +1,126 @@
 <template>
-<div style="width: 87%;margin-left: 6.5%">
-  <div class="banner">
-    <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
-  </div>
-  <div style="margin-top: 10px;display: flex">
-    <div style="background: #f8f8f8;width: 30%">
-      <div style="padding: 10px;display: flex;justify-content: space-between">
+    <div style="width: 100%;background: #F6F6F8">
+      <div style="width: 78%;margin-left: 11%">
+        <div class="banner">
+          <img src="../../assets/img/banner.jpeg" alt="" style="height: 150px;width: 100%">
+        </div>
+        <div style="margin-top: 10px;display: flex">
+          <div style="background: #ffffff;width: 30%">
+            <div style="padding: 10px;display: flex;justify-content: space-between">
+              <div>
+                <span @mouseenter="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
+                <span @mouseenter="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
+              </div>
+              <span class="more" @click="moreClick"><i class="el-icon-circle-plus-outline"></i>MORE</span>
+            </div>
+            <div>
+              <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 2px 10px" v-for="item in infoList" :key="item.id">
+                <el-link  style="font-size: 14px;" @click="navigateToDetail(item.id)">{{item.title.length > 20 ? item.title.substring(0, 20) + '...' : item.title}}</el-link>
+              </div>
+            </div>
+          </div>
+          <div style="width: 70%;margin-left: 2%">
+            <el-carousel height="329px" style="width: 100%">
+              <el-carousel-item v-for="item in carouselList" :key="item.id" @click.native="navigateToCourseDetail(item.id)" style="cursor: pointer">
+                <img :src="item.src" alt="" style="width: 100%;height: 329px">
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </div>
         <div>
-          <span @mouseenter="activeTab = 'course'" :style="activeTab === 'course' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新课程</span> |
-          <span @mouseenter="activeTab = 'information'" :style="activeTab === 'information' ? {color: '#409EFF'} : ''" style="cursor: pointer">最新资讯</span>
-        </div>
-        <span class="more" @click="moreClick"><i class="el-icon-circle-plus-outline"></i>MORE</span>
-      </div>
-      <div>
-        <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 0px 5px" v-for="item in infoList" :key="item.id">
-          <el-link  style="font-size: 14px;" @click="navigateToDetail(item.id)">{{item.title.length > 20 ? item.title.substring(0, 20) + '...' : item.title}}</el-link>
-        </div>
-      </div>
-    </div>
-    <div style="width: 70%">
-      <el-carousel height="312px" style="width: 100%">
-        <el-carousel-item v-for="item in carouselList" :key="item.id" @click.native="navigateToCourseDetail(item.id)" style="cursor: pointer">
-          <img :src="item.src" alt="" style="width: 100%;height: 312px">
-        </el-carousel-item>
-      </el-carousel>
-    </div>
-  </div>
-  <div>
-    <div style="display: flex;justify-content: space-between">
-      <h2>热门课程 |</h2>
-      <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
-    </div>
-    <div style="display: flex;">
-      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(0,3)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
-        <img :src="'api/resources/' + course.cover" class="image">
-        <div style="padding: 14px;">
-          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
-          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
-            {{course.description}}
+          <div style="display: flex;justify-content: space-between">
+            <h2>热门课程 |</h2>
+            <span class="more" @click="$router.push({path: '/courses/'})"><i class="el-icon-circle-plus-outline"></i>MORE</span>
+          </div>
+          <div style="display: flex;">
+            <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(0,4)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '40px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
+              <img :src="'api/resources/' + course.cover" class="image">
+              <div style="padding: 12px;">
+                <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
+                  {{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}
+                </div>
+              </div>
+            </el-card>
+          </div>
+          <div style="display: flex;margin-top: 30px">
+            <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(4,8)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '40px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
+              <img :src="'api/resources/' + course.cover" class="image">
+              <div style="padding: 14px;">
+                <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
+                  {{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}
+                </div>
+              </div>
+            </el-card>
           </div>
         </div>
-      </el-card>
-    </div>
-    <div style="display: flex;margin-top: 30px">
-      <el-card :body-style="{ padding: '0px' }"  v-for="(course,index) in coursesList.slice(3,6)" shadow="hover" :key="course.id" :style="{width: '60%', marginLeft: index !== 0 ? '50px' : '0px'}" @click.native="$router.push({path: '/courses/' + course.id})">
-        <img :src="'api/resources/' + course.cover" class="image">
-        <div style="padding: 14px;">
-          <el-link :underline="false" style="font-size: 18px;font-weight: bold">{{course.title.length > 15 ? course.title.substring(0, 15) + '...' : course.title}}</el-link>
-          <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
-            {{course.description}}
+
+        <div class="hot-city-group" ref="hotCityGroup">
+          <div><h2>热门城市 | </h2></div>
+          <div @mouseenter="showArrow = true" @mouseleave="showArrow = false">
+            <div class="left-arrow" v-show="showArrow" @click="scroll(true)"><img src="../../assets/img/arrow-left.png" alt=""></div>
+            <div class="right-arrow" v-show="showArrow" @click="scroll(false)"><img src="../../assets/img/arrow-right.png" alt=""></div>
+            <div style="display: inline-flex;">
+              <div class="hot-city beijing" @click="navigateCourse({province: 1})">
+                <h3 style="color: white">北京</h3>
+                <h4 style="color: white">Beijing</h4>
+              </div>
+              <div class="hot-city changsha" @click="navigateCourse({city:184})">
+                <h3 style="color: white">长沙</h3>
+                <h4 style="color: white">Changsha</h4>
+              </div>
+              <div class="hot-city chengdu" @click="navigateCourse({city: 240})">
+                <h3 style="color: white">成都</h3>
+                <h4 style="color: white">Chengdu</h4>
+              </div>
+              <div class="hot-city guangzhou" @click="navigateCourse({city: 198})">
+                <h3 style="color: white">广州</h3>
+                <h4 style="color: white">Gangzhou</h4>
+              </div>
+              <div class="hot-city hangzhou" @click="navigateCourse({city: 88})">
+                <h3 style="color: white">杭州</h3>
+                <h4 style="color: white">Hangzhou</h4>
+              </div>
+              <div class="hot-city qingdao" @click="navigateCourse({city: 136})">
+                <h3 style="color: white">青岛</h3>
+                <h4 style="color: white">Qingdao</h4>
+              </div>
+              <div class="hot-city zhengzhou" @click="navigateCourse({city: 152})">
+                <h3 style="color: white">郑州</h3>
+                <h4 style="color: white">Zhengzhou</h4>
+              </div>
+            </div>
+            <div style="display: inline-flex;margin-top: 30px">
+              <div class="hot-city shanghai" @click="navigateCourse({province: 9})">
+                <h3 style="color: white">上海</h3>
+                <h4 style="color: white">Shanghai</h4>
+              </div>
+              <div class="hot-city suzhou" @click="navigateCourse({city: 79})">
+                <h3 style="color: white">苏州</h3>
+                <h4 style="color: white">Suzhou</h4>
+              </div>
+              <div class="hot-city tianjin" @click="navigateCourse({province: 2})">
+                <h3 style="color: white">天津</h3>
+                <h4 style="color: white">Tianjin</h4>
+              </div>
+              <div class="hot-city wuhan" @click="navigateCourse({city: 170})">
+                <h3 style="color: white">武汉</h3>
+                <h4 style="color: white">Wuhan</h4>
+              </div>
+              <div class="hot-city xiamen" @click="navigateCourse({city: 116})">
+                <h3 style="color: white">厦门</h3>
+                <h4 style="color: white">Xiamen</h4>
+              </div>
+              <div class="hot-city xian" @click="navigateCourse({city: 293})">
+                <h3 style="color: white">西安</h3>
+                <h4 style="color: white">Xian</h4>
+              </div>
+            </div>
           </div>
         </div>
-      </el-card>
-    </div>
-  </div>
-  <div class="hot-city-group" ref="hotCityGroup">
-    <div><h2>热门城市 | </h2></div>
-    <div @mouseenter="showArrow = true" @mouseleave="showArrow = false">
-      <div class="left-arrow" v-show="showArrow" @click="scroll(true)"><img src="../../assets/img/arrow-left.png" alt=""></div>
-      <div class="right-arrow" v-show="showArrow" @click="scroll(false)"><img src="../../assets/img/arrow-right.png" alt=""></div>
-      <div style="display: inline-flex;">
-        <div class="hot-city beijing" @click="navigateCourse({province: 1})">
-          <h3 style="color: white">北京</h3>
-          <h4 style="color: white">Beijing</h4>
-        </div>
-        <div class="hot-city changsha" @click="navigateCourse({city:184})">
-          <h3 style="color: white">长沙</h3>
-          <h4 style="color: white">Changsha</h4>
-        </div>
-        <div class="hot-city chengdu" @click="navigateCourse({city: 240})">
-          <h3 style="color: white">成都</h3>
-          <h4 style="color: white">Chengdu</h4>
-        </div>
-        <div class="hot-city guangzhou" @click="navigateCourse({city: 198})">
-          <h3 style="color: white">广州</h3>
-          <h4 style="color: white">Gangzhou</h4>
-        </div>
-        <div class="hot-city hangzhou" @click="navigateCourse({city: 88})">
-          <h3 style="color: white">杭州</h3>
-          <h4 style="color: white">Hangzhou</h4>
-        </div>
-        <div class="hot-city qingdao" @click="navigateCourse({city: 136})">
-          <h3 style="color: white">青岛</h3>
-          <h4 style="color: white">Qingdao</h4>
-        </div>
-        <div class="hot-city zhengzhou" @click="navigateCourse({city: 152})">
-          <h3 style="color: white">郑州</h3>
-          <h4 style="color: white">Zhengzhou</h4>
-        </div>
-      </div>
-      <div style="display: inline-flex;margin-top: 30px">
-        <div class="hot-city shanghai" @click="navigateCourse({province: 9})">
-          <h3 style="color: white">上海</h3>
-          <h4 style="color: white">Shanghai</h4>
-        </div>
-        <div class="hot-city suzhou" @click="navigateCourse({city: 79})">
-          <h3 style="color: white">苏州</h3>
-          <h4 style="color: white">Suzhou</h4>
-        </div>
-        <div class="hot-city tianjin" @click="navigateCourse({province: 2})">
-          <h3 style="color: white">天津</h3>
-          <h4 style="color: white">Tianjin</h4>
-        </div>
-        <div class="hot-city wuhan" @click="navigateCourse({city: 170})">
-          <h3 style="color: white">武汉</h3>
-          <h4 style="color: white">Wuhan</h4>
-        </div>
-        <div class="hot-city xiamen" @click="navigateCourse({city: 116})">
-          <h3 style="color: white">厦门</h3>
-          <h4 style="color: white">Xiamen</h4>
-        </div>
-        <div class="hot-city xian" @click="navigateCourse({city: 293})">
-          <h3 style="color: white">西安</h3>
-          <h4 style="color: white">Xian</h4>
-        </div>
       </div>
     </div>
-  </div>
-</div>
 </template>
 
 <script>

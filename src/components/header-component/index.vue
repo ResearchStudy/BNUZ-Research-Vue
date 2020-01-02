@@ -106,6 +106,7 @@ export default {
   justify-content: space-between;
 }
 .logo {
+  font-family:"SimHei";
   font-size: 30px;
   cursor: pointer;
   margin: 0px 50px;

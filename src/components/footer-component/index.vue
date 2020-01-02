@@ -5,8 +5,8 @@
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>
-  <div style="padding-right: 1%">
-    <div v-for="footerMsg in footerRightArr" :key="footerMsg.title" style="padding-left: 50px">
+  <div style="padding-right: 15%">
+    <div v-for="footerMsg in footerRightArr" :key="footerMsg.title" style="padding-left: 30px">
       <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
     </div>
   </div>
@@ -37,8 +37,8 @@
                 ],
                 footerRightArr: [
                     {
-                        title: "师大研学平台",
-                        children: ["企业服务热线与投诉举报电话  123456789", "工作日  8:00 - 22:00", "休息日  0:00 - 24:00"],
+                        title: " 北师研学",
+                        children: ["联系电话  123456789", "工作日  8:00 - 22:00", "休息日  0:00 - 24:00"],
                         position: "right"
                     }
                 ]
@@ -51,7 +51,8 @@
 #footer{
   display: flex;
   margin-top: 30px;
-  width: 88%;
-  margin-left: 6%;
+  width: 100%;
+  margin-left: 11%;
+  margin-right: 11%;
 }
 </style>

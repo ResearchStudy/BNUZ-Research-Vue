@@ -4,7 +4,7 @@
     <tr>
       <th>{{title}}</th>
     </tr>
-    <tr v-for="child in children" :key="child">
+    <tr   v-for="child in children" :key="child">
       <td><a href="">{{child}}</a></td>
     </tr>
   </table>
