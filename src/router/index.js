@@ -39,7 +39,7 @@ const routes = [
                 path: 'courses/', component: CoursesIndex, children: [
                     {path: '',component: CoursesList, name: 'CoursesList' },
                     {path: 'form',component: CoursesForm },
-                    {path: ':id',component: CoursesDetail },
+                    {path: ':id',component: CoursesDetail, name: 'CoursesDetail' },
                 ]
             },
             {
@@ -67,12 +67,12 @@ const permitAllRoutes = ['/login', '/register', '/', '/organization','/courses',
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("/logout")) {
-        next({ path: '/login' })
         localStorage.setItem("id", "");
         store.dispatch('setRole', "")
+        next({ path: '/login' })
     }
     if (permitAllRoutes.includes(to.path) || store.getters.role.length !== 0) {
-        if(from.fullPath === '/login' && localStorage.getItem("id")){
+        if(localStorage.getItem("id").length !== 0){
             getUserInfo(localStorage.getItem("id")).then((res) => {
                 store.dispatch('setUserInfoAndRole', res);
                 if (res.role === 99) {

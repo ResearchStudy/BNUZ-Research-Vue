@@ -70,12 +70,6 @@
         <div style="display: flex;justify-content: space-between;margin-left: 1%">
           <h3 style="">搜索</h3>
         </div>
-        <!--
-        <div style="display: flex;align-items: center;">
-          <img src="../../assets/img/apps.png" alt="" @click="displayType = 'card'" style="width: 30px;height: 30px">
-          <img src="../../assets/img/list.png" alt="" @click="displayType = 'list'" style="width: 30px;height: 30px">
-        </div>
-        -->
       </div>
 
 
@@ -211,7 +205,8 @@
               })
           },
           detail(id){
-              this.$router.push({path: `/courses/${id}`})
+              const similarCourses = this.coursesList.filter((course) => course.id !== id).slice(0,3)
+              this.$router.push({name: `CoursesDetail`, params: {id,similarCourses}})
           },
           async search(){
             const course_type = this.course_type;
