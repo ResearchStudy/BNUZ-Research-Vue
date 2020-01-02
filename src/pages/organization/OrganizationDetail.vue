@@ -16,9 +16,13 @@
     </div>
   </div>
   <el-divider></el-divider>
-  <el-tabs v-model="activeName">
-    <el-tab-pane label="发布的课程" name="first">
-      <div v-for="course in courseList" :key="course.id">
+  <div style="display: flex;margin-bottom: 10px">
+    <div :class="['tab-item',{active: activeName === 'first'}]" @mouseenter="changeTab('first')">发布的课程</div>
+    <div :class="['tab-item',{active: activeName === 'second'}]" @mouseenter="changeTab('second')">发布的资讯</div>
+  </div>
+  <div>
+    <div v-if="activeName === 'first'">
+      <div v-for="course in courseList" :key="course.id" >
         <div style="display: inline-flex;width: 100%;cursor: pointer" @click="navigateToCourse(course.id)">
           <div style="width: 120px;height: 120px">
             <img :src="'/api/resources/' + course.cover" alt="" style="width: 100px;height: 100px">
@@ -31,12 +35,13 @@
           </div>
         </div>
       </div>
-    </el-tab-pane>
-    <el-tab-pane label="发布的资讯" name="second">
-      <div v-for="information in informationList" :key="information.id">
+    </div>
+    <div v-else>
+      <div v-for="information in informationList" :key="information.id" >
         <div style="display: inline-flex;width: 100%;cursor: pointer"  @click="navigateToInformation(information.id)">
           <div style="width: 120px;height: 120px">
-            <img :src="'/api/resources/' + information.cover" alt="" style="width: 100px;height: 100px">
+            <img :src="'/api/resources/' + information.cover" alt="" style="width: 100px;height: 100px" v-if="information.cover.length !== 0">
+            <img src="../../assets/img/default-news.jpg" alt="" style="width: 100px;height: 100px" v-else>
           </div>
           <div style="padding-left: 30px">
             <h4>{{information.title}}</h4>
@@ -46,8 +51,8 @@
           </div>
         </div>
       </div>
-    </el-tab-pane>
-  </el-tabs>
+    </div>
+  </div>
   <div style="display: flex;justify-content: center;margin-top: 20px">
     <el-pagination
             @size-change="handleSizeChange"
@@ -149,6 +154,9 @@
             },
             navigateToInformation(id){
                 this.$router.push({path: `/informations/${id}`})
+            },
+            changeTab(name){
+                this.activeName = name
             }
         }
     }
@@ -161,5 +169,15 @@
 }
   .detail-info{
     padding: 10px;
+  }
+  .tab-item{
+    padding: 0px 10px 15px;
+    border-bottom: 2px solid #f2f2f2;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .tab-item.active{
+    color: #409eff;
+    border-bottom: 3px solid #409eff !important;
   }
 </style>
