@@ -23,8 +23,13 @@
         <div  class="info">
           <el-button type="primary" @click="preEnroll()">预约报名</el-button>
         </div>
-        <div  class="info">
+        <div  class="info" style="display: flex">
           分享:
+          <div style="display: flex">
+            <img src="../../assets/img/qq.png" alt="" class="share-icon">
+            <img src="../../assets/img/wechat.png" alt="" class="share-icon">
+            <img src="../../assets/img/weibo.png" alt="" class="share-icon">
+          </div>
         </div>
       </div>
     </div>
@@ -42,7 +47,7 @@
         <el-tab-pane label="预约报名" name="four"></el-tab-pane>
       </el-tabs>
     </div>
-  
+
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
       <el-form :model="enroll">
         <el-form-item label="用户名称" label-width="100px">
@@ -100,7 +105,7 @@
 <script>
     import {getCoursesById, getCoursesList, getTermByCoursesId, preEnroll} from '../../api/courses'
   import Card from "../../components/courses/card";
-  
+
     export default {
       name: "CoursesDetail",
       components: {Card},
@@ -174,5 +179,10 @@
 }
   .info{
     margin: 10px 0;
+  }
+  .share-icon{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
   }
 </style>
