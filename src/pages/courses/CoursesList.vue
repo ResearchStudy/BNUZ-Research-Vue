@@ -2,7 +2,7 @@
 
     <div style="width: 78%;margin-left: 11%">
       <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px; background: #F6F6F8" >
-        <div style="width: 90%;margin-left: 8%">
+        <div style="width: 100%;margin-left:2%">
           <el-input placeholder="请输入内容" v-model="title" style="width: 490px;padding-right: 10px;margin-left: 10px"></el-input>
           <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
           <el-button style="margin-left: 10px" @click="reset">重置</el-button>
