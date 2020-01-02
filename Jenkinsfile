@@ -7,6 +7,7 @@ pipeline {
                 anyOf {
                   branch 'master';
                   branch 'dev';
+                  branch 'show';
                 }
             }
             steps {
@@ -18,6 +19,7 @@ pipeline {
                 anyOf {
                   branch 'master';
                   branch 'dev';
+                  branch 'show';
                 }
             }
             steps {
