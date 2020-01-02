@@ -76,7 +76,7 @@ router.beforeEach((to, from, next) => {
     }
     else {
         if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
-            alert(localStorage.getItem("id"));
+            //alert(localStorage.getItem("id"));
             //alert("请先登录！");
             next({ path: '/login' })
         } else {

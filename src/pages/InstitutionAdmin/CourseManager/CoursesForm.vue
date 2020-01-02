@@ -71,6 +71,15 @@
             </el-col>
           </el-row>
 
+          <el-form-item label="课程摘要">
+            <el-input style="width:820px"
+                    type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="form.description"
+            >
+            </el-input>
+          </el-form-item>
 
           <el-form-item label="课程封面">
             <el-upload
