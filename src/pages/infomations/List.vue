@@ -1,33 +1,8 @@
 <template>
 <div>
   <div class="search-group">
-    <el-input placeholder="请输入内容" v-model="title" style="width: 300px;padding-right: 10px"></el-input>
-    <el-select v-model="country_id" placeholder="国家" @change="getProvinceList">
-      <el-option
-              v-for="item in countryList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-      </el-option>
-    </el-select>
-    <el-select v-model="province_id" placeholder="省份" style="padding-left: 10px" @change="getCityList">
-      <el-option
-              v-for="item in provinceList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-      </el-option>
-    </el-select>
-    <el-select v-model="city_id" placeholder="城市" style="padding-left: 10px">
-      <el-option
-              v-for="item in cityList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-      </el-option>
-    </el-select>
+    <el-input placeholder="请输入内容" v-model="title" style="width: 90%;padding-right: 10px"></el-input>
     <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
-    <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     <el-divider></el-divider>
   </div>
 
@@ -68,7 +43,6 @@
 </template>
 
 <script>
-    import {getAddressById} from "../../api/address";
     import {getInformationList, mGetInformationList} from "../../api/information";
 
     const informationType = [{id: 1, name: '行业政策'}, {id: 2, name: '研学政策'}]
@@ -76,18 +50,11 @@
     export default {
         name: "List",
         mounted(){
-            this.getAllCountry();
             this.getInformationList({page:1, limit: 5});
         },
         data(){
             return{
                 title: '',
-                countryList: [],
-                provinceList: [],
-                cityList: [],
-                country_id: '',
-                province_id: '',
-                city_id: '',
                 informationList: [],
                 page: 1,
                 limit: 5,
@@ -95,25 +62,6 @@
             }
         },
         methods:{
-            async getAllCountry(){
-                const result = await getAddressById({target: 1})
-                this.countryList = result.address
-            },
-            async getProvinceList() {
-                const countryId = this.country_id
-                this.province_id = ''
-                const result = await getAddressById({target: 2,parent: countryId});
-                this.provinceList = result.address;
-            },
-            async getCityList() {
-                const provinceId = this.province_id;
-                this.city_id = ''
-                const result = await getAddressById({
-                    target: 3,
-                    parent: provinceId
-                });
-                this.cityList = result.address;
-            },
             async getInformationList(params){
                 const result = await getInformationList(params);
                 const ids = result.informations.map((item) => item.id);

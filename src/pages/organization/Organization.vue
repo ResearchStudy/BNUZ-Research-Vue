@@ -38,12 +38,6 @@
       <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
   </div>
-
-  <!--
-  <div style="display: flex;justify-content: flex-end;width: 90%; margin-left: 5%;margin-top: 15px">
-    <el-button type="primary" @click="naviateToRegister()">我要入驻</el-button>
-  </div>
--->
   
   <div class="search-group">
     <div v-for="institution in institutionList" :key="institution.id" style="cursor: pointer" @click="navigateToInformation(institution.id)">
@@ -99,7 +93,7 @@
     },
     data(){
       return{
-        searchValue: '',
+        name: '',
         countryList: [],
         provinceList: [],
         cityList: [],
@@ -113,7 +107,7 @@
       }
     },
     methods:{
-      async getAllCountry(){
+        async getAllCountry(){
         const result = await getAddressById({target: 1})
         this.countryList = result.address
       },
@@ -127,17 +121,18 @@
       naviateToRegister(){
         this.$router.push({path: 'organization/register'})
       },
+
+        async getCityList() {
+            const provinceId = this.province_id;
+            const result = await getAddressById({
+                target: 3,
+                parent: provinceId
+            });
+            this.cityList = result.address;
+        },
       
-      async getCityList() {
-        const provinceId = this.province_id;
-        const result = await getAddressById({
-          target: 3,
-          parent: provinceId
-        });
-        this.cityList = result.address;
-      },
-      async getInstitutionList(page, limit){
-        const result = await getInstitutionList({page, limit});
+      async getInstitutionList(params){
+        const result = await getInstitutionList(params);
         const ids = result.institutions.map((item) => item.id);
         this.page = result.page
         this.limit = result.limit
@@ -165,8 +160,20 @@
       },
       navigateToInformation(id){
         this.$router.push({path: `/organization/${id}`})
-      }
-
+      },
+      search(){
+        this.page = 1
+        const parmas = {page: this.page, limit: this.limit, name: this.name,city: this.city_id, country: this.country_id, province: this.province_id }
+        this.getInstitutionList(parmas)
+      },
+        reset(){
+            this.city_id = ''
+            this.country_id = ''
+            this.province_id = ''
+            this.name = ''
+            this.page = 1
+            this.getInstitutionList({page: this.page, limit: this.limit, name: this.name,city: this.city_id, country: this.country_id, province: this.province_id })
+        }
     }
   }
 </script>
