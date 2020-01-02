@@ -39,7 +39,7 @@ const routes = [
                 path: 'courses/', component: CoursesIndex, children: [
                     {path: '',component: CoursesList, name: 'CoursesList' },
                     {path: 'form',component: CoursesForm },
-                    {path: ':id',component: CoursesDetail },
+                    {path: ':id',component: CoursesDetail, name: 'CoursesDetail' },
                 ]
             },
             {
@@ -62,16 +62,30 @@ const router = new VueRouter({
     routes
 });
 
-const permitAllRoutes = ['/login', '/register', '/home', '/organization','/courses','/informations'];
+const permitAllRoutes = ['/login', '/register', '/', '/organization','/courses','/informations'];
 
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("/logout")) {
-        next({ path: '/login' })
         localStorage.setItem("id", "");
         store.dispatch('setRole', "")
+        next({ path: '/login' })
     }
     if (permitAllRoutes.includes(to.path) || store.getters.role.length !== 0) {
+        if(localStorage.getItem("id").length !== 0){
+            getUserInfo(localStorage.getItem("id")).then((res) => {
+                store.dispatch('setUserInfoAndRole', res);
+                if (res.role === 99) {
+                    router.addRoutes(rootAdminRoutes);
+                } else if (res.role === 8) {
+                    router.addRoutes(insitutionAdminRoutes)
+                }
+                else if (res.role === 0 || res.role === 1 || res.role === 2) {
+                    router.addRoutes(normalRoutes);
+                }
+                next({ path: to.path })
+            })
+        }
         next()
     }
     else {

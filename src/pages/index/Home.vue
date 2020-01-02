@@ -157,7 +157,6 @@
             async getNewestCoursesList() {
                 const courseList = await getCoursesList();
                 this.coursesList = courseList.courses.slice(0,8)
-                console.log(this.coursesList)
                 const informationList = await getInformationList();
                 this.informationList = informationList.informations.slice(0,8)
                 const carouseMap = this.coursesList.map((item) => {
@@ -257,7 +256,7 @@
   .right-arrow{
     position: absolute;
     margin-top: 100px;
-    margin-left: calc(88%);
+    margin-left: calc(75%);
     cursor: pointer;
   }
   .hot-city-group{

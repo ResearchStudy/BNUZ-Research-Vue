@@ -190,7 +190,7 @@
       naviateToRegister(){
         this.$router.push({path: 'organization/register'})
       },
-      
+
       async getCityList() {
         const provinceId = this.province_id;
         const result = await getAddressById({
