@@ -213,6 +213,7 @@
           detail(id){
               this.$router.push({path: `/courses/${id}`})
           },
+
           async search(){
             const course_type = this.course_type;
             const tag = this.tags.join(",");
