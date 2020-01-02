@@ -10,8 +10,16 @@
             <button style="margin-right: 30px"  @click="$router.push({path: 'organization/register'})">入驻合作</button>
             <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
             <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
-            <a v-if="isLogin" style="cursor: pointer;padding-right: 20px" @click="navigateToAdmin">{{userInfo.nickname}}</a>
-            <button @click="logout()" v-if="isLogin">退出登录</button>
+            <el-dropdown v-if="isLogin">
+                <div style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center">
+                    <img :src="'/api/resources/' + userInfo.avator" alt="avator" style="width: 30px;padding-right: 5px">{{userInfo.nickname}}
+                    <span ></span>
+                </div>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="navigateToAdmin">Dashboard</el-dropdown-item>
+                <el-dropdown-item divided @click.native="logout()">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+            </el-dropdown>
         </div>
     </div>
 </template>
