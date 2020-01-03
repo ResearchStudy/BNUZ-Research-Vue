@@ -53,7 +53,7 @@
     export default {
         name: "List",
         mounted(){
-            this.getInformationList({page:1, limit: 10});
+            this.getInformationList({page:1, limit: 10, ...this.$route.params});
         },
         data(){
             return{

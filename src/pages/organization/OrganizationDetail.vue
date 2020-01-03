@@ -121,9 +121,11 @@
             },
             moreClick(){
               if(this.activeName === 'first'){
-                  this.$router.push({path: '/courses/'})
+                  const id = this.id
+                  this.$router.push({name: 'CoursesList' ,params: {institution: id}})
               }else{
-                  this.$router.push({path: '/informations/'})
+                  const id = this.id
+                  this.$router.push({name: 'InformationList' ,params: {institution: id}})
               }
             }
         }
