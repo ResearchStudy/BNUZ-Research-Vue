@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div style="padding-top: 45px">
     <el-row>
-      <el-col :span="14" :offset="1">
-        <div class="banner ">
+      <el-col :span="13" :offset="1">
+        <div class="banner " style="margin-right: 0px;margin-left:20%;width:100%">
+          <img src="../../assets/img/logo-banner.jpeg" alt="" style="height: 420px">
         </div>
       </el-col>
       <el-col :span="7" :offset="1">
@@ -92,6 +93,6 @@
 
   .banner {
     height: 500px;
-    border: 1px solid black;
+
   }
 </style>

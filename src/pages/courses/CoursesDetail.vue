@@ -50,34 +50,45 @@
 
     <el-dialog title="预约报名" :visible.sync="dialogFormVisible" :rules="rules">
       <el-form :model="enroll" :rules="rules" ref="enroll">
-        <el-form-item label="用户名称" label-width="100px">
+        <el-form-item label="用户名称" label-width="100px" prop="name">
           <el-input v-model="enroll.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="档期" label-width="100px">
-          <el-select v-model="enroll.term_id" placeholder="请选择">
-            <el-option
-                    v-for="item in termList"
-                    :key="item.id"
-                    :label="item.title"
-                    :value="item.id">
-            </el-option>
-          </el-select>
+
+        <el-form-item label="手机号码" label-width="100px"  prop="phone">
+          <el-input  v-model="enroll.phone" :rules="rules"></el-input>
         </el-form-item>
-        <el-form-item label="年龄" label-width="100px">
-          <el-radio-group v-model="enroll.sex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="2">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="用户邮箱" label-width="100px">
-          <el-input v-model="enroll.email"></el-input>
-        </el-form-item>
+
         <el-form-item label="年龄" label-width="100px">
           <el-input v-model="enroll.age" type="number"></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" label-width="100px">
-          <el-input  v-model="enroll.phone" :rules="rules"></el-input>
+
+        <el-row>
+          <el-col span="10">
+            <el-form-item label="档期" label-width="100px">
+              <el-select v-model="enroll.term_id" placeholder="请选择">
+                <el-option
+                        v-for="item in termList"
+                        :key="item.id"
+                        :label="item.title"
+                        :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col span="8">
+            <el-form-item label="性别" label-width="100px">
+              <el-radio-group v-model="enroll.sex">
+                <el-radio :label="1">男</el-radio>
+                <el-radio :label="2">女</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-form-item label="用户邮箱" label-width="100px" prop="email">
+          <el-input v-model="enroll.email"></el-input>
         </el-form-item>
+
         <el-form-item label="留言备注" label-width="100px">
           <el-input
                   type="textarea"
@@ -104,12 +115,10 @@
 
 <script>
     import {getCoursesById, getCoursesList, getTermByCoursesId, preEnroll} from '../../api/courses'
-  import Card from "../../components/courses/card";
+    import Card from "../../components/courses/card";
 
     export default {
-
       name: "CoursesDetail",
-
       components: {Card},
       data(){
         let checkPhone = (rule, value, callback) => {

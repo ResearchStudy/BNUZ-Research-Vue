@@ -12,39 +12,39 @@
       <div>
         <el-divider  content-position="center" ><span style="font-size: 20px">基本资料</span></el-divider>
       </div>
-      <el-form ref="form" :model="form" label-width="100px" >
-        <el-form-item label="企业名称">
+      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+        <el-form-item label="企业名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="企业注册号">
+        <el-form-item label="企业注册号" prop="name">
           <el-input v-model="form.tax_id"></el-input>
         </el-form-item>
-        <el-form-item label="企业类型">
+        <el-form-item label="企业类型" prop="name">
           <el-input v-model="form.institution_type"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="成立时间">
+            <el-form-item label="成立时间" prop="name">
               <el-date-picker type="date" placeholder="选择日期" v-model="form.establish_time" style="width: 100%;"></el-date-picker>
             </el-form-item>
 
           </el-col>
           <el-col :span="8">
-            <el-form-item label="省份">
+            <el-form-item label="省份" prop="name">
               <el-select v-model="form.address.province_id" placeholder="请选择省份" @change="getCityList(form.address.province_id)">
                 <el-option v-for="province in provinceList" :label="province.name" :key="province.id" :value="province.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="城市">
+            <el-form-item label="城市" prop="name">
               <el-select v-model="form.address.city_id" placeholder="请选择城市">
                 <el-option v-for="city in cityList" :label="city.name" :key="city.id" :value="city.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="详细地址">
+        <el-form-item label="详细地址" prop="name">
           <el-input v-model="form.address.details"></el-input>
         </el-form-item>
 
@@ -52,18 +52,18 @@
 
         <el-row>
           <el-col span="8">
-            <el-form-item label="法人">
+            <el-form-item label="法人" prop="name">
               <el-input v-model="form.legal_person"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col span="8">
-            <el-form-item label="联系电话">
+            <el-form-item label="联系电话" prop="name">
               <el-input v-model="form.phone"></el-input>
             </el-form-item>
           </el-col>
           <el-col span="8">
-            <el-form-item label="核准时间">
+            <el-form-item label="核准时间" prop="name">
               <el-date-picker type="date" placeholder="选择日期" v-model="form.approval_time" style="width: 100%;"></el-date-picker>
             </el-form-item>
           </el-col>
@@ -71,7 +71,7 @@
 
         <el-row>
           <el-col span="16">
-            <el-form-item label="营业期限">
+            <el-form-item label="营业期限" prop="name">
               <el-col :span="11">
                 <el-date-picker type="date" placeholder="选择日期" v-model="form.business_license_start_time" style="width: 100%;"></el-date-picker>
               </el-col>
@@ -85,30 +85,30 @@
           </el-col>
 
           <el-col span="8">
-            <el-form-item label="注册资金">
+            <el-form-item label="注册资金" prop="name">
               <el-input v-model="form.registered_money" type="number"></el-input>
             </el-form-item>
           </el-col>
 
         </el-row>
 
-        <el-form-item label="登记机关">
+        <el-form-item label="登记机关" prop="name">
           <el-input v-model="form.registration_authority"></el-input>
         </el-form-item>
 
 
-        <el-form-item label="经营范围">
+        <el-form-item label="经营范围" prop="name">
           <el-input type="textarea" v-model="form.business_scope"></el-input>
         </el-form-item>
         <el-row>
           <el-col span="12">
-            <el-form-item label="联系人">
+            <el-form-item label="联系人" prop="name">
               <el-input v-model="form.contact_man"></el-input>
             </el-form-item>
           </el-col>
 
           <el-col span="12">
-            <el-form-item label="手机号码">
+            <el-form-item label="手机号码" prop="phone">
               <el-input v-model="form.contact_number"></el-input>
             </el-form-item>
           </el-col>
@@ -232,6 +232,17 @@
             this.getProvinceList();
         },
         data(){
+
+          let checkPhone = (rule, value, callback) => {
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+            console.log(reg.test(value));
+            if (reg.test(value)) {
+              callback();
+            } else {
+              return callback(new Error('手机格式有误'));
+            }
+
+          };
             return {
                 active: 1,
                 form: {
@@ -260,7 +271,19 @@
                   files:[]
                 },
                 provinceList: [],
-                cityList: []
+                cityList: [],
+
+              rules: {
+               phone : [
+                  { required: true, message: "电话不能为空", trigger: "blur" },
+                  {validator : checkPhone , trigger : 'blur'},
+
+                ],
+                name : [
+                  {required : true , message : "名字不能为空" , trigger : "blur"}
+                ],
+
+              }
             }
         },
         methods:{

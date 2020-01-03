@@ -105,8 +105,6 @@
 
 <script>
 
-
-
 export default {
   name: "BaseData",
   data() {
@@ -118,8 +116,8 @@ export default {
       } else {
         return callback(new Error('手机格式有误'));
       }
-        
-    };   
+
+    };
 
     let checkEmail = (rlue , value , callback) => {
       const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
