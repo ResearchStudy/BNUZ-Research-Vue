@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="search-group">
-    <el-input placeholder="请输入内容" v-model="title" style="width: 90%;padding-right: 10px"></el-input>
+    <el-input placeholder="请输入内容111" v-model="title" style="width: 90%;padding-right: 10px"></el-input>
     <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
     <el-divider></el-divider>
   </div>
