@@ -1,6 +1,5 @@
 <template>
-
-    <div style="width: 78%;margin-left: 11%">
+    <div style="width: 78%;margin-left: 11%;margin-top: 0">
       <div style="width: 97%;margin-left: 1.2%">
       <div class="search-group" style="border: 1px solid #f2f2f2;padding: 15px 30px; background: #F6F6F8" >
         <div style="width: 100%;margin-left:2%">

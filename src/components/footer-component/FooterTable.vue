@@ -1,14 +1,18 @@
 <template>
-<div :class="position">
-  <table>
-    <tr>
-      <th>{{title}}</th>
-    </tr>
-    <tr   v-for="child in children" :key="child">
-      <td><a href="">{{child}}</a></td>
-    </tr>
-  </table>
-</div>
+
+    <div :class="position" >
+      <table>
+        <tr>
+          <th>{{title}}</th>
+        </tr>
+        <tr   v-for="child in children" :key="child">
+          <td><a href="">{{child}}</a></td>
+        </tr>
+      </table>
+    </div>
+
+
+
 </template>
 
 <script>

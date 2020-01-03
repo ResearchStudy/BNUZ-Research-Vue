@@ -1,16 +1,19 @@
 <template>
-<div id="footer">
-  <div style="display: flex">
-    <div v-for="(footerMsg, index) in footerLeftArr" :key="footerMsg.title" :style="index === 0 ? {paddingLeft: '30px'} : {paddingLeft: '150px'}">
-      <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
+    <div id="footer">
+      <div style="display: flex">
+        <div v-for="(footerMsg, index) in footerLeftArr" :key="footerMsg.title" :style="index === 0 ? {paddingLeft: '30px'} : {paddingLeft: '150px'}">
+          <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
+        </div>
+      </div>
+      <div>
+        <div v-for="footerMsg in footerRightArr" :key="footerMsg.title" style="padding-left: 30px">
+          <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
+        </div>
+      </div>
     </div>
-  </div>
-  <div>
-    <div v-for="footerMsg in footerRightArr" :key="footerMsg.title" style="padding-left: 30px">
-      <FooterTable :title="footerMsg.title" :children="footerMsg.children" :position="footerMsg.position"/>
-    </div>
-  </div>
-</div>
+
+
+
 </template>
 
 <script>
@@ -22,7 +25,7 @@
             return {
                 footerLeftArr:[
                     {
-                        title: "企业服务",
+                        title: "企业服务11",
                         children: ["研学搜索", "新闻资讯", "研学APP"],
                         position: "left"
                     },{
