@@ -2,8 +2,8 @@
   <div style="padding-top: 45px">
     <el-row>
       <el-col :span="13" :offset="1">
-        <div class="banner ">
-          <img src="../../assets/img/logo-banner.jpeg" alt="" style="height: 450px">
+        <div class="banner " style="margin-right: 0px;margin-left:20%;width:100%">
+          <img src="../../assets/img/logo-banner.jpeg" alt="" style="height: 420px">
         </div>
       </el-col>
       <el-col :span="8" :offset="1">

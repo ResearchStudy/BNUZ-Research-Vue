@@ -15,7 +15,7 @@
             </div>
             <div>
               <div style="display: flex;height: 32px;line-height: 32px;overflow: hidden;padding: 2px 10px" v-for="item in infoList" :key="item.id">
-                <el-link  style="font-size: 14px;" @click="navigateToDetail(item.id)">{{item.title.length > 20 ? item.title.substring(0, 20) + '...' : item.title}}</el-link>
+                <el-link  style="font-size: 14px;" @click="navigateToDetail(item.id)">{{item.title}}</el-link>
               </div>
             </div>
           </div>
@@ -37,8 +37,8 @@
               <img :src="'api/resources/' + course.cover" class="image">
               <div style="padding: 12px;">
                 <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
-                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
-                  {{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;text-overflow:ellipsis">
+                  <p>{{course.description.length >32 ? course.description.substring(0, 32) + '...' : course.description}}</p>
                 </div>
               </div>
             </el-card>
@@ -48,8 +48,8 @@
               <img :src="'api/resources/' + course.cover" class="image">
               <div style="padding: 14px;">
                 <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
-                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px">
-                  {{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;overflow: hidden;font-size: 14px;text-overflow:ellipsis">
+                  <p>{{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}</p>
                 </div>
               </div>
             </el-card>
@@ -157,7 +157,6 @@
             async getNewestCoursesList() {
                 const courseList = await getCoursesList();
                 this.coursesList = courseList.courses.slice(0,8)
-                console.log(this.coursesList)
                 const informationList = await getInformationList();
                 this.informationList = informationList.informations.slice(0,8)
                 const carouseMap = this.coursesList.map((item) => {
@@ -257,7 +256,7 @@
   .right-arrow{
     position: absolute;
     margin-top: 100px;
-    margin-left: calc(88%);
+    margin-left: calc(75%);
     cursor: pointer;
   }
   .hot-city-group{
@@ -310,9 +309,14 @@
     display: block;
   }
 
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
+  /deep/ .el-link--inner{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    width: 100%;
+  }
+  /deep/ .el-link{
+    width: 100%;
+    text-align: left;
   }
 </style>

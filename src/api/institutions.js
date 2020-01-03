@@ -50,7 +50,6 @@ export function institutionsFilesUpload(id,data) {
 
 
 export function getInstitutionList(params) {
-    console.log(params)
     return request({
         url: `${prefix}/list`,
         params:params
