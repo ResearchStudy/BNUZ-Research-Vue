@@ -1,30 +1,30 @@
 <template>
-<div>
-  <div class="search-group">
-<<<<<<< HEAD
-    <el-input placeholder="请输入内容111" v-model="title" style="width: 90%;padding-right: 10px"></el-input>
-=======
-    <el-input placeholder="请输入内容" v-model="title" style="width: 89%;padding-right: 10px"></el-input>
->>>>>>> 5911ed08f50a9da9254ca65577741c99c282ce36
+<div >
+  <div class="search-group" style="width: 50%;margin-left: 25%">
+
+    <el-input placeholder="请输入内容" v-model="title" style="width: 80%;padding-right: 10px"></el-input>
+
     <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
   </div>
 
-  <div class="search-group" style="margin-top: 20px">
+  <div class="search-group" style="margin-top: 20px;width: 65%;margin-left: 17%">
     <div v-for="information in informationList" :key="information.id" style="cursor: pointer" @click="navigateToInformation(information.id)">
       <div style="display: flex;padding: 5px 15px;border: 1px solid #f2f2f2;box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);margin-bottom: 10px">
-        <div style="width: 400px;height: 200px">
-          <img :src="information.src" alt="" style="width: 400px;height: 200px" v-if="information.cover.length !== 0">
-          <img src="../../assets/img/default-news.jpg" alt="" style="width: 400px;height: 200px" v-else>
+        <div style="width: 300px;height: 150px">
+          <img :src="information.src" alt="" style="width: 300px;height: 150px" v-if="information.cover.length !== 0">
+          <img src="../../assets/img/default-news.jpg" alt="" style="width: 300px;height: 150px" v-else>
         </div>
         <div style="width: 100%;padding-left: 30px">
-          <h2>{{information.title}}</h2>
-          <div>
+          <h3>{{information.title}}</h3>
+          <div style="font-size: 15px">
             {{information.abstract}}
           </div>
+          <!--
           <div style="display: flex;justify-content: space-between;margin-top: 60px;">
             <div style="display: flex;align-items: center"><img src="../../assets/img/label.png" alt="label"> {{information.informationType}}</div>
             <div>{{information.createDate}}</div>
           </div>
+          -->
         </div>
       </div>
     </div>
@@ -53,14 +53,14 @@
     export default {
         name: "List",
         mounted(){
-            this.getInformationList({page:1, limit: 5});
+            this.getInformationList({page:1, limit: 10});
         },
         data(){
             return{
                 title: '',
                 informationList: [],
                 page: 1,
-                limit: 5,
+                limit: 10,
                 total: 0
             }
         },

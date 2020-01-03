@@ -1,6 +1,6 @@
 <template>
-<div style="margin-top: 50px">
-<div style="width: 70%;margin-left: 15%;margin-bottom: 30px">
+<div style="margin-top: 1px;background: #F6F6F8">
+<div style="width: 65%;margin-left: 17%;margin-bottom: 30px;background: #FFFFFF">
   <div style="text-align: center;font-size: 22px;line-height: 50px;color: #747474;font-weight: bold;">{{informationDetail.title}}</div>
   <div class="show-content">
     <div>
