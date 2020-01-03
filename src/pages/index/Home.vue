@@ -37,8 +37,8 @@
               <img :src="'api/resources/' + course.cover" class="image">
               <div style="padding: 12px;">
                 <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
-                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;text-overflow:ellipsis;white-space:nowrap;">
-                  {{course.description}}
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;text-overflow:ellipsis">
+                  <p>{{course.description.length >32 ? course.description.substring(0, 32) + '...' : course.description}}</p>
                 </div>
               </div>
             </el-card>
@@ -48,8 +48,8 @@
               <img :src="'api/resources/' + course.cover" class="image">
               <div style="padding: 14px;">
                 <el-link :underline="false" style="font-size: 16px;font-weight: bold">{{course.title.length > 12 ? course.title.substring(0, 12) + '...' : course.title}}</el-link>
-                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;overflow: hidden;font-size: 14px;text-overflow:ellipsis;white-space:nowrap;">
-                  {{course.description}}
+                <div style="color: #9d9d9d;height: 51px;overflow: hidden;font-size: 14px;overflow: hidden;font-size: 14px;text-overflow:ellipsis">
+                  <p>{{course.description.length > 32 ? course.description.substring(0, 32) + '...' : course.description}}</p>
                 </div>
               </div>
             </el-card>

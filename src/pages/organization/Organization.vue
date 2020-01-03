@@ -7,7 +7,7 @@
 -->
   <div class="search-group" style=" width: 83%;;margin-left: 5%;border: 1px solid #f2f2f2;padding: 15px 10px; background: #F6F6F8" >
     <div style="display: inline-block">
-      <el-input placeholder="请输入内容" v-model="name" style="width: 590px;padding-right: 10px;margin-left: 10px"></el-input>
+      <el-input placeholder="请输入内容111" v-model="name" style="width: 590px;padding-right: 10px;margin-left: 10px"></el-input>
       <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
       <el-button style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
@@ -190,6 +190,8 @@
       naviateToRegister(){
         this.$router.push({path: 'organization/register'})
       },
+
+
 
       async getCityList() {
         const provinceId = this.province_id;
