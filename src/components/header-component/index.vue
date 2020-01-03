@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="right" style="margin-right: 10px">
-            <button style="margin-right: 30px"  @click="$router.push({path: 'organization/register'})">入驻合作</button>
+            <button style="margin-right: 30px"  @click=checkRegister() >入驻合作</button>
             <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
             <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
             <el-dropdown v-if="isLogin">
@@ -67,6 +67,18 @@ export default {
     navigateTo(path) {
       this.$router.push({ path: path });
     },
+
+      checkRegister(){
+          if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
+              alert("请先登录！");
+              this.$router.push({ path: '/login' })
+          }else if (this.role === 8){
+              alert("您已入驻，无需重复申请！");
+              this.$router.push({ path: '/' })
+          }else{
+              this.$router.push({path: 'organization/register'})
+          }
+      },
     navigateToAdmin() {
       if (this.role === 99) {
         this.$router.push({ path: "/root-admin" });
@@ -93,7 +105,9 @@ export default {
     userInfo() {
       return this.$store.getters.userInfo || {};
     }
-  }
+  },
+
+
 };
 </script>
 
