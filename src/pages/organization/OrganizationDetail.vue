@@ -16,48 +16,30 @@
     </div>
   </div>
   <el-divider></el-divider>
-  <el-tabs v-model="activeName">
-    <el-tab-pane label="发布的课程" name="first">
-      <div v-for="course in courseList" :key="course.id">
-        <div style="display: inline-flex;width: 100%;cursor: pointer" @click="navigateToCourse(course.id)">
-          <div style="width: 120px;height: 120px">
-            <img :src="'/api/resources/' + course.cover" alt="" style="width: 100px;height: 100px">
-          </div>
-          <div style="padding-left: 30px">
-            <h4>{{course.title}}</h4>
-            <div>
-              {{course.description}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </el-tab-pane>
-    <el-tab-pane label="发布的资讯" name="second">
-      <div v-for="information in informationList" :key="information.id">
-        <div style="display: inline-flex;width: 100%;cursor: pointer"  @click="navigateToInformation(information.id)">
-          <div style="width: 120px;height: 120px">
-            <img :src="'/api/resources/' + information.cover" alt="" style="width: 100px;height: 100px">
-          </div>
-          <div style="padding-left: 30px">
-            <h4>{{information.title}}</h4>
-            <div>
-              {{information.abstract}}
-            </div>
-          </div>
-        </div>
-      </div>
-    </el-tab-pane>
-  </el-tabs>
-  <div style="display: flex;justify-content: center;margin-top: 20px">
-    <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="page"
-            :page-sizes="[5,10,15,20]"
-            :page-size="limit"
-            :total="total"
-            layout=" prev, pager, next, sizes, jumper">
-    </el-pagination>
+  <div style="display: flex;margin-bottom: 10px;justify-content: space-between">
+    <div style="display: flex">
+      <div :class="['tab-item',{active: activeName === 'first'}]" @mouseenter="changeTab('first')">发布的课程</div>
+      <div :class="['tab-item',{active: activeName === 'second'}]" @mouseenter="changeTab('second')">发布的资讯</div>
+    </div>
+    <div>
+      <span class="more" @click="moreClick"><i class="el-icon-circle-plus-outline"></i>MORE</span>
+    </div>
+  </div>
+  <div>
+    <div v-if="activeName === 'first'">
+      <el-row >
+        <el-col :span="6" v-for="course in courseList" :key="course.id" style="padding: 0px; cursor: pointer"   @click.native="navigateToCourse(course.id)">
+          <card  :title="course.title" :img-src="'/api/resources/' + course.cover" :description="course.description" :tag-name="course.tagName"/>
+        </el-col>
+      </el-row>
+    </div>
+    <div v-else>
+      <el-row >
+        <el-col :span="6" v-for="information in informationList" :key="information.id" style="padding: 0px; cursor: pointer" @click.native="navigateToInformation(information.id)">
+          <card  :title="information.title" :img-src="'/api/resources/' + information.cover" :description="information.abstract" />
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </div>
 </template>
@@ -66,9 +48,11 @@
   import {getInstitutionsInfo} from "../../api/institutions";
   import {getCoursesList} from "../../api/courses";
   import {getInformationList} from "../../api/information";
+  import Card from "../../components/courses/card";
 
   export default {
         name: "OrganizationDetail",
+        components: {Card},
         mounted(){
           this.getInstitutionsInfo(this.$route.params.id);
         },
@@ -107,10 +91,10 @@
                 organizationInfo.establishDate = date.getFullYear() + "年" + month + "月" + date.getDate() + "日";
                 this.organizationInfo = organizationInfo;
                 this.id = result.id
-                const courseList = await getCoursesList({institution_id: result.id,page: 1,limit: 5});
+                const courseList = await getCoursesList({institution_id: result.id,page: 1,limit: 16});
                 this.courseTotal = courseList.total
                 this.courseList = courseList.courses
-                const informationList = await getInformationList({institution_id: result.id,page: 1,limit: 5});
+                const informationList = await getInformationList({institution_id: result.id,page: 1,limit: 16});
                 this.informationTotal = informationList.total
                 this.informationList = informationList.informations
             },
@@ -126,29 +110,21 @@
                 this.courseTotal = courseList.total
                 this.courseList = courseList.courses
             },
-            handleSizeChange(limit){
-                if(this.activeName === 'first'){
-                    this.courseLimit = limit;
-                    this.getCourseList(this.page, limit)
-                }else{
-                    this.informationLimit = limit;
-                    this.getInformationList(this.page, limit)
-                }
-            },
-            handleCurrentChange(page) {
-                if(this.activeName === 'first'){
-                    this.coursePage = page;
-                    this.getCourseList(page, this.limit)
-                }else{
-                    this.informationPage = page;
-                    this.getInformationList(page, this.limit)
-                }
-            },
             navigateToCourse(id){
                 this.$router.push({path: `/courses/${id}`})
             },
             navigateToInformation(id){
                 this.$router.push({path: `/informations/${id}`})
+            },
+            changeTab(name){
+                this.activeName = name
+            },
+            moreClick(){
+              if(this.activeName === 'first'){
+                  this.$router.push({path: '/courses/'})
+              }else{
+                  this.$router.push({path: '/informations/'})
+              }
             }
         }
     }
@@ -162,4 +138,23 @@
   .detail-info{
     padding: 10px;
   }
+  .tab-item{
+    padding: 0px 10px 15px;
+    border-bottom: 2px solid #f2f2f2;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .tab-item.active{
+    color: #409eff;
+    border-bottom: 3px solid #409eff !important;
+  }
+.more{
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+.more:hover{
+  color: #409EFF;
+  cursor: pointer;
+}
 </style>

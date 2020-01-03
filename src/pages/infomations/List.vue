@@ -1,16 +1,20 @@
 <template>
 <div>
   <div class="search-group">
+<<<<<<< HEAD
     <el-input placeholder="请输入内容111" v-model="title" style="width: 90%;padding-right: 10px"></el-input>
+=======
+    <el-input placeholder="请输入内容" v-model="title" style="width: 89%;padding-right: 10px"></el-input>
+>>>>>>> 5911ed08f50a9da9254ca65577741c99c282ce36
     <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
-    <el-divider></el-divider>
   </div>
 
-  <div class="search-group">
+  <div class="search-group" style="margin-top: 20px">
     <div v-for="information in informationList" :key="information.id" style="cursor: pointer" @click="navigateToInformation(information.id)">
-      <div style="display: flex;padding: 10px 15px">
+      <div style="display: flex;padding: 5px 15px;border: 1px solid #f2f2f2;box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);margin-bottom: 10px">
         <div style="width: 400px;height: 200px">
-          <img :src="'api/resources/' + information.cover" alt="" style="width: 400px;height: 200px">
+          <img :src="information.src" alt="" style="width: 400px;height: 200px" v-if="information.cover.length !== 0">
+          <img src="../../assets/img/default-news.jpg" alt="" style="width: 400px;height: 200px" v-else>
         </div>
         <div style="width: 100%;padding-left: 30px">
           <h2>{{information.title}}</h2>
@@ -23,7 +27,6 @@
           </div>
         </div>
       </div>
-      <el-divider></el-divider>
     </div>
   </div>
 
@@ -77,6 +80,7 @@
                         ...item,
                         createDate,
                         informationType: informationType.filter((t) => t.id === item.information_type)[0].name,
+                        src: item.cover.length === 0 ? '../../assets/img/default-news.jpg' : `/api/resources/${item.cover}`
                     }
                 })
                 this.informationList = temp
@@ -112,8 +116,8 @@
 
 <style scoped>
   .search-group{
-    width: 70%;
-    margin-left: 15%;
+    width: 80%;
+    margin-left: 10%;
     margin-top: 30px;
   }
 </style>

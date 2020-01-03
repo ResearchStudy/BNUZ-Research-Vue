@@ -23,8 +23,13 @@
         <div  class="info">
           <el-button type="primary" @click="preEnroll()">预约报名</el-button>
         </div>
-        <div  class="info">
+        <div  class="info" style="display: flex">
           分享:
+          <div style="display: flex">
+            <img src="../../assets/img/qq.png" alt="" class="share-icon">
+            <img src="../../assets/img/wechat.png" alt="" class="share-icon">
+            <img src="../../assets/img/weibo.png" alt="" class="share-icon">
+          </div>
         </div>
       </div>
     </div>
@@ -42,7 +47,7 @@
         <el-tab-pane label="预约报名" name="four"></el-tab-pane>
       </el-tabs>
     </div>
-  
+
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
       <el-form :model="enroll">
         <el-form-item label="用户名称" label-width="100px">
@@ -100,7 +105,7 @@
 <script>
     import {getCoursesById, getCoursesList, getTermByCoursesId, preEnroll} from '../../api/courses'
   import Card from "../../components/courses/card";
-  
+
     export default {
       name: "CoursesDetail",
       components: {Card},
@@ -128,7 +133,6 @@
           this.id = this.$route.params.id
         },
         id(){
-          this.similarCourses = this.$route.params.similarCourses
           this.getCoursesInfo()
         }
       },
@@ -139,13 +143,20 @@
       methods: {
         async getCoursesInfo(){
             this.info = await getCoursesById(this.$route.params.id);
+            const temp = await getCoursesList();
+            const similarCourses = temp.courses.filter((course) => course.id !== this.$route.params.id).slice(0,3);
+            this.similarCourses = similarCourses;
             this.info.src = `/api/resources/${this.info.cover}`
             this.info.startTime = new Date(this.info.start_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.start_time * 1000).getMonth() + 1
             this.info.endTime = new Date(this.info.end_time * 1000).getMonth() + 1 > 12 ? 1 : new Date(this.info.end_time * 1000).getMonth() + 1
         },
         async preEnroll(){
-          this.dialogFormVisible = true
-          this.termList = await getTermByCoursesId(this.$route.params.id)
+          if(!localStorage.getItem("id") || localStorage.getItem("id").length === 0 ){
+              this.$router.push({path: '/login'})
+          }  else {
+              this.dialogFormVisible = true
+              this.termList = await getTermByCoursesId(this.$route.params.id)
+          }
         },
         preEnrollSubmit(){
             this.enroll.age = parseInt(this.enroll.age)
@@ -156,13 +167,11 @@
         },
         handleClick(tab){
           if(tab.name === 'four'){
-              this.dialogFormVisible = true
+              this.preEnroll()
           }
         },
           async navigateToCoursesById(id){
-            const temp = await getCoursesList();
-            const similarCourses = temp.courses.filter((course) => course.id !== id).slice(0,3);
-            this.$router.push({name: `CoursesDetail`, params: {id, similarCourses}})
+            this.$router.push({name: `CoursesDetail`, params: {id}})
           }
       }
     }
@@ -174,5 +183,10 @@
 }
   .info{
     margin: 10px 0;
+  }
+  .share-icon{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
   }
 </style>
