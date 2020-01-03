@@ -91,22 +91,22 @@
                 organizationInfo.establishDate = date.getFullYear() + "年" + month + "月" + date.getDate() + "日";
                 this.organizationInfo = organizationInfo;
                 this.id = result.id
-                const courseList = await getCoursesList({institution_id: result.id,page: 1,limit: 16});
+                const courseList = await getCoursesList({institution: result.id,page: 1,limit: 16});
                 this.courseTotal = courseList.total
                 this.courseList = courseList.courses
-                const informationList = await getInformationList({institution_id: result.id,page: 1,limit: 16});
+                const informationList = await getInformationList({institution: result.id,page: 1,limit: 16});
                 this.informationTotal = informationList.total
                 this.informationList = informationList.informations
             },
             async getInformationList(page, limit){
                 const id = this.id
-                const informationList = await getInformationList({institution_id: id,page, limit});
+                const informationList = await getInformationList({institution: id,page, limit});
                 this.informationTotal = informationList.total
                 this.informationList = informationList.informations
             },
             async getCourseList(page, limit){
                 const id = this.id
-                const courseList = await getCoursesList({institution_id: id,page, limit});
+                const courseList = await getCoursesList({institution: id,page, limit});
                 this.courseTotal = courseList.total
                 this.courseList = courseList.courses
             },
