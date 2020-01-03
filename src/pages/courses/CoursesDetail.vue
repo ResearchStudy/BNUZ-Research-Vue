@@ -48,8 +48,8 @@
       </el-tabs>
     </div>
 
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="enroll">
+    <el-dialog title="预约报名" :visible.sync="dialogFormVisible" :rules="rules">
+      <el-form :model="enroll" :rules="rules" ref="enroll">
         <el-form-item label="用户名称" label-width="100px">
           <el-input v-model="enroll.name" autocomplete="off"></el-input>
         </el-form-item>
@@ -75,8 +75,8 @@
         <el-form-item label="年龄" label-width="100px">
           <el-input v-model="enroll.age" type="number"></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" label-width="100px">
-          <el-input v-model="enroll.phone"></el-input>
+        <el-form-item label="手机号码" label-width="100px">
+          <el-input  v-model="enroll.phone" :rules="rules"></el-input>
         </el-form-item>
         <el-form-item label="留言备注" label-width="100px">
           <el-input
@@ -107,9 +107,30 @@
   import Card from "../../components/courses/card";
 
     export default {
+
       name: "CoursesDetail",
+
       components: {Card},
       data(){
+        let checkPhone = (rule, value, callback) => {
+          const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+          console.log(reg.test(value));
+          if (reg.test(value)) {
+            callback();
+          } else {
+            return callback(new Error('手机格式有误'));
+          }
+        };
+
+        let checkEmail = (rlue , value , callback) => {
+          const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+          if (reg.test(value)) {
+            callback();
+          } else {
+            return callback(new Error('邮箱格式有误'));
+          }
+        };
+
         return {
           info: {},
           id: '',
@@ -120,14 +141,35 @@
               sex: '',
               email: '',
               age: '',
-              phone: '',
+              phone : '',
               remarks: '',
               term_id: ''
+          },
+
+          rules: {
+            email : [
+              {required : true , message : "邮箱不能为空" , trigger: "blur" },
+              {validator : checkEmail , trigger : 'blur'},
+            ],
+            phone : [
+              { required: true, message: "电话不能为空", trigger: "blur" },
+              {validator : checkPhone , trigger : 'blur'},
+
+            ],
+            name : [
+              {required : true , message : "名字不能为空" , trigger : "blur"}
+            ],
+            nickname : [
+              {required : true , message : "昵称不能为空" , trigger : "blur"}
+            ]
           },
           termList: [],
           similarCourses: []
         }
       },
+
+
+
       watch:{
         $route(){
           this.id = this.$route.params.id
