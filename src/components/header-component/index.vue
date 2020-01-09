@@ -112,6 +112,7 @@ export default {
 
 <style scoped>
 #header {
+  position: fixed;
   width: 100%;
   color: white;
   background-color: #202329;
@@ -119,6 +120,7 @@ export default {
   display: flex;
   justify-content: space-between;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  z-index: 999;
 }
 .left,
 .right {
