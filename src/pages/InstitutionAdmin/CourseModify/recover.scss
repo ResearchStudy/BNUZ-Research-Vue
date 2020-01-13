@@ -1,0 +1,48 @@
+/deep/ .avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/deep/ .avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+
+/deep/ .avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+
+/deep/ .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+
+/deep/ .el-form-item {
+  margin-bottom: 16px;
+}
+
+/deep/ .el-form-item__content {
+  margin-bottom: 10px;
+}
+
+/deep/ .el-form-item__error {
+  margin-left: 30px;
+}
+
+/deep/ input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/deep/ input[type="number"]::-webkit-inner-spin-button,
+/deep/ input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -7,10 +7,7 @@
     </el-breadcrumb>
     <div class="information-list__wrap">
       <div class="information-list__header">
-
-
         <el-button type="primary" @click="naviateToPublish()">发布新课程</el-button>
-
         <div class="search-input">
           <el-input
             placeholder="请输入要搜索的内容"
@@ -31,7 +28,6 @@
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
-
           <el-table-column
             prop="title"
             label="标题"
@@ -39,23 +35,24 @@
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">
-              <router-link
-                class="router-link"
-                :to="`/courses/${scope.row.id}`"
-              >{{scope.row.title}}</router-link>
-            </template>
+            <template slot-scope="scope">{{scope.row.title}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="id"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="id" width="100" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.id}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="类型"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column prop="type" label="类型" width="100" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{generateCourseType(scope.row.course_type)}}</template>
           </el-table-column>
 
-          <el-table-column prop="travelDays" label="行程天数" width="100" align="center" show-overflow-tooltip>
+          <el-table-column
+            prop="travelDays"
+            label="行程天数"
+            width="100"
+            align="center"
+            show-overflow-tooltip
+          >
             <template slot-scope="scope">{{scope.row.travel_days}}</template>
           </el-table-column>
 
@@ -67,24 +64,15 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">{{scope.row.suitable_for_crowd}}</template>
-
-
           </el-table-column>
           <el-table-column prop="desc" label="课程描述" align="center" show-overflow-tooltip>
-            <template
-              slot-scope="scope"
-            >{{scope.row.description}}</template>
+            <template slot-scope="scope">{{scope.row.description}}</template>
           </el-table-column>
-
 
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleAdoptClick(scope.row.id, true)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDeleteCourse(scope.row.id)"
-              >删除</el-button>
+              <el-button size="mini" type="primary" @click="handleEditClick(scope.row.id)">编辑</el-button>
+              <el-button size="mini" type="danger" @click="handleDeleteCourse(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -130,19 +118,16 @@ export default {
       } = await this.$http.get("/api/courses/list", {
         limit: "10",
         page: this.currentPage + "",
-        title:"",
-        attribute:"",
-        status:"",
+        title: "",
+        attribute: "",
+        status: "",
         course_type: ""
       });
       const idList = courses.map(infors => infors.id);
 
-      const { data: courseList } = await this.$http.post(
-        "/api/courses/_mget",
-        {
-          ids: idList
-        }
-      );
+      const { data: courseList } = await this.$http.post("/api/courses/_mget", {
+        ids: idList
+      });
 
       this.currentTableData = courseList;
       this.totalTagsCount = total;
@@ -159,7 +144,6 @@ export default {
       };
       return typeList[type] || "无";
     },
-
 
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;
@@ -179,7 +163,6 @@ export default {
     },
 
     async handleDeleteCourse(id) {
-
       await this.$http.delete(`/api/courses/${id}`);
       await this.getCourseList();
       this.$message({
@@ -190,9 +173,8 @@ export default {
       this.handleCurrentPageChange(this.currentPage);
     },
 
-
-    naviateToPublish(){
-      this.$router.push({path: '/insitution-admin/coursesForm'})
+    naviateToPublish() {
+      this.$router.push({ path: "/institution-admin/coursesForm" });
     },
 
     handleSelectionChange(val) {
@@ -226,19 +208,9 @@ export default {
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    async handleAdoptClick(id, isAdopted) {
-      await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
-        adopt: isAdopted,
-        reply: "没有回复哦"
-      });
-      if ((this.totalTagsCount - 1) % 10 === 0) {
-        this.currentPage -= 1;
-      }
-      await this.getAuditPendingList();
-      this.$message({
-        type: "success",
-        message: "处理成功！",
-        isSingle: true
+    async handleEditClick(id) {
+      this.$router.push({
+        path: `/institution-admin/course-modify/${id}`
       });
     },
     async handleMultiAdoptClick(isAdopted) {
