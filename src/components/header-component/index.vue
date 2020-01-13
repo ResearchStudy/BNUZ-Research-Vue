@@ -82,7 +82,7 @@ export default {
       if (this.role === 99) {
         this.$router.push({ path: "/root-admin" });
       } else if (this.role === 8) {
-        this.$router.push({ path: "/insitution-admin" });
+        this.$router.push({ path: "/institution-admin" });
       } else if (this.role === 0 || this.role === 1 || this.role === 2) {
         this.$router.push({ path: "/person" });
       }

@@ -12,7 +12,7 @@ import TagsManager from '@/pages/InstitutionAdmin/TagsManager/index'
 import PreEnrollStudentByCourse from '@/pages/InstitutionAdmin/PreEnrollStudent/PreEnrollStudentByCourse'
 const institutionAdminRoutes = [
   {
-    path: '/insitution-admin', component: Index, children: [
+    path: '/institution-admin', component: Index, children: [
       { path: '/', redirect: 'dashboard' },
       { path: 'dashboard', component: DashBoard },
       { path: 'informationManager', component: InformationManager },

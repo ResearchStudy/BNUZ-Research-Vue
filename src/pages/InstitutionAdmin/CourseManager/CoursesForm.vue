@@ -353,7 +353,7 @@
                             isSingle: true,
                             duration: 5000
                         });
-                        this.$router.push({path: '/insitution-admin/courseManager'})
+                        this.$router.push({path: '/institution-admin/courseManager'})
                     })
                 })
                 this.fullscreenLoading = false
