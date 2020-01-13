@@ -1,18 +1,18 @@
 const validateWhiteSpace = (value, callback) => {
-  if (value.toString().indexOf(' ') !== -1) {
+  if (value && value.toString().indexOf(' ') !== -1) {
     callback(new Error('不能包含空格'))
   }
 }
 
 const validateIsEmpty = (value, callback) => {
-  if (value === '') {
+  if (value === '' || value === undefined || value === null) {
     callback(new Error('请输入内容'))
   }
 }
 
 const validateCommon = (rule, value, callback) => {
-  validateWhiteSpace(value, callback)
   validateIsEmpty(value, callback)
+  validateWhiteSpace(value, callback)
   callback()
 }
 
@@ -25,12 +25,14 @@ const validatePassword = (rule, value, callback) => {
 }
 
 const validateNumber = (rule, value, callback) => {
+  validateIsEmpty(value, callback)
+  validateWhiteSpace(value, callback)
   if (/[^\d.]/.test(value.toString())) {
     callback(new Error('请输入纯数字'))
   } else if (value.toString().indexOf('.') !== value.toString().lastIndexOf('.')) {
     callback(new Error('请输入正确的金额'))
-  } else {
-    validateCommon(rule, value, callback)
+  }else{
+    callback()
   }
 }
 
