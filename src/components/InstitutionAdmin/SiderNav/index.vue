@@ -13,7 +13,7 @@
         <span>账户中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/insitution-admin/dashboard">基本资料</el-menu-item>
+        <el-menu-item index="/institution-admin/dashboard">基本资料</el-menu-item>
         <el-menu-item index="1-2">修改密码</el-menu-item>
         <el-menu-item index="1-2">修改手机号</el-menu-item>
         <el-menu-item index="1-2">修改地址</el-menu-item>
@@ -25,10 +25,10 @@
         <span>内容中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/insitution-admin/courseManager">课程管理</el-menu-item>
+        <el-menu-item index="/institution-admin/courseManager">课程管理</el-menu-item>
 
 
-        <el-menu-item index="/insitution-admin/informationManager">资讯管理</el-menu-item>
+        <el-menu-item index="/institution-admin/informationManager">资讯管理</el-menu-item>
         <el-menu-item index="2-5">附件管理</el-menu-item>
         <el-menu-item index="/insitution-admin/tags">标签管理</el-menu-item>
         <el-menu-item index="2-5">课程评论管理</el-menu-item>
@@ -40,7 +40,7 @@
         <span>用户中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/insitution-admin/preEnrollStudent">预报名学生</el-menu-item>
+        <el-menu-item index="/institution-admin/preEnrollStudent">预报名学生</el-menu-item>
         <el-menu-item index="/root-admin/accounts">已报名学生</el-menu-item>
         <el-menu-item index="/root-admin/accounts">批量报名</el-menu-item>
         <el-menu-item index="/root-admin/accounts">退款申请</el-menu-item>
