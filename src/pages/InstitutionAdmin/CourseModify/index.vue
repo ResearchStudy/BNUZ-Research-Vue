@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
       <el-breadcrumb-item>课程管理</el-breadcrumb-item>
-      <el-breadcrumb-item>{{coursesDetail.id}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="course-modify__wrap">
       <div class="course-modify__title">基本信息</div>
@@ -30,38 +30,50 @@
             <el-input v-model="coursesDetail.suitable_for_crowd"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="课程类型">
-          <div class="content">
-            <el-select
-              v-model="coursesDetail.course_type"
-              placeholder="请选择类型"
-              filterable
-              @change="handleTypeChange"
-              value-key="id"
-            >
-              <el-option
-                v-for="item in typeList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </div>
-        </el-form-item>
-        <el-form-item label="课程标签">
-          <div class="content">
-            <el-select
-              v-model="coursesDetail.tag"
-              placeholder="请选择标签"
-              filterable
-              multiple
-              @change="handleTagChange"
-              value-key="id"
-            >
-              <el-option v-for="item in tagList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-            </el-select>
-          </div>
-        </el-form-item>
+        <el-row>
+          <el-col span="8">
+            <el-form-item label="课程类型">
+              <div class="content">
+                <el-select
+                  v-model="coursesDetail.course_type"
+                  placeholder="请选择类型"
+                  filterable
+                  @change="handleTypeChange"
+                  value-key="id"
+                >
+                  <el-option
+                    v-for="item in typeList"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </div>
+            </el-form-item>
+          </el-col>
+          <el-col span="16">
+            <el-form-item label="课程标签">
+              <div class="content">
+                <el-select
+                  style="width:80%"
+                  v-model="coursesDetail.tag"
+                  placeholder="请选择标签"
+                  filterable
+                  multiple
+                  @change="handleTagChange"
+                  value-key="id"
+                >
+                  <el-option
+                    v-for="item in tagList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="课程时间">
           <div class="content">
             <el-date-picker
@@ -137,16 +149,6 @@
               <img v-if="coursesDetail.imageUrl" :src="coursesDetail.imageUrl" class="avatar" />
               <i v-if="!coursesDetail.imageUrl" class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-          </div>
-        </el-form-item>
-        <el-form-item label="是否发布" prop="details">
-          <div class="content">
-            <el-switch
-              v-model="coursesDetail.status"
-              :active-value="1"
-              :inactive-value="2"
-              active-color="#409EFF"
-            ></el-switch>
           </div>
         </el-form-item>
         <el-form-item label="课程详情" prop="details">
@@ -235,6 +237,16 @@
             </el-tabs>
           </div>
         </el-form-item>
+        <el-form-item label="是否发布">
+          <div class="content">
+            <el-switch
+              v-model="coursesDetail.status"
+              :active-value="1"
+              :inactive-value="2"
+              active-color="#409EFF"
+            ></el-switch>
+          </div>
+        </el-form-item>
         <el-form-item>
           <div class="content">
             <el-button type="primary" @click="handleSaveClick()">保存</el-button>
@@ -252,6 +264,7 @@ export default {
   data() {
     return {
       id: -1,
+      title: "",
       typeList: [
         { label: "知识科普", value: 1 },
         { label: "自然观赏", value: 2 },
@@ -287,11 +300,13 @@ export default {
     async getCourseDetail() {
       const { data } = await this.$http.get(`/api/courses/${this.id}`);
       const {
+        title,
         start_time,
         end_time,
         tag,
         address: { id, province_id, city_id, details }
       } = data;
+      this.title = title;
       this.coursesDetail = {
         ...data,
         timeRange: [start_time * 1000, end_time * 1000],
