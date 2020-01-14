@@ -17,7 +17,7 @@ const validateDate = (rule, value, callback) => {
 
 const validateCommon = (rule, value, callback) => {
   validateIsEmpty(value, callback)
-  validateWhiteSpace(value, callback)
+  // validateWhiteSpace(value, callback)
   callback()
 }
 
