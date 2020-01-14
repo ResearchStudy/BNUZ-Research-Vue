@@ -4,30 +4,30 @@
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
       <el-breadcrumb-item>课程管理</el-breadcrumb-item>
-      <el-breadcrumb-item>{{coursesDetail.title}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{coursesDetail.id}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="course-modify__wrap">
       <div class="course-modify__title">基本信息</div>
       <el-form
         ref="coursesDetail"
         :model="coursesDetail"
-        :rules="rules"
+        :rules="courseRules"
         label-width="120px"
         label-suffix=":"
       >
-        <el-form-item label="主标题" prop="title">
+        <el-form-item label="课程标题" prop="title">
           <div class="content">
             <el-input v-model="coursesDetail.title"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="副标题" prop="sub_title">
+        <el-form-item label="课程子标题" prop="sub_title">
           <div class="content">
             <el-input v-model="coursesDetail.sub_title"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="课程描述" prop="description">
+        <el-form-item label="适合人群" prop="suitable_for_crowd">
           <div class="content">
-            <el-input v-model="coursesDetail.description"></el-input>
+            <el-input v-model="coursesDetail.suitable_for_crowd"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="课程类型">
@@ -48,11 +48,6 @@
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item label="价格" prop="price">
-          <div class="content">
-            <el-input v-model="coursesDetail.price"></el-input>
-          </div>
-        </el-form-item>
         <el-form-item label="课程标签">
           <div class="content">
             <el-select
@@ -67,7 +62,7 @@
             </el-select>
           </div>
         </el-form-item>
-        <el-form-item label="起始时间">
+        <el-form-item label="课程时间">
           <div class="content">
             <el-date-picker
               style="width:100%"
@@ -125,19 +120,9 @@
             <el-input v-model="coursesDetail.address_detail"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="课程详情" prop="details">
+        <el-form-item label="课程描述" prop="description">
           <div class="content">
-            <quill-editor v-model="coursesDetail.details" ref="detailsEditor" class="warrper"></quill-editor>
-          </div>
-        </el-form-item>
-        <el-form-item label="行程安排" prop="scheduling">
-          <div class="content">
-            <quill-editor v-model="coursesDetail.scheduling" ref="schedulingEditor" class="warrper"></quill-editor>
-          </div>
-        </el-form-item>
-        <el-form-item label="报名须知" prop="notice">
-          <div class="content">
-            <quill-editor v-model="coursesDetail.notice" ref="noticeEditor" class="warrper"></quill-editor>
+            <el-input v-model="coursesDetail.description"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="课程封面">
@@ -154,9 +139,105 @@
             </el-upload>
           </div>
         </el-form-item>
+        <el-form-item label="是否发布" prop="details">
+          <div class="content">
+            <el-switch
+              v-model="coursesDetail.status"
+              :active-value="1"
+              :inactive-value="2"
+              active-color="#409EFF"
+            ></el-switch>
+          </div>
+        </el-form-item>
+        <el-form-item label="课程详情" prop="details">
+          <div class="content">
+            <quill-editor v-model="coursesDetail.details" ref="detailsEditor"></quill-editor>
+          </div>
+        </el-form-item>
         <el-form-item>
           <div class="content">
-            <el-button type="primary" @click="handleSaveClick('coursesDetail')">保存</el-button>
+            <el-tabs value="scheduling">
+              <el-tab-pane label="行程安排" name="scheduling">
+                <quill-editor v-model="coursesDetail.scheduling" ref="schedulingEditor"></quill-editor>
+              </el-tab-pane>
+              <el-tab-pane label="开营时间" name="time">
+                <el-button @click="handleAddTermClick">添加学期</el-button>
+                <el-form
+                  class="terms__detail"
+                  ref="termsDetail"
+                  :model="termsDetail"
+                  label-width="6em"
+                  label-suffix=":"
+                  label-position="left"
+                  hide-required-asterisk
+                >
+                  <div
+                    v-for="(term,index) in termsDetail.termsList"
+                    :key="term.key"
+                    style="margin-bottom:40px"
+                  >
+                    <div class="terms__title">
+                      第{{index+1}}期
+                      <el-button
+                        circle
+                        type="danger"
+                        size="mini"
+                        icon="el-icon-delete"
+                        @click="handleDeleteTermClick(index,term.id)"
+                        style="margin-left:20px"
+                      ></el-button>
+                    </div>
+                    <el-form-item
+                      label="计划人数"
+                      :prop="'termsList.'+index+'.planned'"
+                      :rules="termRules.planned"
+                    >
+                      <el-input v-model="term.planned"></el-input>
+                    </el-form-item>
+                    <el-form-item
+                      label="价格"
+                      :prop="'termsList.'+index+'.price'"
+                      :rules="termRules.price"
+                    >
+                      <el-input v-model="term.price"></el-input>
+                    </el-form-item>
+                    <el-form-item
+                      label="活动时间"
+                      :prop="'termsList.'+index+'.timeRange'"
+                      :rules="termRules.timeRange"
+                    >
+                      <el-date-picker
+                        style="width:100%"
+                        unlink-panels
+                        v-model="term.timeRange"
+                        value-format="timestamp"
+                        type="daterange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :clearable="false"
+                        :editable="false"
+                      ></el-date-picker>
+                    </el-form-item>
+                    <el-form-item
+                      label="备注"
+                      :prop="'termsList.'+index+'.remarks'"
+                      :rules="termRules.remarks"
+                    >
+                      <el-input v-model="term.remarks"></el-input>
+                    </el-form-item>
+                  </div>
+                </el-form>
+              </el-tab-pane>
+              <el-tab-pane label="报名须知" name="notice">
+                <quill-editor v-model="coursesDetail.notice" ref="noticeEditor"></quill-editor>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <div class="content">
+            <el-button type="primary" @click="handleSaveClick()">保存</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -165,7 +246,7 @@
 </template>
 
 <script>
-import rules from "./validate";
+import { courseRules, termRules } from "./validate";
 export default {
   name: "CourseModify",
   data() {
@@ -179,10 +260,15 @@ export default {
         { label: "文化康乐", value: 16 }
       ],
       coursesDetail: {},
+      termsDetail: {
+        termsList: []
+      },
+      deleteTermsList: [],
       provinceList: [],
       cityList: [],
       tagList: [],
-      rules: rules,
+      courseRules: courseRules,
+      termRules: termRules,
       preProvinceId: -1,
       preCityId: -1,
       preAddressDetail: ""
@@ -195,6 +281,7 @@ export default {
     await this.getCourseDetail();
     await this.getCityList();
     await this.getTagList();
+    await this.getTermList();
   },
   methods: {
     async getCourseDetail() {
@@ -203,7 +290,7 @@ export default {
         start_time,
         end_time,
         tag,
-        address: { id, province_id, city_id, detail }
+        address: { id, province_id, city_id, details }
       } = data;
       this.coursesDetail = {
         ...data,
@@ -211,13 +298,26 @@ export default {
         address_id: id,
         province_id,
         city_id,
-        address_detail: detail,
+        address_detail: details,
         tag: tag.map(item => item.id)
       };
       this.preProvinceId = province_id;
       this.preCityId = city_id;
-      this.preAddressDetail = detail;
+      this.preAddressDetail = details;
       this.coursesDetail.imageUrl = await this.getPreImageInfo();
+    },
+    async getTermList() {
+      const { data } = await this.$http.get(`/api/courses/${this.id}/terms`);
+      this.termsDetail.termsList = data.map(term => {
+        const { id, planned, price, remarks, start_time, end_time } = term;
+        return {
+          id,
+          planned,
+          price,
+          remarks,
+          timeRange: [start_time * 1000, end_time * 1000]
+        };
+      });
     },
     handleTypeChange(type) {
       this.coursesDetail.course_type = type;
@@ -309,74 +409,131 @@ export default {
       }
       return (isJPG || isPNG) && isLt2M;
     },
-    handleSaveClick(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          const {
-            title,
-            sub_title,
-            description,
-            course_type,
-            price,
-            tag,
-            timeRange,
-            details,
-            scheduling,
-            notice,
-            imageUrl,
-            province_id,
-            city_id,
-            address_detail
-          } = this.coursesDetail;
-          const [start_time, end_time] = timeRange;
+    handleAddTermClick() {
+      this.termsDetail.termsList.push({
+        id: -1,
+        planned: "",
+        price: "",
+        timeRange: [],
+        remarks: "",
+        key: new Date().getTime()
+      });
+    },
+    handleDeleteTermClick(index, id) {
+      this.termsDetail.termsList.splice(index, 1);
+      this.deleteTermsList.push(id);
+    },
+    async handleCourseSubmit() {
+      const {
+        title,
+        sub_title,
+        description,
+        course_type,
+        tag,
+        timeRange,
+        details,
+        scheduling,
+        notice,
+        imageUrl,
+        province_id,
+        city_id,
+        address_detail,
+        suitable_for_crowd,
+        status
+      } = this.coursesDetail;
+      const [start_time, end_time] = timeRange;
 
-          const isAddressChange =
-            this.preProvinceId !== province_id ||
-            this.preCityId !== city_id ||
-            this.preAddressDetail !== address_detail;
+      const isAddressChange =
+        this.preProvinceId !== province_id ||
+        this.preCityId !== city_id ||
+        this.preAddressDetail !== address_detail;
 
-          if (isAddressChange) {
-            const {
-              data: { id: newAddressId }
-            } = await this.$http.post("/api/address", {
-              country_id: 1,
-              province_id,
-              city_id,
-              details
-            });
-            this.coursesDetail.address_id = newAddressId;
-          }
+      if (isAddressChange) {
+        const {
+          data: { id: newAddressId }
+        } = await this.$http.post("/api/address", {
+          country_id: 1,
+          province_id,
+          city_id,
+          details: address_detail
+        });
+        this.coursesDetail.address_id = newAddressId;
+      }
+      await this.$http.put(`/api/courses/${this.id}`, {
+        title,
+        subtitle: sub_title,
+        description,
+        course_type,
+        tag,
+        details,
+        start_time: start_time / 1000,
+        end_time: end_time / 1000,
+        scheduling,
+        notice,
+        cover: imageUrl,
+        address_id: this.coursesDetail.address_id,
+        suitable_for_crowd,
+        status
+      });
+    },
+    async handleTermSubmit() {
+      const { termsList } = this.termsDetail;
+      termsList.forEach(async ({ id, price, planned, timeRange, remarks }) => {
+        const isNewTerm = id === -1;
+        const [start_time, end_time] = timeRange;
+        const requestBody = {
+          planned: parseInt(planned),
+          price: parseInt(price),
+          start_time: start_time / 1000,
+          end_time: end_time / 1000,
+          remarks
+        };
+        if (!isNewTerm) {
+          await this.$http.put(
+            `/api/courses/${this.id}/terms/${id}`,
+            requestBody
+          );
+        } else {
+          await this.$http.post(`/api/courses/${this.id}/terms`, requestBody);
+        }
+      });
+      const deleteTermsList = this.deleteTermsList.filter(id => id !== -1);
+      if (deleteTermsList.length === 0) return;
+      await this.$http.delete(`/api/courses/${this.id}/terms`, {
+        data: {
+          ids: deleteTermsList
+        }
+      });
+    },
+    handleSaveClick() {
+      const courseValid = new Promise((resolve, reject) => {
+        this.$refs["coursesDetail"].validate(valid => {
+          if (valid) resolve();
+          reject();
+        });
+      });
+      const termValid = new Promise((resolve, reject) => {
+        this.$refs["termsDetail"].validate(valid => {
+          if (valid) resolve();
+          reject();
+        });
+      });
 
-          await this.$http.put(`/api/courses/${this.id}`, {
-            title,
-            sub_title,
-            description,
-            course_type,
-            price,
-            tag,
-            details,
-            start_time,
-            end_time,
-            scheduling,
-            notice,
-            cover: imageUrl,
-            address_id: this.coursesDetail.address_id
-          });
+      Promise.all([courseValid, termValid])
+        .then(async () => {
+          await this.handleTermSubmit();
+          await this.handleCourseSubmit();
           this.$message({
             type: "success",
             message: "修改成功"
           });
-          this.$router.push({
-            path: "/root-admin/accounts"
-          });
-        } else {
+        })
+        .catch(() => {
           this.$message({
             type: "error",
             message: "请按要求完成表格"
           });
-          return false;
-        }
-      });
+        });
     }
   }
 };
@@ -407,6 +564,23 @@ export default {
       max-width: 80%;
       margin-left: 30px;
       color: #666;
+    }
+  }
+}
+
+.terms {
+  &__title {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  &__detail {
+    /deep/ .el-form-item__error {
+      margin-left: 0;
     }
   }
 }
