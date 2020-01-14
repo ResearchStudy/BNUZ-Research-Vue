@@ -17,8 +17,7 @@ const http = {
       }).catch(err => {
         /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
         const { response: { data } } = err
-        console.log(data)
-        return reject()
+        return reject(data)
       })
     })
   },
@@ -29,8 +28,7 @@ const http = {
       }).catch(err => {
         /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
         const { response: { data } } = err
-        console.log(data)
-        return reject()
+        return reject(data)
       })
     })
   },
@@ -41,8 +39,7 @@ const http = {
       }).catch(err => {
         /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
         const { response: { data } } = err
-        console.log(data)
-        return reject()
+        return reject(data)
       })
     })
   },
@@ -53,8 +50,7 @@ const http = {
       }).catch(err => {
         /* data: { status: false, errcode: 5303, message: "验证失败", data: null } */
         const { response: { data } } = err
-        console.log(data)
-        return reject()
+        return reject(data)
       })
     })
   }
