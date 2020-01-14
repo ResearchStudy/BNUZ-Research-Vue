@@ -1,4 +1,4 @@
-const { validatePhone, validateNumber, validateCommon } = require('@/utils/formValidate')
+const { validatePhone, validateMoney, validateCommon } = require('@/utils/formValidate')
 
 module.exports = {
   name: [{
@@ -17,7 +17,7 @@ module.exports = {
     validator: validateCommon, trigger: ['blur', 'change']
   }],
   registered_money: [{
-    validator: validateNumber, trigger: ['blur', 'change']
+    validator: validateMoney, trigger: ['blur', 'change']
   }],
   registration_authority: [{
     validator: validateCommon, trigger: ['blur', 'change']
