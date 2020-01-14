@@ -24,14 +24,14 @@ const validatePassword = (rule, value, callback) => {
   }
 }
 
-const validateNumber = (rule, value, callback) => {
+const validateMoney = (rule, value, callback) => {
   validateIsEmpty(value, callback)
   validateWhiteSpace(value, callback)
   if (/[^\d.]/.test(value.toString())) {
     callback(new Error('请输入纯数字'))
   } else if (value.toString().indexOf('.') !== value.toString().lastIndexOf('.')) {
     callback(new Error('请输入正确的金额'))
-  }else{
+  } else {
     callback()
   }
 }
@@ -54,7 +54,7 @@ const validateEmail = (rule, value, callback) => {
 }
 
 module.exports = {
-  validateNumber,
+  validateMoney,
   validatePassword,
   validatePhone,
   validateEmail,
