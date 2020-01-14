@@ -12,12 +12,14 @@
             <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
             <el-dropdown v-if="isLogin">
                 <div style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center">
-                    <img :src="'/api/resources/' + userInfo.avator" alt="avator" style="width: 30px;padding-right: 5px">{{userInfo.nickname}}
+                    <img :src="avator" alt="avator" style="width: 30px;padding-right: 5px">{{userInfo.nickname}}
                     <span ></span>
                 </div>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="navigateToAdmin">Dashboard</el-dropdown-item>
-                <el-dropdown-item divided @click.native="logout()">退出登录</el-dropdown-item>
+            <el-dropdown-menu slot="dropdown" class="drop">
+                <el-dropdown-item @click.native="navigateToPre" v-if="isUser">个人空间</el-dropdown-item>
+                <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
+                <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
+                <el-dropdown-item  @click.native="logout()" class="layout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
             </el-dropdown>
         </div>
@@ -26,11 +28,14 @@
 
 <script>
 import HeaderLink from "@/components/header-component/HeaderLink";
+
 export default {
   name: "Header",
   components: { HeaderLink },
   data() {
     return {
+      avator : "",
+      id : "",
       titleArr: [
         {
           name: "首页",
@@ -63,11 +68,27 @@ export default {
       ]
     };
   },
+  async mounted(){
+    await this.getAvator();
+  },
   methods: {
+    async getAvator(){
+      this.id = this.$store.getters.userInfo.id;
+      await this.$http.get('/api/accounts/' + this.id).then(res => {
+        if(res.data.avator === ""){
+          this.avator = "/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=";
+
+        }
+        else{
+          this.avator = "/api/resources/" + res.data.avator;
+        }
+      })
+
+    },
     navigateTo(path) {
       this.$router.push({ path: path });
     },
-      checkRegister(){
+    checkRegister(){
           if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
               alert("请先登录！");
               this.$router.push({ path: '/login' })
@@ -77,23 +98,63 @@ export default {
           }else{
               this.$router.push({path: 'organization/register'})
           }
-      },
+    },
+    // navigateToAdmin() {
+    //   if (this.role === 99) {
+    //     this.$router.push({ path: "/root-admin" });
+    //   } else if (this.role === 8) {
+    //     this.$router.push({ path: "/institution-admin" });
+    //   } else if (this.role === 0 || this.role === 1 || this.role === 2) {
+    //     this.$router.push({ path: "/person" });
+    //   }
+    // },
     navigateToAdmin() {
-      if (this.role === 99) {
+      if (this.$store.getters.role === 99) {
         this.$router.push({ path: "/root-admin" });
-      } else if (this.role === 8) {
+      } else if (this.$store.getters.role === 8) {
         this.$router.push({ path: "/institution-admin" });
-      } else if (this.role === 0 || this.role === 1 || this.role === 2) {
+      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
         this.$router.push({ path: "/person" });
+      }
+    },
+    navigateToPre() {
+      if (this.$store.getters.role === 99) {
+        this.$router.push({ path: "/root-admin/accounts" });
+      } else if (this.$store.getters.role === 8) {
+        this.$router.push({ path: "/institution-admin/preEnrollStudent" });
+      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
+        this.$router.push({ path: "/person/pre-entry" });
+      }
+    },
+    navigateToPass() {
+      if (this.$store.getters.role === 99) {
+        this.$router.push({ path: "/root-admin" });
+      } else if (this.$store.getters.role === 8) {
+        this.$router.push({ path: "/institution-admin" });
+      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
+        this.$router.push({ path: "/person/reset-pwd" });
       }
     },
     logout() {
       this.$router.push({ path: "/logout" });
-    }
+    },
+
   },
+
   computed: {
+    
+    
     role() {
       return this.$store.getters.role || "";
+    },
+    isUser(){
+      if(this.$store.getters.role === 99){
+        return ("");
+      }
+      else{
+        return("1");
+      }
+
     },
     isLogin() {
       return (
@@ -102,8 +163,11 @@ export default {
       );
     },
     userInfo() {
+     
       return this.$store.getters.userInfo || {};
-    }
+    },
+
+
   },
 
 
@@ -149,5 +213,14 @@ export default {
 }
 .right button:focus {
   outline: 0;
+}
+.drop {
+  color:white;
+  width: 150px;
+  background-color: #202329;
+}
+.layout {
+  border-top-style:solid;
+  border-color:white;
 }
 </style>
