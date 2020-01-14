@@ -509,13 +509,17 @@ export default {
       const courseValid = new Promise((resolve, reject) => {
         this.$refs["coursesDetail"].validate(valid => {
           if (valid) resolve();
-          reject();
+          reject({
+            message: "请按要求完成表格"
+          });
         });
       });
       const termValid = new Promise((resolve, reject) => {
         this.$refs["termsDetail"].validate(valid => {
           if (valid) resolve();
-          reject();
+          reject({
+            message: "请按要求完成表格"
+          });
         });
       });
 
@@ -525,13 +529,15 @@ export default {
           await this.handleCourseSubmit();
           this.$message({
             type: "success",
-            message: "修改成功"
+            message: "修改成功",
+            isSingle: true
           });
         })
-        .catch(() => {
+        .catch(({ message }) => {
           this.$message({
             type: "error",
-            message: "请按要求完成表格"
+            message: message,
+            isSingle: true
           });
         });
     }
