@@ -9,7 +9,7 @@ import CoursesIndex from "@/pages/courses/index";
 import CoursesForm from "@/pages/courses/CoursesForm";
 import Home from "@/pages/index/Home";
 import store from '@/store'
-import { checkUserLogin, getUserInfo } from "../api/user";
+import {checkUserLogin, getUserInfo, logout} from "../api/user";
 import rootAdminRoutes from "./rootAdmin";
 import normalRoutes from "./normal";
 import NotFound from "../pages/common/NotFound";
@@ -20,7 +20,6 @@ import CoursesDetail from "../pages/courses/CoursesDetail";
 import CoursesList from "../pages/courses/CoursesList";
 import InformationsList from "../pages/infomations/List";
 import InformationDetail from "../pages/infomations/Detail";
-import http from '../utils/http'
 Vue.use(VueRouter);
 
 const routes = [
@@ -40,9 +39,9 @@ const routes = [
             },
             {
                 path: 'courses/', component: CoursesIndex, children: [
-                    { path: '', component: CoursesList, name: 'CoursesList' },
-                    { path: 'form', component: CoursesForm, name: 'CoursesForm' },
-                    { path: ':id', component: CoursesDetail, name: 'CoursesDetail' },
+                    {path: '',component: CoursesList, name: 'CoursesList' },
+                    {path: 'form',component: CoursesForm, name: 'CoursesFormIndex' },
+                    {path: ':id',component: CoursesDetail, name: 'CoursesDetail' },
                 ]
             },
             {
@@ -76,15 +75,22 @@ const permitAllRoutes = [
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("/logout")) {
-        localStorage.setItem("id", "");
+        logout();
+        localStorage.removeItem("id");
         store.dispatch('setRole', "")
         next({ path: '/login' })
     }
+    if(localStorage.getItem("id") !== null && localStorage.getItem("id").length !== 0){
+        checkUserLogin().then((res) => {
+            if(!res.status){
+                logout();
+                localStorage.removeItem("id")
+            }
+        })
+    }
     if (permitAllRoutes.some((item) => to.path.indexOf(item) !== -1) || store.getters.role.length !== 0) {
-        if (localStorage.getItem("id") && localStorage.getItem("id").length !== 0) {
-            // console.log('one')
-            // console.log(localStorage.getItem('id'))
-            http.get(`/api/accounts/${localStorage.getItem("id")}`).then(({ data: res }) => {
+        if(localStorage.getItem("id") !== null && localStorage.getItem("id").length !== 0){
+            getUserInfo(localStorage.getItem("id")).then((res) => {
                 store.dispatch('setUserInfoAndRole', res);
                 if (res.role === 99) {
                     router.addRoutes(rootAdminRoutes);
@@ -110,10 +116,11 @@ router.beforeEach((to, from, next) => {
             //     next({ path: to.path })
             // })
         }
+
         next()
     }
     else {
-        if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
+        if (localStorage.getItem("id") === null || localStorage.getItem("id").length === 0) {
             //alert(localStorage.getItem("id"));
             //alert("请先登录！");
             next({ path: '/login' })
