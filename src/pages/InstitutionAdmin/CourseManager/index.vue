@@ -47,23 +47,15 @@
           </el-table-column>
 
           <el-table-column
-            prop="travelDays"
-            label="行程天数"
-            width="100"
+            prop="create_time"
+            label="创建时间"
+            width="200"
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">{{scope.row.travel_days}}</template>
-          </el-table-column>
-
-          <el-table-column
-            prop="suitableForCrowd"
-            label="适合人群"
-            width="100"
-            align="center"
-            show-overflow-tooltip
-          >
-            <template slot-scope="scope">{{scope.row.suitable_for_crowd}}</template>
+            <template
+              slot-scope="scope"
+            >{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
           </el-table-column>
           <el-table-column prop="desc" label="课程描述" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.description}}</template>
@@ -123,13 +115,7 @@ export default {
         status: "",
         course_type: ""
       });
-      const idList = courses.map(infors => infors.id);
-
-      const { data: courseList } = await this.$http.post("/api/courses/_mget", {
-        ids: idList
-      });
-
-      this.currentTableData = courseList;
+      this.currentTableData = courses;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
     },
