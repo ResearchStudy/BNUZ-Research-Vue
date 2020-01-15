@@ -30,3 +30,10 @@ export function checkUserLogin() {
         method: 'get'
     })
 }
+
+export function logout() {
+    return request({
+        url: `${prefix}/logout`,
+        method: 'get'
+    })
+}
