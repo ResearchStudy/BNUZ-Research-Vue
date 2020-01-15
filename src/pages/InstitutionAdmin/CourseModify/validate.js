@@ -36,9 +36,6 @@ module.exports = {
     }],
     timeRange: [{
       validator: validateDate, trigger: 'change'
-    }],
-    remarks: [{
-      validator: validateCommon, trigger: ['blur', 'change']
     }]
   }
 }
