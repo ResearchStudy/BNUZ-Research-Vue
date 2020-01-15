@@ -1,6 +1,6 @@
 <template>
   <el-menu
-    default-active="/person/dashboard"
+    :default-active="$route.path"
     class="sider-nav__container"
     @open="handleOpen"
     @close="handleClose"

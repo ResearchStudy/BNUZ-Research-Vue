@@ -184,7 +184,7 @@ export default {
             this.form.email = res.data.email
             this.form.phone = res.data.phone
             this.form.token = res.data.avator
-            this.imageUrl = "/api/resources/"+this.form.token
+            this.imageUrl = "/api/resources/"+ this.form.token
         })
         this.preImageUrl = await this.getPreImageInfo();
     },
