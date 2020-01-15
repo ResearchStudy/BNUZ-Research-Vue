@@ -71,18 +71,20 @@ export default {
   async mounted(){
     await this.getAvator();
   },
+  
   methods: {
     async getAvator(){
-      this.id = this.$store.getters.userInfo.id;
+    this.id = localStorage.getItem("id");
+    if(this.id){
       await this.$http.get('/api/accounts/' + this.id).then(res => {
         if(res.data.avator === ""){
           this.avator = "/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=";
-
         }
         else{
           this.avator = "/api/resources/" + res.data.avator;
         }
       })
+    }
 
     },
     navigateTo(path) {
@@ -99,15 +101,7 @@ export default {
               this.$router.push({path: 'organization/register'})
           }
     },
-    // navigateToAdmin() {
-    //   if (this.role === 99) {
-    //     this.$router.push({ path: "/root-admin" });
-    //   } else if (this.role === 8) {
-    //     this.$router.push({ path: "/institution-admin" });
-    //   } else if (this.role === 0 || this.role === 1 || this.role === 2) {
-    //     this.$router.push({ path: "/person" });
-    //   }
-    // },
+
     navigateToAdmin() {
       if (this.$store.getters.role === 99) {
         this.$router.push({ path: "/root-admin" });
@@ -136,25 +130,24 @@ export default {
       }
     },
     logout() {
+      localStorage.setItem("id","");
       this.$router.push({ path: "/logout" });
     },
 
   },
 
   computed: {
-    
-    
     role() {
       return this.$store.getters.role || "";
     },
     isUser(){
+     
       if(this.$store.getters.role === 99){
         return ("");
       }
       else{
         return("1");
       }
-
     },
     isLogin() {
       return (
@@ -163,9 +156,11 @@ export default {
       );
     },
     userInfo() {
-     
       return this.$store.getters.userInfo || {};
     },
+    
+    
+
 
 
   },
