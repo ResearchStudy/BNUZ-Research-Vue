@@ -30,11 +30,13 @@ const routes = [
             { path: '', component: Home, name: 'Home' },
             { path: 'login', component: Login, name: 'Login' },
             { path: 'register', component: Register, name: 'Register' },
-            {path: 'organization/', component: OrganizationIndex, children: [
-                    {path: '', component: Organization, name: 'Organization'},
-                    {path: 'register', component: OrganizationRegister, name: 'OrganizationRegister'},
-                    {path: ':id', component: OrganizationDetail, name: 'OrganizationDetail'},
-                ]},
+            {
+                path: 'organization/', component: OrganizationIndex, children: [
+                    { path: '', component: Organization, name: 'Organization' },
+                    { path: 'register', component: OrganizationRegister, name: 'OrganizationRegister' },
+                    { path: ':id', component: OrganizationDetail, name: 'OrganizationDetail' },
+                ]
+            },
             {
                 path: 'courses/', component: CoursesIndex, children: [
                     {path: '',component: CoursesList, name: 'CoursesList' },
@@ -44,8 +46,8 @@ const routes = [
             },
             {
                 path: 'informations/', component: CoursesIndex, children: [
-                    {path: '',component: InformationsList, name: 'InformationList' },
-                    {path: ':id',component: InformationDetail, name: 'InformationDetail' }
+                    { path: '', component: InformationsList, name: 'InformationList' },
+                    { path: ':id', component: InformationDetail, name: 'InformationDetail' }
                 ]
             }
         ]
@@ -70,7 +72,6 @@ const permitAllRoutes = [
     '/courses',
     '/informations'
 ];
-
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes("/logout")) {
@@ -101,6 +102,19 @@ router.beforeEach((to, from, next) => {
                 }
                 next({ path: to.path })
             })
+            // getUserInfo(localStorage.getItem("id")).then((res) => {
+            //     console.log(res)
+            //     store.dispatch('setUserInfoAndRole', res);
+            //     if (res.role === 99) {
+            //         router.addRoutes(rootAdminRoutes);
+            //     } else if (res.role === 8) {
+            //         router.addRoutes(insitutionAdminRoutes)
+            //     }
+            //     else if (res.role === 0 || res.role === 1 || res.role === 2) {
+            //         router.addRoutes(normalRoutes);
+            //     }
+            //     next({ path: to.path })
+            // })
         }
 
         next()
@@ -113,10 +127,10 @@ router.beforeEach((to, from, next) => {
         } else {
             if (store.getters.role.length === 0) {
                 checkUserLogin().then((res) => {
-                    if(!res.status){
-                        next({path : '/login'})
+                    if (!res.status) {
+                        next({ path: '/login' })
                         localStorage.setItem("id", "")
-                    }else{
+                    } else {
                         getUserInfo(localStorage.getItem("id")).then((res) => {
                             store.dispatch('setUserInfoAndRole', res);
                             if (res.role === 99) {
