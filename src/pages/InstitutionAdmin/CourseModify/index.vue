@@ -160,7 +160,11 @@
           <div class="content">
             <el-tabs value="scheduling">
               <el-tab-pane label="行程安排" name="scheduling">
-                <quill-editor v-model="coursesDetail.scheduling" ref="schedulingEditor"></quill-editor>
+                <div class="terms__detail">
+                  <el-form-item prop="scheduling">
+                    <quill-editor v-model="coursesDetail.scheduling" ref="schedulingEditor"></quill-editor>
+                  </el-form-item>
+                </div>
               </el-tab-pane>
               <el-tab-pane label="开营时间" name="time">
                 <el-button @click="handleAddTermClick">添加学期</el-button>
@@ -232,7 +236,11 @@
                 </el-form>
               </el-tab-pane>
               <el-tab-pane label="报名须知" name="notice">
-                <quill-editor v-model="coursesDetail.notice" ref="noticeEditor"></quill-editor>
+                <div class="terms__detail">
+                  <el-form-item prop="notice">
+                    <quill-editor v-model="coursesDetail.notice" ref="noticeEditor"></quill-editor>
+                  </el-form-item>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </div>
