@@ -11,6 +11,9 @@ module.exports = {
     suitable_for_crowd: [{
       validator: validateCommon, trigger: ['blur', 'change']
     }],
+    price: [{
+      validator: validateMoney, trigger: ['blur', 'change']
+    }],
     description: [{
       validator: validateCommon, trigger: ['blur', 'change']
     }],

@@ -30,6 +30,11 @@
             <el-input v-model="coursesDetail.suitable_for_crowd"></el-input>
           </div>
         </el-form-item>
+        <el-form-item label="价钱" prop="price">
+          <div class="content">
+            <el-input v-model="coursesDetail.price"></el-input>
+          </div>
+        </el-form-item>
         <el-row>
           <el-col span="8">
             <el-form-item label="课程类型">
@@ -462,7 +467,8 @@ export default {
         city_id,
         address_detail,
         suitable_for_crowd,
-        status
+        status,
+        price
       } = this.coursesDetail;
       const [start_time, end_time] = timeRange;
 
@@ -496,7 +502,8 @@ export default {
         cover: imageUrl,
         address_id: this.coursesDetail.address_id,
         suitable_for_crowd,
-        status
+        status,
+        price: parseInt(price)
       });
     },
     async handleTermSubmit() {
