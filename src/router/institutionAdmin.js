@@ -5,8 +5,8 @@ import PublishInformation from '@/pages/PublishInformation/index'
 import InformationDetail from '@/pages/InstitutionAdmin/InformationDetail/index'
 import UpdateInformation from '@/pages/UpdateInformation/index'
 import CourseManager from '@/pages/InstitutionAdmin/CourseManager/index'
-import CoursesForm from '@/pages/InstitutionAdmin/CourseManager/CoursesForm'
 import CourseModify from '@/pages/InstitutionAdmin/CourseModify/index'
+import CoursePublish from '@/pages/InstitutionAdmin/CoursePublish/index'
 import PreEnrollStudent from '@/pages/InstitutionAdmin/PreEnrollStudent/index'
 import TagsManager from '@/pages/InstitutionAdmin/TagsManager/index'
 
@@ -20,8 +20,8 @@ const institutionAdminRoutes = [
       { path: 'publishInformation', component: PublishInformation },
       { path: 'information-list/:id', component: InformationDetail },
       { path: 'information-update/:id', component: UpdateInformation },
-      { path: 'courseManager', component: CourseManager },
-      { path: 'coursesForm', component: CoursesForm },
+      { path: 'course-list', component: CourseManager },
+      { path: 'course-publish', component: CoursePublish },
       { path: 'course-modify/:id', component: CourseModify },
       { path: 'preEnrollStudent', component: PreEnrollStudent },
       { path: 'preEnrollStudentByCourse/:id', component: PreEnrollStudentByCourse },

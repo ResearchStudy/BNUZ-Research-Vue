@@ -25,7 +25,7 @@
         <span>内容中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/institution-admin/courseManager">课程管理</el-menu-item>
+        <el-menu-item index="/institution-admin/course-list">课程管理</el-menu-item>
 
 
         <el-menu-item index="/institution-admin/informationManager">资讯管理</el-menu-item>

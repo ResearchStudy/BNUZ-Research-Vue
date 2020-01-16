@@ -164,7 +164,7 @@ export default {
     },
 
     naviateToPublish() {
-      this.$router.push({ path: "/institution-admin/coursesForm" });
+      this.$router.push({ path: "/institution-admin/course-publish" });
     },
 
     handleSelectionChange(val) {
