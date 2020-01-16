@@ -42,8 +42,14 @@
             <template slot-scope="scope">{{scope.row.id}}</template>
           </el-table-column>
 
-          <el-table-column prop="type" label="类型" width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{generateCourseType(scope.row.course_type)}}</template>
+          <el-table-column
+            prop="type"
+            label="发布状态"
+            width="100"
+            align="center"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">{{scope.row.status===1?'发布':'暂存'}}</template>
           </el-table-column>
 
           <el-table-column
@@ -53,9 +59,7 @@
             align="center"
             show-overflow-tooltip
           >
-            <template
-              slot-scope="scope"
-            >{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
+            <template slot-scope="scope">{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
           </el-table-column>
           <el-table-column prop="desc" label="课程描述" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.description}}</template>
