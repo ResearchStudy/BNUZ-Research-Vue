@@ -35,10 +35,29 @@
           <el-tab-pane label="行程安排" name="second">
             <div v-html="info.scheduling"></div>
           </el-tab-pane>
-          <el-tab-pane label="研学服务" name="third">
+          <el-tab-pane label="开营时间" name="third">
+            <el-form class="terms__detail" label-width="6em" label-suffix=":" label-position="left">
+              <div v-for="(term,index) in termsDetail" :key="term.key" class="terms__wrap">
+                <div class="terms__title">第{{index+1}}期</div>
+                <el-form-item label="计划人数">
+                  <div>{{term.planned}}</div>
+                </el-form-item>
+                <el-form-item label="价格">
+                  <div>{{term.price}}</div>
+                </el-form-item>
+                <el-form-item label="活动时间">
+                  <div>{{`${new Date(term.start_time*1000).toLocaleDateString()} 至 ${new Date(term.end_time*1000).toLocaleDateString()}`}}</div>
+                </el-form-item>
+                <el-form-item label="备注">
+                  <div>{{term.remarks || '无'}}</div>
+                </el-form-item>
+              </div>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="研学服务" name="four">
             <div v-html="info.notice"></div>
           </el-tab-pane>
-          <el-tab-pane label="预约报名" name="four"></el-tab-pane>
+          <el-tab-pane label="预约报名" name="five"></el-tab-pane>
         </el-tabs>
       </div>
 
@@ -61,9 +80,9 @@
               <el-form-item label="档期" label-width="100px">
                 <el-select v-model="enroll.term_id" placeholder="请选择">
                   <el-option
-                    v-for="item in termList"
+                    v-for="(item,index) in termList"
                     :key="item.id"
-                    :label="item.title"
+                    :label="`第${index+1}期`"
                     :value="item.id"
                   ></el-option>
                 </el-select>
@@ -171,7 +190,8 @@ export default {
         nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }]
       },
       termList: [],
-      similarCourses: []
+      similarCourses: [],
+      termsDetail: []
     };
   },
 
@@ -184,8 +204,10 @@ export default {
     }
   },
   mounted() {
+    this.id = this.$route.params.id;
     this.similarCourses = this.$route.params.similarCourses;
     this.getCoursesInfo();
+    this.getTermsInfo();
   },
   methods: {
     async getCoursesInfo() {
@@ -204,6 +226,11 @@ export default {
         new Date(this.info.end_time * 1000).getMonth() + 1 > 12
           ? 1
           : new Date(this.info.end_time * 1000).getMonth() + 1;
+    },
+    async getTermsInfo() {
+      const { data } = await this.$http.get(`/api/courses/${this.id}/terms`);
+      this.termsDetail = data;
+      console.log(this.termsDetail);
     },
     async preEnroll() {
       if (
@@ -224,7 +251,7 @@ export default {
       });
     },
     handleClick(tab) {
-      if (tab.name === "four") {
+      if (tab.name === "five") {
         this.preEnroll();
       }
     },
@@ -235,7 +262,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-row {
   margin: 10px 0px;
 }
@@ -246,5 +273,36 @@ export default {
   width: 25px;
   height: 25px;
   margin-left: 10px;
+}
+.terms {
+  &__title {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  &__detail {
+    .terms {
+      &__title {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        color: #333;
+        font-size: 26px;
+        font-weight: bold;
+      }
+
+      &__wrap {
+        margin-bottom: 30px;
+
+        /deep/ .el-form-item {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
 }
 </style>
