@@ -5,7 +5,7 @@ module.exports = {
     title: [{
       validator: validateCommon, trigger: ['blur', 'change']
     }],
-    sub_title: [{
+    subtitle: [{
       validator: validateCommon, trigger: ['blur', 'change']
     }],
     suitable_for_crowd: [{
@@ -13,6 +13,21 @@ module.exports = {
     }],
     price: [{
       validator: validateMoney, trigger: ['blur', 'change']
+    }],
+    course_type: [{
+      required: true, message: '请选择活动类型', trigger: 'change'
+    }],
+    tag: [{
+      required: true, message: '请选择课程标签', trigger: 'blur'
+    }],
+    course_time: [{
+      validator: validateDate, trigger: 'change'
+    }],
+    province_id: [{
+      required: true, message: '请选择省份', trigger: 'blur'
+    }],
+    city_id: [{
+      required: true, message: '请选择城市', trigger: 'blur'
     }],
     description: [{
       validator: validateCommon, trigger: ['blur', 'change']

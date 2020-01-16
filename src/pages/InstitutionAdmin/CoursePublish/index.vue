@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
       <el-breadcrumb-item>课程管理</el-breadcrumb-item>
-      <el-breadcrumb-item>{{title}}</el-breadcrumb-item>
+      <el-breadcrumb-item>发布课程</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="course-modify__wrap">
       <div class="course-modify__title">基本信息</div>
@@ -14,15 +14,16 @@
         :rules="courseRules"
         label-width="120px"
         label-suffix=":"
+        hide-required-asterisk
       >
         <el-form-item label="课程标题" prop="title">
           <div class="content">
             <el-input v-model="coursesDetail.title"></el-input>
           </div>
         </el-form-item>
-        <el-form-item label="课程子标题" prop="sub_title">
+        <el-form-item label="课程子标题" prop="subtitle">
           <div class="content">
-            <el-input v-model="coursesDetail.sub_title"></el-input>
+            <el-input v-model="coursesDetail.subtitle"></el-input>
           </div>
         </el-form-item>
         <el-form-item label="适合人群" prop="suitable_for_crowd">
@@ -36,8 +37,8 @@
           </div>
         </el-form-item>
         <el-row>
-          <el-col span="8">
-            <el-form-item label="课程类型">
+          <el-col :span="8">
+            <el-form-item label="课程类型" prop="course_type">
               <div class="content">
                 <el-select
                   v-model="coursesDetail.course_type"
@@ -56,8 +57,8 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col span="16">
-            <el-form-item label="课程标签">
+          <el-col :span="16">
+            <el-form-item label="课程标签" prop="tag">
               <div class="content">
                 <el-select
                   style="width:80%"
@@ -79,12 +80,12 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="课程时间">
+        <el-form-item label="课程时间" prop="course_time">
           <div class="content">
             <el-date-picker
               style="width:100%"
               unlink-panels
-              v-model="coursesDetail.timeRange"
+              v-model="coursesDetail.course_time"
               value-format="timestamp"
               type="daterange"
               range-separator="至"
@@ -96,7 +97,7 @@
           </div>
         </el-form-item>
         <div style="display:flex">
-          <el-form-item label="省份" style="width:50%">
+          <el-form-item label="省份" style="width:50%" prop="province_id">
             <div class="content">
               <el-select
                 v-model="coursesDetail.province_id"
@@ -114,7 +115,7 @@
               </el-select>
             </div>
           </el-form-item>
-          <el-form-item label="城市" style="width:50%">
+          <el-form-item label="城市" style="width:50%" prop="city_id">
             <div class="content">
               <el-select
                 v-model="coursesDetail.city_id"
@@ -190,6 +191,7 @@
                     <div class="terms__title">
                       第{{index+1}}期
                       <el-button
+                        v-if="index!==0"
                         circle
                         type="danger"
                         size="mini"
@@ -273,7 +275,7 @@
 <script>
 import { courseRules, termRules } from "./validate";
 export default {
-  name: "CourseModify",
+  name: "CoursePublish",
   data() {
     return {
       id: -1,
@@ -285,9 +287,34 @@ export default {
         { label: "励志拓展", value: 8 },
         { label: "文化康乐", value: 16 }
       ],
-      coursesDetail: {},
+      coursesDetail: {
+        address_id: "",
+        title: "",
+        subtitle: "",
+        suitable_for_crowd: "",
+        course_type: "",
+        tag: [],
+        course_time: [],
+        province_id: "",
+        city_id: "",
+        address_details: "",
+        description: "",
+        imageUrl: "",
+        details: "",
+        scheduling: "",
+        notice: "",
+        price: ""
+      },
       termsDetail: {
-        termsList: []
+        termsList: [
+          {
+            title: "",
+            planned: "",
+            price: "",
+            timeRange: [],
+            remarks: ""
+          }
+        ]
       },
       deleteTermsList: [],
       provinceList: [],
@@ -303,50 +330,10 @@ export default {
   async mounted() {
     const { id } = this.$route.params;
     this.id = id;
-    await this.getProvinceList();
-    await this.getCourseDetail();
-    await this.getCityList();
     await this.getTagList();
-    await this.getTermList();
+    await this.getProvinceList();
   },
   methods: {
-    async getCourseDetail() {
-      const { data } = await this.$http.get(`/api/courses/${this.id}`);
-      const {
-        title,
-        start_time,
-        end_time,
-        tag,
-        address: { id, province_id, city_id, details }
-      } = data;
-      this.title = title;
-      this.coursesDetail = {
-        ...data,
-        timeRange: [start_time * 1000, end_time * 1000],
-        address_id: id,
-        province_id,
-        city_id,
-        address_detail: details,
-        tag: tag.map(item => item.id)
-      };
-      this.preProvinceId = province_id;
-      this.preCityId = city_id;
-      this.preAddressDetail = details;
-      this.coursesDetail.imageUrl = await this.getPreImageInfo();
-    },
-    async getTermList() {
-      const { data } = await this.$http.get(`/api/courses/${this.id}/terms`);
-      this.termsDetail.termsList = data.map(term => {
-        const { id, planned, price, remarks, start_time, end_time } = term;
-        return {
-          id,
-          planned,
-          price,
-          remarks,
-          timeRange: [start_time * 1000, end_time * 1000]
-        };
-      });
-    },
     handleTypeChange(type) {
       this.coursesDetail.course_type = type;
     },
@@ -383,23 +370,6 @@ export default {
         data: { tags }
       } = await this.$http.get("/api/tags/list");
       this.tagList = tags;
-    },
-    getPreImageInfo() {
-      return new Promise(async resolve => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-        img.src = `/api/resources/${this.coursesDetail.cover}`;
-        img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.fillStyle = "#fff";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          const res = canvas.toDataURL("image/jpeg");
-          resolve(res);
-        };
-      });
     },
     async handleAvatarUpload({ file }) {
       this.isUploaded = true;
@@ -443,6 +413,7 @@ export default {
         planned: "",
         price: "",
         timeRange: [],
+        title: "",
         remarks: "",
         key: new Date().getTime()
       });
@@ -454,11 +425,11 @@ export default {
     async handleCourseSubmit() {
       const {
         title,
-        sub_title,
+        subtitle,
         description,
         course_type,
         tag,
-        timeRange,
+        course_time,
         details,
         scheduling,
         notice,
@@ -470,27 +441,19 @@ export default {
         status,
         price
       } = this.coursesDetail;
-      const [start_time, end_time] = timeRange;
-
-      const isAddressChange =
-        this.preProvinceId !== province_id ||
-        this.preCityId !== city_id ||
-        this.preAddressDetail !== address_detail;
-
-      if (isAddressChange) {
-        const {
-          data: { id: newAddressId }
-        } = await this.$http.post("/api/address", {
-          country_id: 1,
-          province_id,
-          city_id,
-          details: address_detail
-        });
-        this.coursesDetail.address_id = newAddressId;
-      }
-      await this.$http.put(`/api/courses/${this.id}`, {
+      const [start_time, end_time] = course_time;
+      const {
+        data: { id: newAddressId }
+      } = await this.$http.post("/api/address", {
+        country_id: 1,
+        province_id,
+        city_id,
+        details: address_detail
+      });
+      this.coursesDetail.address_id = newAddressId;
+      await this.$http.post(`/api/courses`, {
         title,
-        subtitle: sub_title,
+        subtitle,
         description,
         course_type,
         tag,
@@ -503,36 +466,17 @@ export default {
         address_id: this.coursesDetail.address_id,
         suitable_for_crowd,
         status,
+        term: this.termsDetail.termsList.map(
+          ({ price, planned, timeRange: [start_time, end_time], remarks }) => ({
+            planned: parseInt(planned),
+            price: parseInt(price),
+            start_time: start_time / 1000,
+            end_time: end_time / 1000,
+            remarks,
+            title: ""
+          })
+        ),
         price: parseInt(price)
-      });
-    },
-    async handleTermSubmit() {
-      const { termsList } = this.termsDetail;
-      termsList.forEach(async ({ id, price, planned, timeRange, remarks }) => {
-        const isNewTerm = id === -1;
-        const [start_time, end_time] = timeRange;
-        const requestBody = {
-          planned: parseInt(planned),
-          price: parseInt(price),
-          start_time: start_time / 1000,
-          end_time: end_time / 1000,
-          remarks
-        };
-        if (!isNewTerm) {
-          await this.$http.put(
-            `/api/courses/${this.id}/terms/${id}`,
-            requestBody
-          );
-        } else {
-          await this.$http.post(`/api/courses/${this.id}/terms`, requestBody);
-        }
-      });
-      const deleteTermsList = this.deleteTermsList.filter(id => id !== -1);
-      if (deleteTermsList.length === 0) return;
-      await this.$http.delete(`/api/courses/${this.id}/terms`, {
-        data: {
-          ids: deleteTermsList
-        }
       });
     },
     handleSaveClick() {
@@ -555,13 +499,13 @@ export default {
 
       Promise.all([courseValid, termValid])
         .then(async () => {
-          await this.handleTermSubmit();
           await this.handleCourseSubmit();
           this.$message({
             type: "success",
-            message: "修改成功",
+            message: "发布成功",
             isSingle: true
           });
+          this.$route.push({ path: "/institution-admin/course-list" });
         })
         .catch(({ message }) => {
           this.$message({
