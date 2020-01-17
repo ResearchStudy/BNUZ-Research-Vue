@@ -1,29 +1,37 @@
 <template>
-    <div id="header">
-        <div class="left">
-            <div class="logo">北师研学</div>
-            <div style="display: flex; justify-content: space-between">
-                <header-link v-for="title in titleArr" :title="title.name" :href="title.href" :key="title.name"/>
-            </div>
-        </div>
-        <div class="right" style="margin-right: 10px">
-            <button style="margin-right: 30px"  @click=checkRegister() >入驻合作</button>
-            <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
-            <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
-            <el-dropdown v-if="isLogin">
-                <div style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center">
-                    <img :src="avator" alt="avator" style="width: 30px;padding-right: 5px">{{userInfo.nickname}}
-                    <span ></span>
-                </div>
-            <el-dropdown-menu slot="dropdown" class="drop">
-                <el-dropdown-item @click.native="navigateToPre" v-if="isUser">个人空间</el-dropdown-item>
-                <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
-                <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
-                <el-dropdown-item  @click.native="logout()" class="layout">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-            </el-dropdown>
-        </div>
+  <div id="header">
+    <div class="left">
+      <div class="logo">北师研学</div>
+      <div style="display: flex; justify-content: space-between">
+        <header-link
+          v-for="title in titleArr"
+          :title="title.name"
+          :href="title.href"
+          :key="title.name"
+        />
+      </div>
     </div>
+    <div class="right" style="margin-right: 10px">
+      <button style="margin-right: 30px" @click="checkRegister()">入驻合作</button>
+      <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
+      <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
+      <el-dropdown v-if="isLogin">
+        <div
+          style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center"
+        >
+          <img :src="avator" alt="avator" style="width: 30px;padding-right: 5px" />
+          {{userInfo.nickname}}
+          <span></span>
+        </div>
+        <el-dropdown-menu slot="dropdown" class="drop">
+          <el-dropdown-item @click.native="navigateToPre" v-if="isUser">个人空间</el-dropdown-item>
+          <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
+          <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="logout()" class="layout">退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -34,8 +42,8 @@ export default {
   components: { HeaderLink },
   data() {
     return {
-      avator : "",
-      id : "",
+      avator: "",
+      id: "",
       titleArr: [
         {
           name: "首页",
@@ -68,38 +76,53 @@ export default {
       ]
     };
   },
-  async mounted(){
+  async mounted() {
     await this.getAvator();
   },
-  
-  methods: {
-    async getAvator(){
-    this.id = localStorage.getItem("id");
-    if(this.id){
-      await this.$http.get('/api/accounts/' + this.id).then(res => {
-        if(res.data.avator === ""){
-          this.avator = "/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=";
-        }
-        else{
-          this.avator = "/api/resources/" + res.data.avator;
-        }
-      })
-    }
 
+  methods: {
+    async getAvator() {
+      this.id = localStorage.getItem("id");
+      if (this.id) {
+        await this.$http.get("/api/accounts/" + this.id).then(res => {
+          if (res.data.avator === "") {
+            this.avator =
+              "/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=";
+          } else {
+            this.avator = "/api/resources/" + res.data.avator;
+          }
+        });
+      }
     },
     navigateTo(path) {
       this.$router.push({ path: path });
     },
-    checkRegister(){
-          if (!localStorage.getItem("id") || localStorage.getItem("id").length === 0) {
-              alert("请先登录！");
-              this.$router.push({ path: '/login' })
-          }else if (this.role === 8){
-              alert("您已入驻，无需重复申请！");
-              this.$router.push({ path: '/' })
-          }else{
-              this.$router.push({path: 'organization/register'})
-          }
+    checkRegister() {
+      if (
+        !localStorage.getItem("id") ||
+        localStorage.getItem("id").length === 0
+      ) {
+        alert("请先登录！");
+        this.$router.push({ path: "/login" });
+      } else if (this.role === 8) {
+        alert("您已入驻，无需重复申请！");
+        this.$router.push({ path: "/" });
+      } else {
+        this.$http
+          .get("/api/accounts/login/check")
+          .then(({ data: { status } }) => {
+            if (!status) {
+              this.$router.push({ path: "/login" });
+              this.$message({
+                message: "请先登录",
+                type: "error",
+                isSingle: true
+              });
+            } else {
+              this.$router.push({ path: "/organization/register" });
+            }
+          });
+      }
     },
 
     navigateToAdmin() {
@@ -107,7 +130,11 @@ export default {
         this.$router.push({ path: "/root-admin" });
       } else if (this.$store.getters.role === 8) {
         this.$router.push({ path: "/institution-admin" });
-      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
+      } else if (
+        this.$store.getters.role === 0 ||
+        this.$store.getters.role === 1 ||
+        this.$store.getters.role === 2
+      ) {
         this.$router.push({ path: "/person" });
       }
     },
@@ -116,7 +143,11 @@ export default {
         this.$router.push({ path: "/root-admin/accounts" });
       } else if (this.$store.getters.role === 8) {
         this.$router.push({ path: "/institution-admin/preEnrollStudent" });
-      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
+      } else if (
+        this.$store.getters.role === 0 ||
+        this.$store.getters.role === 1 ||
+        this.$store.getters.role === 2
+      ) {
         this.$router.push({ path: "/person/pre-entry" });
       }
     },
@@ -125,28 +156,29 @@ export default {
         this.$router.push({ path: "/root-admin" });
       } else if (this.$store.getters.role === 8) {
         this.$router.push({ path: "/institution-admin" });
-      } else if (this.$store.getters.role === 0 || this.$store.getters.role === 1 || this.$store.getters.role === 2) {
+      } else if (
+        this.$store.getters.role === 0 ||
+        this.$store.getters.role === 1 ||
+        this.$store.getters.role === 2
+      ) {
         this.$router.push({ path: "/person/reset-pwd" });
       }
     },
     logout() {
-      localStorage.setItem("id","");
+      localStorage.setItem("id", "");
       this.$router.push({ path: "/logout" });
-    },
-
+    }
   },
 
   computed: {
     role() {
       return this.$store.getters.role || "";
     },
-    isUser(){
-     
-      if(this.$store.getters.role === 99){
-        return ("");
-      }
-      else{
-        return("1");
+    isUser() {
+      if (this.$store.getters.role === 99) {
+        return "";
+      } else {
+        return "1";
       }
     },
     isLogin() {
@@ -157,15 +189,8 @@ export default {
     },
     userInfo() {
       return this.$store.getters.userInfo || {};
-    },
-    
-    
-
-
-
-  },
-
-
+    }
+  }
 };
 </script>
 
@@ -188,7 +213,7 @@ export default {
   justify-content: space-between;
 }
 .logo {
-  font-family:"SimHei";
+  font-family: "SimHei";
   font-size: 30px;
   cursor: pointer;
   margin: 0px 50px;
@@ -210,12 +235,12 @@ export default {
   outline: 0;
 }
 .drop {
-  color:white;
+  color: white;
   width: 150px;
   background-color: #202329;
 }
 .layout {
-  border-top-style:solid;
-  border-color:white;
+  border-top-style: solid;
+  border-color: white;
 }
 </style>

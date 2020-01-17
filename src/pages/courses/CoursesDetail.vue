@@ -239,8 +239,21 @@ export default {
       ) {
         this.$router.push({ path: "/login" });
       } else {
-        this.dialogFormVisible = true;
-        this.termList = await getTermByCoursesId(this.$route.params.id);
+        this.$http
+          .get("/api/accounts/login/check")
+          .then(async ({ data: { status } }) => {
+            if (!status) {
+              this.$router.push({ path: "/login" });
+              this.$message({
+                message: "请先登录",
+                type: "error",
+                isSingle: true
+              });
+            } else {
+              this.dialogFormVisible = true;
+              this.termList = await getTermByCoursesId(this.$route.params.id);
+            }
+          });
       }
     },
     preEnrollSubmit() {
