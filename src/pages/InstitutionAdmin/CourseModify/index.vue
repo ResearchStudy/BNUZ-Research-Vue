@@ -37,7 +37,7 @@
         </el-form-item>
         <el-row>
           <el-col span="8">
-            <el-form-item label="课程类型">
+            <el-form-item label="课程类型" prop="course_type">
               <div class="content">
                 <el-select
                   v-model="coursesDetail.course_type"
@@ -57,7 +57,7 @@
             </el-form-item>
           </el-col>
           <el-col span="16">
-            <el-form-item label="课程标签">
+            <el-form-item label="课程标签" prop="tag">
               <div class="content">
                 <el-select
                   style="width:80%"
@@ -79,12 +79,12 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="课程时间">
+        <el-form-item label="课程时间" prop="course_time">
           <div class="content">
             <el-date-picker
               style="width:100%"
               unlink-panels
-              v-model="coursesDetail.timeRange"
+              v-model="coursesDetail.course_time"
               value-format="timestamp"
               type="daterange"
               range-separator="至"
@@ -96,7 +96,7 @@
           </div>
         </el-form-item>
         <div style="display:flex">
-          <el-form-item label="省份" style="width:50%">
+          <el-form-item label="省份" style="width:50%" prop="province_id">
             <div class="content">
               <el-select
                 v-model="coursesDetail.province_id"
@@ -114,7 +114,7 @@
               </el-select>
             </div>
           </el-form-item>
-          <el-form-item label="城市" style="width:50%">
+          <el-form-item label="城市" style="width:50%" prop="city_id">
             <div class="content">
               <el-select
                 v-model="coursesDetail.city_id"
@@ -322,7 +322,7 @@ export default {
       this.title = title;
       this.coursesDetail = {
         ...data,
-        timeRange: [start_time * 1000, end_time * 1000],
+        course_time: [start_time * 1000, end_time * 1000],
         address_id: id,
         province_id,
         city_id,
@@ -458,7 +458,7 @@ export default {
         description,
         course_type,
         tag,
-        timeRange,
+        course_time,
         details,
         scheduling,
         notice,
@@ -470,7 +470,7 @@ export default {
         status,
         price
       } = this.coursesDetail;
-      const [start_time, end_time] = timeRange;
+      const [start_time, end_time] = course_time;
 
       const isAddressChange =
         this.preProvinceId !== province_id ||
@@ -562,6 +562,7 @@ export default {
             message: "修改成功",
             isSingle: true
           });
+          this.$router.push({ path: "/institution-admin/course-list" });
         })
         .catch(({ message }) => {
           this.$message({
