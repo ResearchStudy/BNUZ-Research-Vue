@@ -14,7 +14,6 @@
         :rules="courseRules"
         label-width="120px"
         label-suffix=":"
-        hide-required-asterisk
       >
         <el-form-item label="课程标题" prop="title">
           <div class="content">
@@ -181,7 +180,6 @@
                   label-width="6em"
                   label-suffix=":"
                   label-position="left"
-                  hide-required-asterisk
                 >
                   <div
                     v-for="(term,index) in termsDetail.termsList"
@@ -505,7 +503,7 @@ export default {
             message: "发布成功",
             isSingle: true
           });
-          this.$route.push({ path: "/institution-admin/course-list" });
+          this.$router.push({ path: "/institution-admin/course-list" });
         })
         .catch(({ message }) => {
           this.$message({
