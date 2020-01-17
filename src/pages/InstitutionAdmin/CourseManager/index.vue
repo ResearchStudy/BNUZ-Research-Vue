@@ -67,8 +67,18 @@
 
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="handleEditClick(scope.row.id)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDeleteCourse(scope.row.id)">删除</el-button>
+              <el-button
+                :disabled="scope.row.start_time< new Date().getTime()/1000"
+                size="mini"
+                type="primary"
+                @click="handleEditClick(scope.row.id)"
+              >编辑</el-button>
+              <el-button
+                :disabled="scope.row.start_time< new Date().getTime()/1000"
+                size="mini"
+                type="danger"
+                @click="handleDeleteCourse(scope.row.id)"
+              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
