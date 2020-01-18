@@ -16,6 +16,7 @@
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
+          height="calc(100vh - 245px)"
         >
           <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.id}}</template>
@@ -242,6 +243,7 @@ export default {
 <style lang="scss" scoped>
 .accounts-manager {
   &__container {
+    height: calc(100vh - 100px);
   }
 
   &__wrap {
@@ -261,6 +263,7 @@ export default {
 
   &__pagination {
     display: flex;
+    height: 30px;
     margin-top: 20px;
 
     .pagination {

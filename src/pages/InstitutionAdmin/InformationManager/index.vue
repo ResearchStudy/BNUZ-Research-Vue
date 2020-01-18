@@ -7,8 +7,6 @@
     </el-breadcrumb>
     <div class="information-list__wrap">
       <div class="information-list__header">
-
-
         <el-button type="primary" @click="naviateToPublish()">发布新资讯</el-button>
 
         <div class="search-input">
@@ -29,6 +27,7 @@
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          height="calc(100vh - 255px)"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
 
@@ -47,13 +46,26 @@
             </template>
           </el-table-column>
 
-
-          <el-table-column prop="author" label="发布者"  width="100" align="center" show-overflow-tooltip>
+          <el-table-column
+            prop="author"
+            label="发布者"
+            width="100"
+            align="center"
+            show-overflow-tooltip
+          >
             <template slot-scope="scope">{{scope.row.author_name}}</template>
           </el-table-column>
 
-          <el-table-column prop="updateTime" label="更新时间" width="100" align="center" show-overflow-tooltip>
-            <template slot-scope="scope">{{new Date(scope.row.update_time*1000).toLocaleDateString()}}</template>
+          <el-table-column
+            prop="updateTime"
+            label="更新时间"
+            width="100"
+            align="center"
+            show-overflow-tooltip
+          >
+            <template
+              slot-scope="scope"
+            >{{new Date(scope.row.update_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
 
           <el-table-column
@@ -64,24 +76,15 @@
             show-overflow-tooltip
           >
             <template slot-scope="scope">{{generateStatus(scope.row.status)}}</template>
-
-
           </el-table-column>
           <el-table-column prop="abstract" label="摘要" align="center" show-overflow-tooltip>
-            <template
-              slot-scope="scope"
-            >{{scope.row.abstract}}</template>
+            <template slot-scope="scope">{{scope.row.abstract}}</template>
           </el-table-column>
-
 
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" @click="handleUpdateClick(scope.row.id)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDeleteInformation(scope.row.id)"
-              >删除</el-button>
+              <el-button size="mini" type="danger" @click="handleDeleteInformation(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -127,12 +130,11 @@ export default {
       } = await this.$http.get("/api/information/list", {
         limit: "10",
         page: this.currentPage + "",
-        title:"",
-        attribute:"",
-        status:"",
+        title: "",
+        attribute: "",
+        status: "",
         information_type: ""
       });
-
 
       const idList = informations.map(infors => infors.id);
 
@@ -176,8 +178,8 @@ export default {
       return statusList[status] || "无";
     },
 
-    naviateToPublish(){
-      this.$router.push({path: '/insitution-admin/publishInformation'})
+    naviateToPublish() {
+      this.$router.push({ path: "/insitution-admin/publishInformation" });
     },
 
     handleSelectionChange(val) {
@@ -212,9 +214,7 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleUpdateClick(id) {
-      this.$router.push({path: '/insitution-admin/information-update/'+id})
-
-
+      this.$router.push({ path: "/insitution-admin/information-update/" + id });
     },
 
     async handleDeleteInformation(id) {
@@ -225,10 +225,8 @@ export default {
         message: "删除成功！",
         isSingle: true
       });
-      this.handleCurrentPageChange(this.currentPage);  },
-
-
-
+      this.handleCurrentPageChange(this.currentPage);
+    }
   }
 };
 </script>
@@ -236,6 +234,7 @@ export default {
 <style lang="scss" scoped>
 .information-list {
   &__container {
+    height: calc(100vh - 100px);
   }
 
   &__header {
@@ -269,6 +268,7 @@ export default {
 
   &__pagination {
     display: flex;
+    height: 30px;
     margin-top: 20px;
 
     .pagination {
