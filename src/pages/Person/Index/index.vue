@@ -11,14 +11,11 @@
         <el-main>
           <router-view></router-view>
         </el-main>
-        <el-footer>Footer</el-footer>
       </el-container>
     </el-container>
   </el-container>
 </template>
-
 <script>
-//import Header from "@/components/Person/Header";
 import appHeader from '../../../components/header-component/index.vue';
 import SiderNav from "@/components/Person/SiderNav";
 export default {

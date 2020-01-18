@@ -2,8 +2,7 @@
   <el-menu
     :default-active="$route.path"
     class="sider-nav__container"
-    @open="handleOpen"
-    @close="handleClose"
+    :default-openeds="['1', '2']"
     :unique-opened="true"
     theme=dark
     background-color="#F6F6F8"
