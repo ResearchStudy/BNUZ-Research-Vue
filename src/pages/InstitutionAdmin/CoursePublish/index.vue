@@ -252,12 +252,14 @@
         </el-form-item>
         <el-form-item label="是否发布">
           <div class="content">
-            <el-switch
-              v-model="coursesDetail.status"
-              :active-value="1"
-              :inactive-value="2"
-              active-color="#409EFF"
-            ></el-switch>
+            <el-tooltip :content="coursesDetail.status===1?'发布':'暂存'" placement="top">
+              <el-switch
+                v-model="coursesDetail.status"
+                :active-value="1"
+                :inactive-value="2"
+                active-color="#409EFF"
+              ></el-switch>
+            </el-tooltip>
           </div>
         </el-form-item>
         <el-form-item>
@@ -498,9 +500,10 @@ export default {
       Promise.all([courseValid, termValid])
         .then(async () => {
           await this.handleCourseSubmit();
+          const { status } = this.coursesDetail;
           this.$message({
             type: "success",
-            message: "发布成功",
+            message: status === 1 ? "发布成功" : "暂存成功",
             isSingle: true
           });
           this.$router.push({ path: "/institution-admin/course-list" });

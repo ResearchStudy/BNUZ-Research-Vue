@@ -144,7 +144,8 @@ export default {
         title: "",
         attribute: "",
         status: "",
-        course_type: ""
+        course_type: "",
+        me: 1
       });
       this.currentTableData = courses;
       this.totalTagsCount = total;
