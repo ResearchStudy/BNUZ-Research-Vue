@@ -165,7 +165,6 @@ export default {
   },
   async mounted() {
       await this.getUserInfo();
-
   },
 
 
