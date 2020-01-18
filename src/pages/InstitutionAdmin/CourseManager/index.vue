@@ -73,12 +73,28 @@
                 type="primary"
                 @click="handleEditClick(scope.row.id)"
               >编辑</el-button>
-              <el-button
-                :disabled="scope.row.start_time< new Date().getTime()/1000"
-                size="mini"
-                type="danger"
-                @click="handleDeleteCourse(scope.row.id)"
-              >删除</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该课程吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleDeleteCourse(scope.row.id,scope.$index)"
+                  >确定</el-button>
+                </div>
+                <el-button
+                  slot="reference"
+                  :disabled="scope.row.start_time< new Date().getTime()/1000"
+                  size="mini"
+                  type="danger"
+                >删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -105,6 +121,7 @@ export default {
   name: "CourseList",
   data() {
     return {
+      visible: false,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -162,7 +179,8 @@ export default {
       }
     },
 
-    async handleDeleteCourse(id) {
+    async handleDeleteCourse(id, index) {
+      this.closePopover(index);
       await this.$http.delete(`/api/courses/${id}`);
       await this.getCourseList();
       this.$message({
@@ -171,6 +189,10 @@ export default {
         isSingle: true
       });
       this.handleCurrentPageChange(this.currentPage);
+    },
+
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
     },
 
     naviateToPublish() {
