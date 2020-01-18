@@ -36,7 +36,7 @@
           </div>
         </el-form-item>
         <el-row>
-          <el-col span="8">
+          <el-col :span="8">
             <el-form-item label="课程类型" prop="course_type">
               <div class="content">
                 <el-select
@@ -56,7 +56,7 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col span="16">
+          <el-col :span="16">
             <el-form-item label="课程标签" prop="tag">
               <div class="content">
                 <el-select
@@ -303,10 +303,10 @@ export default {
   async mounted() {
     const { id } = this.$route.params;
     this.id = id;
+    await this.getTagList();
     await this.getProvinceList();
     await this.getCourseDetail();
     await this.getCityList();
-    await this.getTagList();
     await this.getTermList();
   },
   methods: {
