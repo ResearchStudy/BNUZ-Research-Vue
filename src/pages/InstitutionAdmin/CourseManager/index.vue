@@ -26,6 +26,7 @@
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          height="calc(100vh - 255px)"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
           <el-table-column
@@ -260,6 +261,7 @@ export default {
 <style lang="scss" scoped>
 .information-list {
   &__container {
+    height: calc(100vh - 100px);
   }
 
   &__header {
@@ -293,6 +295,7 @@ export default {
 
   &__pagination {
     display: flex;
+    height: 30px;
     margin-top: 20px;
 
     .pagination {
