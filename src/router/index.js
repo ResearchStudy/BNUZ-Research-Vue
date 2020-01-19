@@ -52,12 +52,7 @@ const routes = [
                 ]
             }
         ]
-    },
-    {
-        path: "*",
-        component: NotFound
     }
-
 ]
 
 const router = new VueRouter({
@@ -101,6 +96,10 @@ router.beforeEach((to, from, next) => {
                 else if (res.role === 0 || res.role === 1 || res.role === 2) {
                     router.addRoutes(normalRoutes);
                 }
+                router.addRoutes([{
+                    path: "*",
+                    component: NotFound
+                }])
                 next({ path: to.path })
             })
             // getUserInfo(localStorage.getItem("id")).then((res) => {
@@ -140,6 +139,10 @@ router.beforeEach((to, from, next) => {
                             else if (res.role === 0 || res.role === 1 || res.role === 2) {
                                 router.addRoutes(normalRoutes);
                             }
+                            router.addRoutes([{
+                                path: "*",
+                                component: NotFound
+                            }])
                             next({ path: to.path })
                         })
                     }
