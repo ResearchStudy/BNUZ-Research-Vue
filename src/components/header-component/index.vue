@@ -11,7 +11,6 @@
         />
       </div>
     </div>
-<<<<<<< Updated upstream
     <div class="right" style="margin-right: 10px">
       <button style="margin-right: 30px" @click="checkRegister()">入驻合作</button>
       <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
@@ -29,48 +28,6 @@
           <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
           <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
           <el-dropdown-item @click.native="logout()" class="layout">退出登录</el-dropdown-item>
-=======
-    <div
-      class="right"
-      style="margin-right: 10px"
-    >
-      <button
-        style="margin-right: 30px"
-        @click=checkRegister()
-      >入驻合作</button>
-      <button
-        style="margin-right: 17px"
-        @click="navigateTo('/register')"
-        v-if="!isLogin"
-      >注册</button>
-      <button
-        @click="navigateTo('/login')"
-        v-if="!isLogin"
-      >登录</button>
-      <el-dropdown v-if="isLogin">
-        <div style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center">
-          <img
-            :src="avator"
-            alt="avator"
-            style="width: 30px;padding-right: 5px"
-          >{{userInfo.nickname}}
-          <span></span>
-        </div>
-        <el-dropdown-menu
-          slot="dropdown"
-          class="drop"
-        >
-          <el-dropdown-item
-            @click.native="navigateToPre"
-            v-if="isUser"
-          >个人空间</el-dropdown-item>
-          <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
-          <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
-          <el-dropdown-item
-            @click.native="logout()"
-            class="layout"
-          >退出登录</el-dropdown-item>
->>>>>>> Stashed changes
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -85,14 +42,7 @@ export default {
   components: { HeaderLink },
   data() {
     return {
-<<<<<<< Updated upstream
-      avator: "",
       id: "",
-=======
-      
-      id: "",
-      setted: false,
->>>>>>> Stashed changes
       titleArr: [
         {
           name: "首页",
@@ -125,29 +75,9 @@ export default {
       ]
     };
   },
-<<<<<<< Updated upstream
-  async mounted() {
-    await this.getAvator();
-  },
+
 
   methods: {
-    async getAvator() {
-      this.id = localStorage.getItem("id");
-      if (this.id) {
-        await this.$http.get("/api/accounts/" + this.id).then(res => {
-          if (res.data.avator === "") {
-            this.avator =
-              "/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=";
-          } else {
-            this.avator = "/api/resources/" + res.data.avator;
-          }
-        });
-      }
-    },
-=======
-
-  methods: {
->>>>>>> Stashed changes
     navigateTo(path) {
       this.$router.push({ path: path });
     },
@@ -162,7 +92,6 @@ export default {
         alert("您已入驻，无需重复申请！");
         this.$router.push({ path: "/" });
       } else {
-<<<<<<< Updated upstream
         this.$http
           .get("/api/accounts/login/check")
           .then(({ data: { status } }) => {
@@ -177,9 +106,6 @@ export default {
               this.$router.push({ path: "/organization/register" });
             }
           });
-=======
-        this.$router.push({ path: "organization/register" });
->>>>>>> Stashed changes
       }
     },
 
@@ -224,12 +150,8 @@ export default {
     },
     logout() {
       localStorage.setItem("id", "");
-<<<<<<< Updated upstream
-      this.$router.push({ path: "/logout" });
-=======
       localStorage.setItem("avator","")
       this.$router.push({ path: "/logout"});
->>>>>>> Stashed changes
     }
   },
   
@@ -243,15 +165,9 @@ export default {
     },
     isUser() {
       if (this.$store.getters.role === 99) {
-<<<<<<< Updated upstream
-        return "";
-      } else {
-        return "1";
-=======
         return false;
       } else {
         return true;
->>>>>>> Stashed changes
       }
     },
     isLogin() {
