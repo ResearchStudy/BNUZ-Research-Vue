@@ -1,16 +1,16 @@
 <template>
-  <div class="tabs-manager__container">
+  <div class="tags-manager__container">
     <el-breadcrumb separator-class="el-icon-arrow-right" style="height:15px">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
       <el-breadcrumb-item>TAG管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="tabs-manager__wrap">
-      <div class="tabs-manager__header">
+    <div class="tags-manager__wrap">
+      <div class="tags-manager__header">
         <el-button type="danger" @click="handleMultiDeleteTag">批量删除</el-button>
         <el-button type="primary" @click="handleAddClick">添加TAG</el-button>
       </div>
-      <div class="tabs-manager__table">
+      <div class="tags-manager__table">
         <el-table
           border
           ref="multipleTable"
@@ -41,7 +41,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="tabs-manager__pagination">
+      <div class="tags-manager__pagination">
         <div class="pagination__info">共{{totalTagsCount}}条记录，共{{totalPage}}页，当前显示第{{currentPage}}页</div>
         <el-pagination
           class="pagination__container"
@@ -59,7 +59,7 @@
 
 <script>
 export default {
-  name: "TabsManager",
+  name: "TagsManager",
   data() {
     return {
       totalTagsCount: 0,
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tabs-manager {
+.tags-manager {
   &__container {
     height: calc(100vh - 100px);
   }

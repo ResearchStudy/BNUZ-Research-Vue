@@ -27,7 +27,7 @@
         <el-menu-item index="2-1">课程列表</el-menu-item>
         <el-menu-item index="2-2">资讯列表</el-menu-item>
         <el-menu-item index="2-3">附件管理</el-menu-item>
-        <el-menu-item index="/root-admin/tabs">标签管理</el-menu-item>
+        <el-menu-item index="/root-admin/tags">标签管理</el-menu-item>
         <el-menu-item index="2-5">课程评论管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
