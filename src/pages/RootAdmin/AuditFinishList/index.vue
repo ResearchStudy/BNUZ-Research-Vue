@@ -19,9 +19,11 @@
             clearable
           />
         </div>
-      </div> -->
+      </div>-->
       <div class="audit-finish-list__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
@@ -80,7 +82,7 @@
                 type="danger"
                 @click="handleAdoptClick(scope.row.id, false)"
               >不通过</el-button>
-            </template> -->
+          </template>-->
           <!-- </el-table-column> -->
         </el-table>
       </div>
@@ -105,6 +107,7 @@ export default {
   name: "AuditFinishList",
   data() {
     return {
+      isLoading: true,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -115,13 +118,6 @@ export default {
     };
   },
   async mounted() {
-    await this.$http.get("/api/institutions/enroll/list", {
-        limit: "100",
-        page: "1",
-        // handle: true,
-        adopt: true,
-        name: ""
-      });
     await this.getAuditFinishList();
   },
   methods: {
@@ -146,6 +142,7 @@ export default {
       this.currentTableData = auditFinishList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
+      this.isLoading = false;
     },
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;
@@ -168,7 +165,9 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       await this.getAuditFinishList();
+      this.isLoading = false;
     },
     handleSearchChange(val) {
       this.searchValue = val;
@@ -193,7 +192,7 @@ export default {
       const start = (this.currentPage - 1) * 10;
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
-    },
+    }
     // async handleAdoptClick(id, isAdopted) {
     //   await this.$http.post(`/api/institutions/enroll/handle/${id}`, {
     //     adopt: isAdopted,

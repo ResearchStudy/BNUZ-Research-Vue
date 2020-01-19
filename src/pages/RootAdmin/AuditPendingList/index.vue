@@ -22,6 +22,8 @@
       </div>
       <div class="audit-pending-list__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
@@ -70,14 +72,10 @@
             >{{new Date(scope.row.create_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
           <el-table-column prop="applyTime" label="联系人" align="center" show-overflow-tooltip>
-            <template
-                    slot-scope="scope"
-            >{{scope.row.institution_details.contact_man}}</template>
+            <template slot-scope="scope">{{scope.row.institution_details.contact_man}}</template>
           </el-table-column>
           <el-table-column prop="applyTime" label="手机号码" align="center" show-overflow-tooltip>
-            <template
-                    slot-scope="scope"
-            >{{scope.row.institution_details.contact_number}}</template>
+            <template slot-scope="scope">{{scope.row.institution_details.contact_number}}</template>
           </el-table-column>
           <el-table-column prop="description" label="机构简介" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.institution_details.remarks}}</template>
@@ -115,6 +113,7 @@ export default {
   name: "AuditPendingList",
   data() {
     return {
+      isLoading: true,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -125,7 +124,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getAuditPendingList();
+    this.getAuditPendingList();
   },
   methods: {
     async getAuditPendingList() {
@@ -149,6 +148,7 @@ export default {
       this.currentTableData = auditPendingList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
+      this.isLoading = false;
     },
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;
@@ -171,7 +171,9 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       await this.getAuditPendingList();
+      this.isLoading = false;
     },
     handleSearchChange(val) {
       this.searchValue = val;

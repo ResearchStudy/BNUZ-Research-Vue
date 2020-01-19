@@ -11,6 +11,8 @@
       </div>
       <div class="accounts-manager__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           border
           ref="multipleTable"
           :data="currentTableData"
@@ -118,6 +120,7 @@ export default {
   name: "AccountsManager",
   data() {
     return {
+      isLoading: true,
       totalTagsCount: 0,
       totalPage: 0,
       currentPage: 1,
@@ -134,7 +137,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getAccountsList();
+    this.getAccountsList();
   },
   methods: {
     async getAccountsList() {
@@ -157,6 +160,7 @@ export default {
       this.currentTableData = accountsInfoList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
+      this.isLoading = false;
     },
 
     generateRole(role) {
@@ -194,7 +198,9 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       await this.getAccountsList();
+      this.isLoading = false;
     },
     handleDialogClose() {
       this.isDialogShow = false;

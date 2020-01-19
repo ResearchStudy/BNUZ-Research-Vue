@@ -12,6 +12,8 @@
       </div>
       <div class="tags-manager__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           border
           ref="multipleTable"
           :data="currentTableData"
@@ -62,6 +64,7 @@ export default {
   name: "TagsManager",
   data() {
     return {
+      isLoading: true,
       totalTagsCount: 0,
       totalPage: 0,
       currentPage: 1,
@@ -71,7 +74,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getTagsList();
+    this.getTagsList();
   },
   methods: {
     async getTagsList() {
@@ -80,6 +83,7 @@ export default {
       } = await this.$http.get("/api/tags/list");
       this.tableData = tags;
       this.setCurrentTableData();
+      this.isLoading = false;
     },
     async handleAddClick() {
       this.$prompt("请输入标签名", "创建标签", {
@@ -123,7 +127,9 @@ export default {
     },
     handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       this.setCurrentTableData();
+      this.isLoading = false;
     },
 
     async handleDeleteTag(id) {
@@ -174,7 +180,7 @@ export default {
       &__info {
         color: #333;
       }
-      
+
       &__container {
         margin-left: auto;
       }

@@ -22,6 +22,8 @@
       </div>
       <div class="audit-pending-modify__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
@@ -105,6 +107,7 @@ export default {
   name: "AuditPendingModify",
   data() {
     return {
+      isLoading: true,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -115,7 +118,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getAuditPendingModify();
+    this.getAuditPendingModify();
   },
   methods: {
     async getAuditPendingModify() {
@@ -133,6 +136,7 @@ export default {
       this.currentTableData = data;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
+      this.isLoading = false;
     },
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;
@@ -155,7 +159,9 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       await this.getAuditPendingList();
+      this.isLoading = false;
     },
     handleSearchChange(val) {
       this.searchValue = val;
