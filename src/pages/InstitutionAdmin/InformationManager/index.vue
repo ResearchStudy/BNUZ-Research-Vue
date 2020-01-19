@@ -22,6 +22,8 @@
       </div>
       <div class="information-list__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
@@ -111,6 +113,7 @@ export default {
   name: "InformationList",
   data() {
     return {
+      isLoading: true,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -121,7 +124,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getInformationList();
+    this.getInformationList();
   },
   methods: {
     async getInformationList() {
@@ -148,6 +151,7 @@ export default {
       this.currentTableData = informationList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
+      this.isLoading = false;
     },
 
     setCurrentTableData() {
@@ -187,7 +191,9 @@ export default {
     },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       await this.getInformationList();
+      this.isLoading = false;
     },
     handleSearchChange(val) {
       this.searchValue = val;

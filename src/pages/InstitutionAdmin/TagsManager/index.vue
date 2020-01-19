@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: "TabsManager",
+  name: "TagsManager",
   data() {
     return {
       totalTagsCount: 0,
