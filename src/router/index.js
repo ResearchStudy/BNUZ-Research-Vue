@@ -88,6 +88,7 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem("id") !== null && localStorage.getItem("id").length !== 0) {
             http.get(`/api/accounts/${localStorage.getItem("id")}`).then(({ data: res }) => {
                 store.dispatch('setUserInfoAndRole', res);
+                store.dispatch('setAvator',res.avator);
                 if (res.role === 99) {
                     router.addRoutes(rootAdminRoutes);
                 } else if (res.role === 8) {
@@ -131,6 +132,7 @@ router.beforeEach((to, from, next) => {
                     } else {
                         getUserInfo(localStorage.getItem("id")).then((res) => {
                             store.dispatch('setUserInfoAndRole', res);
+                            store.dispatch('setAvator',res.avator);
                             if (res.role === 99) {
                                 router.addRoutes(rootAdminRoutes);
                             } else if (res.role === 8) {
