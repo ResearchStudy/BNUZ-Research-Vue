@@ -46,16 +46,6 @@
             }
         },
         methods: {
-            getAvator(id){
-              this.$http.get("/api/accounts/" + id).then(res => {
-                if (res.data.avator !== "") {
-                  localStorage.setItem("avator","/api/resources/" + res.data.avator);
-                }
-                else{
-                  localStorage.setItem("avator","/api/resources/eyJleHBpcmVfYXQiOi0xLCJhY2NvdW50X2lkIjotMSwicGF0aCI6InN0b3JhZ2U6Ly9hY2NvdW50X2F2YXRvckAyLzE1NzkwMTE5MDItYXZhdG9yLmpwZyIsInB1YmxpYyI6dHJ1ZSwiZmlsZV9uYW1lIjoiIn0=")
-                }
-              });
-            },
             login() {
                 const loginInfo = {
                     key: this.form.key,
@@ -64,7 +54,6 @@
                 };
                 login(loginInfo).then((res) => {
                     localStorage.setItem("id", res.id)
-                    this.getAvator(res.id)
                     this.$router.push({path: "/"})
                 })
             },

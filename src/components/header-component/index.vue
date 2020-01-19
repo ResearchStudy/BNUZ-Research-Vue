@@ -19,7 +19,7 @@
         <div
           style="cursor: pointer;padding-right: 20px;color: white;display: flex;align-items: center"
         >
-          <img :src="avator" alt="avator" style="width: 30px;padding-right: 5px" />
+          <img :src="$store.state.avator" style="width: 30px;padding-right: 5px" />
           {{userInfo.nickname}}
           <span></span>
         </div>
@@ -75,7 +75,7 @@ export default {
       ]
     };
   },
-
+  
 
   methods: {
     navigateTo(path) {
@@ -149,17 +149,13 @@ export default {
       }
     },
     logout() {
-      localStorage.setItem("id", "");
-      localStorage.setItem("avator","")
       this.$router.push({ path: "/logout"});
     }
+    
   },
   
 
   computed: {
-    avator() {
-      return localStorage.getItem("avator");
-    },
     role() {
       return this.$store.getters.role || "";
     },
