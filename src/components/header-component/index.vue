@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="right" style="margin-right: 10px">
-      <button style="margin-right: 30px" @click="checkRegister()">入驻合作</button>
+      <button v-if="!isRegisted" style="margin-right: 30px" @click="checkRegister()">入驻合作</button>
       <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
       <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
       <el-dropdown v-if="isLogin">
@@ -75,7 +75,6 @@ export default {
       ]
     };
   },
-  
 
   methods: {
     navigateTo(path) {
@@ -149,13 +148,15 @@ export default {
       }
     },
     logout() {
-      this.$router.push({ path: "/logout"});
+      this.$router.push({ path: "/logout" });
     }
-    
   },
-  
 
   computed: {
+    isRegisted() {
+      const roleList = [4, 8, 99];
+      return roleList.some(role => role === this.$store.getters.role);
+    },
     role() {
       return this.$store.getters.role || "";
     },
