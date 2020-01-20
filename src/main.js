@@ -9,10 +9,12 @@ import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
+import VueCropper from 'vue-cropper'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
-Vue.use(VueQuillEditor)
+Vue.use(VueQuillEditor);
+Vue.use(VueCropper)
 
 Vue.prototype.$message = (options = {}) => {
   const { isSingle } = options

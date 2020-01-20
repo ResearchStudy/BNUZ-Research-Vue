@@ -67,7 +67,7 @@
       </div>
       <div class="base-data_avatar">
         <span>头像设置</span>
-        <el-upload
+        <!-- <el-upload
           class="base-data_avatar-uploader"
           action="https://jsonplaceholder.typicode.com/posts/"
           :show-file-list="false"
@@ -84,19 +84,16 @@
             v-else
             class="el-icon-plus base-data_avatar-uploader-icon"
           ></i>
-        </el-upload>
-       
-        <!-- <el-button
-          type="primary"
-          size="mini"
-          icon="el-icon-check"
-        >确认</el-button>
-        <el-button
-          type="danger"
-          size="mini"
-          icon="el-icon-refresh-right"
-        >重置</el-button> -->
+        </el-upload> -->
+        <img
+          v-if="imageUrl"
+          :src="imageUrl"
+          class="base-data_img-avatar"
+        >
+        <App-Cropper :imageUrl.sync="imageUrl">
+        </App-Cropper>
       </div>
+
     </div>
 
   </div>
@@ -104,95 +101,86 @@
 </template>
 
 <script>
-
+import AppCropper from "@/components/Cropper/index.vue";
 export default {
   name: "BaseData",
+  components: {
+    AppCropper
+  },
   data() {
     let checkPhone = (rule, value, callback) => {
-      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
       console.log(reg.test(value));
       if (reg.test(value)) {
         callback();
       } else {
-        return callback(new Error('手机格式有误'));
+        return callback(new Error("手机格式有误"));
       }
-
     };
 
-    let checkEmail = (rlue , value , callback) => {
-      const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+    let checkEmail = (rlue, value, callback) => {
+      const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
       if (reg.test(value)) {
         callback();
       } else {
-        return callback(new Error('邮箱格式有误'));
+        return callback(new Error("邮箱格式有误"));
       }
     };
-    
-    
+
     return {
-      imageUrl:"",
-      isUploaded:false,
-      preImageUrl:"",
-      seen : false,
-      form:{
+      imageUrl: "",
+      isUploaded: false,
+      preImageUrl: "",
+      seen: false,
+      form: {
         nickname: "111",
         name: "",
         phone: "",
         email: "",
         token: "",
-        id : ''
+        id: ""
       },
 
       rules: {
-        email : [
-          {required : true , message : "邮箱不能为空" , trigger: "blur" },
-          {validator : checkEmail , trigger : 'blur'},
+        email: [
+          { required: true, message: "邮箱不能为空", trigger: "blur" },
+          { validator: checkEmail, trigger: "blur" }
         ],
-        phone : [
+        phone: [
           { required: true, message: "电话不能为空", trigger: "blur" },
-          {validator : checkPhone , trigger : 'blur'},
-
+          { validator: checkPhone, trigger: "blur" }
         ],
-        name : [
-          {required : true , message : "名字不能为空" , trigger : "blur"}
-        ],
-        nickname : [
-          {required : true , message : "昵称不能为空" , trigger : "blur"}
-        ]
-      } 
-     
+        name: [{ required: true, message: "名字不能为空", trigger: "blur" }],
+        nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }]
+      }
     };
   },
   async mounted() {
-      await this.getUserInfo();
+    await this.getUserInfo();
   },
 
-
   methods: {
-
-    async handleCancel(){
+    async handleCancel() {
       window.location.reload();
     },
-    async getUserInfo() {  
-       this.form.id = this.$store.getters.userInfo.id;
-        console.log(this.form.id);
-        await this.$http.get('/api/accounts/' + this.form.id).then(res => {
-            console.log(res.data)
-            this.form.nickname = res.data.nickname
-            this.form.name = res.data.realname
-            this.form.email = res.data.email
-            this.form.phone = res.data.phone
-            this.form.token = res.data.avator
-            this.imageUrl = "/api/resources/"+ this.form.token
-        })
-        this.preImageUrl = await this.getPreImageInfo();
+    async ChangeImg(params) {
+      this.imageUrl = params;
     },
-    
-
- 
-
-
-
+    async getUserInfo() {
+      this.form.id = this.$store.getters.userInfo.id;
+      console.log(this.form.id);
+      await this.$http.get("/api/accounts/" + this.form.id).then(res => {
+        console.log(res.data);
+        this.form.nickname = res.data.nickname;
+        this.form.name = res.data.realname;
+        this.form.email = res.data.email;
+        this.form.phone = res.data.phone;
+        this.form.token = res.data.avator;
+        this.imageUrl = "/api/resources/" + this.form.token;
+        
+      });
+      this.preImageUrl = await this.getPreImageInfo();
+    },
 
     async handleAvatarUpload({ file }) {
       this.isUploaded = true;
@@ -223,53 +211,36 @@ export default {
         };
       });
     },
-
-    async beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isPNG = file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error("上传头像图片只能是 JPG/PNG 格式");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
     async onSubmit() {
       await this.$refs.form.validate(valid => {
         if (valid) {
-          console.log(this.form.id);
-          this.token = this.isUploaded ? this.imageUrl : this.preImageUrl;  
-          console.log(this.token)       
           const EditInfo = {
-            nickname : this.form.nickname,
-            realname : this.form.name,
-            avator : this.token,
-            phone : this.phone,
-            email : this.email
-          }
+            nickname: this.form.nickname,
+            realname: this.form.name,
+            avator: this.imageUrl,
+            phone: this.phone,
+            email: this.email
+          };
 
           this.$http
-            .put("/api/accounts/" + this.form.id,EditInfo)
+            .put("/api/accounts/" + this.form.id, EditInfo)
             .then(res => {
-              if(res.data.id !== null){
+              if (res.data.id !== null) {
                 this.$message({
-                type:"success",
-                message:"修改信息成功!",
-                isSingle: true
-              });   
-                        
-              }
-            }).catch(err => {
-              console.log(err);
-                this.$message({
-                type:"error",
-                message:"修改失败！！!",
-                isSingle: true
+                  type: "success",
+                  message: "修改信息成功!",
+                  isSingle: true
                 });
-
+                window.location.reload();
+              }
+            })
+            .catch(err => {
+              console.log(err);
+              this.$message({
+                type: "error",
+                message: "修改失败！！!",
+                isSingle: true
+              });
             });
         } else {
           this.$message({
