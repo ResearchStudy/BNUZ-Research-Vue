@@ -201,13 +201,14 @@ export default {
     },
     id() {
       this.getCoursesInfo();
+      this.getTermsInfo();
     }
   },
   mounted() {
     this.id = this.$route.params.id;
     this.similarCourses = this.$route.params.similarCourses;
-    this.getCoursesInfo();
-    this.getTermsInfo();
+    // this.getCoursesInfo();
+    // this.getTermsInfo();
   },
   methods: {
     async getCoursesInfo() {
