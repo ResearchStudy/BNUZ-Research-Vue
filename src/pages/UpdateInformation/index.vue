@@ -1,5 +1,43 @@
 <template>
   <div style="padding: 50px">
+    <el-dialog
+      title="编辑头像"
+      width="1000px"
+      :visible="isModalOpened"
+      :before-close="hanldeModalClose"
+      top="5vh"
+    >
+      <div class="cropper__container">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="16">
+            <vueCropper
+              style="width:100%;height:400px"
+              ref="cropper"
+              :img="info.src"
+              :autoCrop="true"
+              :fixedBox="false"
+              :canMoveBox="false"
+              :autoCropWidth="200"
+              :autoCropHeight="200"
+              :centerBox="true"
+              @realTime="generatePreviews"
+            />
+          </el-col>
+          <el-col :span="7">
+            <div class="cropper__wrap">
+              <div class="cropper__title">裁剪预览</div>
+              <div :style="previews.div" class="cropper__preview">
+                <img :src="previews.url" :style="previews.img" />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-top:20px">
+          <el-button type="primary" @click="handleImageCut">确认</el-button>
+          <el-button type="primary" @click="hanldeModalClose">取消</el-button>
+        </el-row>
+      </div>
+    </el-dialog>
     <div style="width: 80%;margin-left: 10%">
       <div>
         <h1 align="center">修改资讯</h1>
@@ -11,7 +49,7 @@
         </el-form-item>
 
         <el-row>
-          <el-col span="8">
+          <el-col :span="8">
             <el-form-item label="类型">
               <el-select v-model="info.information_type" placeholder="请选择">
                 <el-option
@@ -24,7 +62,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col span="8">
+          <el-col :span="8">
             <el-form-item label="发布时间">
               <div class="content">
                 <el-date-picker
@@ -48,6 +86,7 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload"
             :http-request="handleAvatarUpload"
+            accept=".jpg, .jpeg, .png"
           >
             <img v-if="info.src" :src="info.src" class="avatar" />
             <i v-else class="el-icon-plus base-data_avatar-uploader-icon"></i>
@@ -79,12 +118,13 @@
 
 
 <script>
-import { saveInformation, getInformationById } from "../../api/information";
+import { getInformationById } from "../../api/information";
 
 export default {
   name: "InformationForm",
   data() {
     return {
+      id: "",
       imageUrl: "",
       fullscreenLoading: false,
       form: {
@@ -105,11 +145,15 @@ export default {
           value: 2,
           label: "研学政策"
         }
-      ]
+      ],
+      isModalOpened: false,
+      previews: {},
+      preImageUrl: ""
     };
   },
 
   mounted() {
+    this.id = this.$route.params.id;
     this.getInformationInfo();
   },
   methods: {
@@ -117,9 +161,10 @@ export default {
       const infomation = await getInformationById(this.$route.params.id);
       const { cover, create_time } = infomation;
       this.imageUrl = `/api/resources/${cover}`;
+      this.preImageUrl = await this.getPreImageInfo();
       this.info = {
         ...infomation,
-        src: await this.getPreImageInfo(),
+        src: this.preImageUrl,
         createTime: new Date(create_time * 1000)
       };
       // this.info.startTime =
@@ -135,6 +180,7 @@ export default {
 
     async handleAvatarUpload({ file }) {
       this.info.src = await this.getImageInfo(file);
+      this.isModalOpened = true;
     },
 
     getPreImageInfo() {
@@ -186,7 +232,7 @@ export default {
       return (isJPG || isPNG) && isLt2M;
     },
 
-    submit() {
+    async submit() {
       this.fullscreenLoading = true;
       const {
         title,
@@ -197,7 +243,7 @@ export default {
         attribute,
         src
       } = this.info;
-      saveInformation({
+      await this.$http.put(`/api/information/${this.id}`, {
         title,
         abstract,
         content,
@@ -205,44 +251,82 @@ export default {
         cover: src,
         status,
         attribute
-      }).then(() => {
-        this.fullscreenLoading = false;
-        this.$message({
-          message: "保存成功",
-          type: "success"
-        });
-        this.$router.push({ path: "/insitution-admin/informationManager" });
+      });
+      this.fullscreenLoading = false;
+      this.$message({
+        message: "保存成功",
+        type: "success"
+      });
+      this.$router.push({ path: "/institution-admin/informationManager" });
+    },
+    hanldeModalClose() {
+      this.isModalOpened = false;
+      this.info.src = this.preImageUrl;
+    },
+    generatePreviews(data) {
+      this.previews = data;
+    },
+    handleImageCut() {
+      this.$refs.cropper.getCropData(data => {
+        this.info.src = data;
+        this.preImageUrl = data;
+        this.isModalOpened = false;
       });
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .avatar-uploader {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  width: 70px;
+  width: 200px;
+  height: 200px;
 }
 
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
-  width: 70px;
-  height: 70px;
-  line-height: 70px;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
   text-align: center;
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
+  width: 200px;
+  height: 200px;
   display: block;
 }
 .ql-container.ql-snow {
   min-height: 180px;
+}
+.cropper {
+  &__container {
+    // width: 1000px;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__preview {
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    background: #cccccc;
+  }
 }
 </style>
