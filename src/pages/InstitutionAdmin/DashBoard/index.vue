@@ -455,6 +455,7 @@ export default {
     handleImageCut() {
       this.$refs.cropper.getCropData(data => {
         this.institutionDetails.imageUrl = data;
+        this.preImageUrl = data;
         this.isModalOpened = false;
       });
     }
