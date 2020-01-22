@@ -93,7 +93,7 @@ export default {
       } else {
         this.$http
           .get("/api/accounts/login/check")
-          .then(({ data: { status } }) => {
+          .then(async ({ data: { status } }) => {
             if (!status) {
               this.$router.push({ path: "/login" });
               this.$message({
@@ -102,6 +102,15 @@ export default {
                 isSingle: true
               });
             } else {
+              const {
+                data: { enrolls }
+              } = await this.$http.get("/api/institutions/enroll/list");
+              if (enrolls.length !== 0) {
+                this.$alert("请耐心等待审核通过", "您已申请", {
+                  confirmButtonText: "确定"
+                });
+                return;
+              }
               this.$router.push({ path: "/organization/register" });
             }
           });

@@ -21,6 +21,7 @@ import CoursesList from "../pages/courses/CoursesList";
 import InformationsList from "../pages/infomations/List";
 import InformationDetail from "../pages/infomations/Detail";
 import http from "../utils/http"
+import { MessageBox } from 'element-ui';
 Vue.use(VueRouter);
 
 const routes = [
@@ -88,7 +89,7 @@ router.beforeEach((to, from, next) => {
         if (localStorage.getItem("id") !== null && localStorage.getItem("id").length !== 0) {
             http.get(`/api/accounts/${localStorage.getItem("id")}`).then(({ data: res }) => {
                 store.dispatch('setUserInfoAndRole', res);
-                store.dispatch('setAvator',res.avator);
+                store.dispatch('setAvator', res.avator);
                 if (res.role === 99) {
                     router.addRoutes(rootAdminRoutes);
                 } else if (res.role === 8) {
@@ -132,7 +133,7 @@ router.beforeEach((to, from, next) => {
                     } else {
                         getUserInfo(localStorage.getItem("id")).then((res) => {
                             store.dispatch('setUserInfoAndRole', res);
-                            store.dispatch('setAvator',res.avator);
+                            store.dispatch('setAvator', res.avator);
                             if (res.role === 99) {
                                 router.addRoutes(rootAdminRoutes);
                             } else if (res.role === 8) {
@@ -151,6 +152,20 @@ router.beforeEach((to, from, next) => {
                 })
             }
         }
+    }
+    if (to.path.includes("/organization/register")) {
+        http.get('/api/institutions/enroll/list').then(({ data: { enrolls } }) => {
+            if (enrolls.length !== 0) {
+                MessageBox({
+                    title: '您已申请',
+                    message: '请耐心等待审核通过',
+                    confirmButtonText: '确定'
+                })
+                next('/')
+            }
+        }).then(() => {
+            next()
+        })
     }
 });
 
