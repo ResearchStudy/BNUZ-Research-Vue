@@ -1,5 +1,43 @@
 <template>
   <div class="course-modify__container">
+    <el-dialog
+      title="编辑头像"
+      width="1000px"
+      :visible="isModalOpened"
+      :before-close="hanldeModalClose"
+      top="5vh"
+    >
+      <div class="cropper__container">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="16">
+            <vueCropper
+              style="width:100%;height:400px"
+              ref="cropper"
+              :img="coursesDetail.imageUrl"
+              :autoCrop="true"
+              :fixedBox="false"
+              :canMoveBox="false"
+              :autoCropWidth="200"
+              :autoCropHeight="200"
+              :centerBox="true"
+              @realTime="generatePreviews"
+            />
+          </el-col>
+          <el-col :span="7">
+            <div class="cropper__wrap">
+              <div class="cropper__title">裁剪预览</div>
+              <div :style="previews.div" class="cropper__preview">
+                <img :src="previews.url" :style="previews.img" />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-top:20px">
+          <el-button type="primary" @click="handleImageCut">确认</el-button>
+          <el-button type="primary" @click="hanldeModalClose">取消</el-button>
+        </el-row>
+      </div>
+    </el-dialog>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
@@ -150,6 +188,7 @@
               :show-file-list="false"
               :before-upload="beforeAvatarUpload"
               :http-request="handleAvatarUpload"
+              accept=".jpg, .jpeg, .png"
             >
               <img v-if="coursesDetail.imageUrl" :src="coursesDetail.imageUrl" class="avatar" />
               <i v-if="!coursesDetail.imageUrl" class="el-icon-plus avatar-uploader-icon"></i>
@@ -297,7 +336,10 @@ export default {
       termRules: termRules,
       preProvinceId: -1,
       preCityId: -1,
-      preAddressDetail: ""
+      preAddressDetail: "",
+      isModalOpened: false,
+      previews: {},
+      preImageUrl: ""
     };
   },
   async mounted() {
@@ -333,6 +375,7 @@ export default {
       this.preCityId = city_id;
       this.preAddressDetail = details;
       this.coursesDetail.imageUrl = await this.getPreImageInfo();
+      this.preImageUrl = this.coursesDetail.imageUrl;
     },
     async getTermList() {
       const { data } = await this.$http.get(`/api/courses/${this.id}/terms`);
@@ -408,6 +451,7 @@ export default {
         ...coursesDetail,
         imageUrl: await this.getImageInfo(file)
       };
+      this.isModalOpened = true;
     },
     getImageInfo(file) {
       return new Promise(async resolve => {
@@ -571,6 +615,20 @@ export default {
             isSingle: true
           });
         });
+    },
+    hanldeModalClose() {
+      this.isModalOpened = false;
+      this.coursesDetail.imageUrl = this.preImageUrl;
+    },
+    generatePreviews(data) {
+      this.previews = data;
+    },
+    handleImageCut() {
+      this.$refs.cropper.getCropData(data => {
+        this.coursesDetail.imageUrl = data;
+        this.preImageUrl = data;
+        this.isModalOpened = false;
+      });
     }
   }
 };
