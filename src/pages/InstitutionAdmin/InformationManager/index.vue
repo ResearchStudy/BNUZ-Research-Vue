@@ -43,7 +43,7 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/insitution-admin/information-list/${scope.row.id}`"
+                :to="`/institution-admin/information-list/${scope.row.id}`"
               >{{scope.row.title}}</router-link>
             </template>
           </el-table-column>
@@ -220,7 +220,9 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleUpdateClick(id) {
-      this.$router.push({ path: "/institution-admin/information-update/" + id });
+      this.$router.push({
+        path: "/institution-admin/information-update/" + id
+      });
     },
 
     async handleDeleteInformation(id) {
