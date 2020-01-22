@@ -183,7 +183,7 @@ export default {
     },
 
     naviateToPublish() {
-      this.$router.push({ path: "/insitution-admin/publishInformation" });
+      this.$router.push({ path: "/institution-admin/publishInformation" });
     },
 
     handleSelectionChange(val) {
@@ -220,7 +220,7 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
     async handleUpdateClick(id) {
-      this.$router.push({ path: "/insitution-admin/information-update/" + id });
+      this.$router.push({ path: "/institution-admin/information-update/" + id });
     },
 
     async handleDeleteInformation(id) {
