@@ -61,6 +61,7 @@
             <img v-if="form.business_license" :src="form.business_license" class="avatar" />
             <i v-if="!form.business_license" class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+          <span style="color:#fa4b2a">营业执照大小不能大于2M</span>
         </el-form-item>
         <el-form-item label="企业名称" prop="name">
           <el-input v-model="form.name"></el-input>
@@ -237,7 +238,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="enrollInstitutionsMsg(1)">立即创建</el-button>
+          <el-button type="primary" @click="enrollInstitutionsMsg(1)">提交审核</el-button>
           <el-button type="primary" @click="enrollInstitutionsMsg(2)">保存</el-button>
         </el-form-item>
       </el-form>
@@ -395,6 +396,7 @@ export default {
       this.form.address.details = address;
       this.form.business_scope = business;
       this.form.registered_money = capital * 10000;
+      this.form.establish_time = establish_date * 1000;
       this.form.business_license_start_time = establish_date * 1000;
       this.form.business_license_end_time = valid_period * 1000;
       this.form.name = name;
