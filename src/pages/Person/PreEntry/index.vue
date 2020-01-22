@@ -8,7 +8,7 @@
     <div class="pre-entry__wrap">
       <div class="pre-entry__header">
 
-        <div class="search-input">
+        <div class="search-input" style="width:400px">
 
           <el-input
             placeholder="请输入要搜索的课程"
@@ -16,22 +16,20 @@
             @change="handleSearchChange"
             @clear="handleClearClick"
             clearable
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="handleSearchClick"
-            >搜索</el-button>
+          ><i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </div>
       </div>
       <div class="pre-entry__table">
         <el-table
+          v-loading="Loading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          height="calc(100vh - 255px)"
         >
           <el-table-column
             prop="course_title"
@@ -51,19 +49,19 @@
           <el-table-column
             prop="create_time"
             label="开始时间"
-            :formatter="formatDate"
             width="200"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          ><template slot-scope="scope">{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
+          </el-table-column>
           <el-table-column
             prop="update_time"
-            :formatter="formatDate2"
             label="结束时间"
             width="200"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          ><template slot-scope="scope">{{new Date(scope.row.update_time*1000).toLocaleString()}}</template>
+          </el-table-column>
           <el-table-column
             prop="price"
             label="价格"
@@ -71,20 +69,35 @@
             align="center"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column
-            label="操作"
-            width="200"
-            align="center"
-          >
+          <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button
-                type="text"
-                @click="handleEntry(scope.$index, scope.row)"
-              >确认</el-button>
-              <el-button
-                type="text"
-                @click="handleDelete(scope.$index, scope.row)"
-              >删除</el-button>
+                size="mini"
+                type="primary"
+                @click="handlePayFor(scope.row.id)"
+              >付款</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该课程吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleDeleteCourse(scope.row.id,scope.$index)"
+                  >确定</el-button>
+                </div>
+                <el-button
+                  slot="reference"
+                  :disabled="scope.row.start_time< new Date().getTime()/1000"
+                  size="mini"
+                  type="danger"
+                >删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -111,6 +124,7 @@ export default {
   data() {
     return {
       userId: "",
+      Loading: true,
       searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
@@ -134,29 +148,11 @@ export default {
       this.currentTableData = course_pre_enroll;
       this.totalTagsCount = course_pre_enroll.length;
       this.totalPage = Math.ceil(course_pre_enroll.length / 10);
+      this.Loading = false;
      
     },
-    formatDate2(row) {
-      let date = new Date(parseInt(row.update_time) * 1000);
-      let Y = date.getFullYear() + "-";
-      let M =
-        date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1) + "-"
-          : date.getMonth() + 1 + "-";
-      let D =
-        date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
-      return Y + M + D;
-    },
-    formatDate(row) {
-      let date = new Date(parseInt(row.create_time) * 1000);
-      let Y = date.getFullYear() + "-";
-      let M =
-        date.getMonth() + 1 < 10
-          ? "0" + (date.getMonth() + 1) + "-"
-          : date.getMonth() + 1 + "-";
-      let D =
-        date.getDate() < 10 ? "0" + date.getDate() + " " : date.getDate() + " ";
-      return Y + M + D;
+    handlePayFor(){
+
     },
     setCurrentTableData() {
       const start = (this.currentPage - 1) * 10;
@@ -167,11 +163,25 @@ export default {
     },
 
 
-    handleCurrentPageChange(currentPage) {
-      const start = (currentPage - 1) * 10;
-      const end = (start + 1) * 10;
+    async handleDeleteCourse(id, index) {
+      this.closePopover(index);
+      await this.getPreEntryList();
+      this.$message({
+        type: "success",
+        message: "删除成功！",
+        isSingle: true
+      });
+      this.handleCurrentPageChange(this.currentPage);
+    },
+    async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
-      this.currentTableData = this.tableData.slice(start, end);
+      this.Loading = true;
+      await this.getPreEntryList();
+      this.Loading = false;
+    },
+
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
     },
 
  
@@ -187,9 +197,8 @@ export default {
       }
 
       this.currentTableData = this.tableData.filter(
-        item => item.course_title === this.searchValue
+        item => item.name === this.searchValue
       );
-      
       this.currentPage = Math.ceil(this.currentTableData.length / 10) || 1;
       this.totalPage = Math.ceil(this.currentTableData.length / 10);
       this.totalTagsCount = this.currentTableData.length;
@@ -201,6 +210,7 @@ export default {
 <style lang="scss" scoped>
 .pre-entry {
   &__container {
+    height: calc(100vh - 100px);
   }
 
   &__header {
@@ -210,20 +220,8 @@ export default {
     background: #fff;
 
     .search-input {
-      display: flex;
-      width: 40%;
+      width: 50%;
       margin-left: auto;
-
-      /deep/ .el-input-group__append {
-        color: #fff;
-        line-height: 39px;
-        border: #409eff 1px solid;
-        background: #409eff;
-
-        &:hover {
-          background: #66b1ff;
-        }
-      }
     }
   }
 
@@ -231,10 +229,22 @@ export default {
     margin-top: 20px;
     padding: 10px;
     background: #fff;
+
+    /deep/ .router-link {
+      // display: block;
+      color: #606266;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
   }
 
   &__pagination {
     display: flex;
+    height: 30px;
     margin-top: 20px;
 
     .pagination {

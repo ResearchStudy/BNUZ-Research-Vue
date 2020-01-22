@@ -36,21 +36,6 @@
             ></el-input>
             
           </el-form-item>
-
-          <el-form-item
-            label="验证码"
-            prop="code"
-          >
-            <el-input
-              v-model="form.code"
-              style="margin-bottom:20px;"
-            >
-            <template slot="append">
-      <div class="divIdentifyingCode" @click="getIdentifyingCode(true)">
-        <img id="imgIdentifyingCode" src="http://dmimg.5054399.com/allimg/pkm/pk/22.jpg" style="height:30px; width: 100px; cursor: pointer;" alt="点击更换"
-             title="点击更换" />
-      </div></template></el-input>
-          </el-form-item>
           
  
           <el-form-item
@@ -123,9 +108,6 @@ export default {
           { required: true, message: "电话不能为空", trigger: "blur" },
           {validator : checkPhone , trigger : 'blur'},
 
-        ],
-        code : [
-          {required : true , message : "验证码不能为空" , trigger : "blur"}
         ],
         SMS_code : [
           {required : true , message : "短信验证码不能为空" , trigger : "blur"}
