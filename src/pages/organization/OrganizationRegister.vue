@@ -1,7 +1,45 @@
 <template>
   <div>
+    <el-dialog
+      title="编辑头像"
+      width="1000px"
+      :visible="isModalOpened"
+      :before-close="hanldeModalClose"
+      top="5vh"
+    >
+      <div class="cropper__container">
+        <el-row type="flex" justify="space-between">
+          <el-col :span="16">
+            <vueCropper
+              style="width:100%;height:400px"
+              ref="cropper"
+              :img="form.logo"
+              :autoCrop="true"
+              :fixedBox="false"
+              :canMoveBox="false"
+              :autoCropWidth="200"
+              :autoCropHeight="200"
+              :centerBox="true"
+              @realTime="generatePreviews"
+            />
+          </el-col>
+          <el-col :span="7">
+            <div class="cropper__wrap">
+              <div class="cropper__title">裁剪预览</div>
+              <div :style="previews.div" class="cropper__preview">
+                <img :src="previews.url" :style="previews.img" />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-top:20px">
+          <el-button type="primary" @click="handleImageCut">确认</el-button>
+          <el-button type="primary" @click="hanldeModalClose">取消</el-button>
+        </el-row>
+      </div>
+    </el-dialog>
     <div style="margin-top: 20px; width:70%; margin-left: 15%">
-      <el-form ref="form" :model="form" label-width="130px" :rules="rules">
+      <el-form ref="form" :model="form" label-width="130px" :rules="rules" label-suffix=":">
         <el-divider content-position="center" class="form__title">
           <span>基本资料</span>
         </el-divider>
@@ -173,10 +211,12 @@
             :show-file-list="false"
             :before-upload="beforeAvatarUpload"
             :http-request="handleAvatarUpload"
+            accept=".jpg, .jpeg, .png"
           >
             <img v-if="form.logo" :src="form.logo" class="avatar" />
             <i v-if="!form.logo" class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+          <span style="color:#fa4b2a">封面大小不能大于2M</span>
         </el-form-item>
         <el-form-item label="其他补充说明文件">
           <el-tooltip content="支持扩展名：.rar .zip .doc .docx .pdf .jpg..." placement="top">
@@ -263,7 +303,10 @@ export default {
         ],
         name: [{ required: true, message: "名字不能为空", trigger: "blur" }]
       },
-      licenceLoading: false
+      licenceLoading: false,
+      isModalOpened: false,
+      previews: {},
+      preImageUrl: ""
     };
   },
   methods: {
@@ -322,6 +365,7 @@ export default {
     },
     async handleAvatarUpload({ file }) {
       this.form.logo = await this.getImageInfo(file);
+      this.isModalOpened = true;
     },
     async handleBusinessLicenceUpload({ file }) {
       this.licenceLoading = true;
@@ -407,6 +451,20 @@ export default {
         });
       }
       return (isJPG || isPNG) && isLt2M;
+    },
+    hanldeModalClose() {
+      this.isModalOpened = false;
+      this.form.logo = this.preImageUrl;
+    },
+    generatePreviews(data) {
+      this.previews = data;
+    },
+    handleImageCut() {
+      this.$refs.cropper.getCropData(data => {
+        this.form.logo = data;
+        this.preImageUrl = data;
+        this.isModalOpened = false;
+      });
     }
   }
 };
@@ -486,6 +544,30 @@ export default {
     width: 300px;
     height: 220px;
     display: block;
+  }
+}
+.cropper {
+  &__container {
+    // width: 1000px;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__preview {
+    overflow: hidden;
+    border: 1px solid #cccccc;
+    background: #cccccc;
   }
 }
 </style>
