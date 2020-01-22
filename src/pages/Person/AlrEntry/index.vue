@@ -8,25 +8,27 @@
     <div class="pre-entry__wrap">
       <div class="pre-entry__header">
         
-        <div class="search-input">
+        <div class="search-input" style="width:400px">
           <el-input
             placeholder="请输入要搜索的课程"
             v-model="searchValue"
             @change="handleSearchChange"
             @clear="handleClearClick"
             clearable
-          >
-            <el-button slot="append" icon="el-icon-search" @click="handleSearchClick">搜索</el-button>
+          ><i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
         </div>
       </div>
       <div class="pre-entry__table">
         <el-table
+          v-loading="Loading"
+          element-loading-text="数据加载中..."
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
+          height="calc(100vh - 255px)"
         >
           <el-table-column
             prop="name"
@@ -44,19 +46,21 @@
           ></el-table-column>
         
           <el-table-column
-            prop="StartTime"
+            prop="create_time"
             label="开始时间"
             width="200"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          ><template slot-scope="scope">{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
+          </el-table-column>
           <el-table-column
-            prop="EndTime"
+            prop="update_time"
             label="结束时间"
             width="200"
             align="center"
             show-overflow-tooltip
-          ></el-table-column>
+          ><template slot-scope="scope">{{new Date(scope.row.update_time*1000).toLocaleString()}}</template>
+          </el-table-column>
           <el-table-column
             prop="price"
             label="价格"
@@ -66,8 +70,33 @@
           ></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEntry(scope.$index, scope.row)">退款</el-button>
-              <el-button type="text" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="handlePayFor(scope.row.id)"
+              >售后</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该课程吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleDeleteCourse(scope.row.id,scope.$index)"
+                  >确定</el-button>
+                </div>
+                <el-button
+                  slot="reference"
+                  :disabled="scope.row.start_time< new Date().getTime()/1000"
+                  size="mini"
+                  type="danger"
+                >删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -94,6 +123,7 @@ export default {
   data() {
     return {
       searchValue: "",
+      userId: "",
       totalTagsCount: 0,
       totalPage: 0,
       currentPage: 0,
@@ -200,24 +230,7 @@ export default {
   },
   methods: {
 
-    // toggleSelection(rows) {
-    //   if (rows) {
-    //     rows.forEach(row => {
-    //       this.$refs.multipleTable.toggleRowSelection(row);
-    //     });
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
-    // handleSelectionChange(val) {
-    //   this.multipleSelection = val;
-    // },
-    // handleEntry(index,rows){
-    //     alert(rows.index.name);
-    // },
-    // handleDelete(index,rows){
 
-    // },
     handleCurrentPageChange(currentPage) {
       const start = (currentPage - 1) * 10;
       const end = (start + 1) * 10;
@@ -258,6 +271,7 @@ export default {
 <style lang="scss" scoped>
 .pre-entry {
   &__container {
+    height: calc(100vh - 100px);
   }
 
   &__header {
@@ -267,20 +281,8 @@ export default {
     background: #fff;
 
     .search-input {
-      display: flex;
-      width: 40%;
+      width: 50%;
       margin-left: auto;
-
-      /deep/ .el-input-group__append {
-        color: #fff;
-        line-height: 39px;
-        border: #409eff 1px solid;
-        background: #409eff;
-
-        &:hover {
-          background: #66b1ff;
-        }
-      }
     }
   }
 
@@ -288,10 +290,22 @@ export default {
     margin-top: 20px;
     padding: 10px;
     background: #fff;
+
+    /deep/ .router-link {
+      // display: block;
+      color: #606266;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
   }
 
   &__pagination {
     display: flex;
+    height: 30px;
     margin-top: 20px;
 
     .pagination {
