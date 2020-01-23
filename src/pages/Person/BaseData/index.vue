@@ -90,7 +90,7 @@
           :src="imageUrl"
           class="base-data_img-avatar"
         >
-        <App-Cropper :imageUrl.sync="imageUrl">
+        <App-Cropper v-if="imageUrl" :imageUrl.sync="imageUrl">
         </App-Cropper>
       </div>
 

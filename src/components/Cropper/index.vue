@@ -89,13 +89,14 @@ export default {
       previews: {}, //实时预览图数据
       attach: {
         id: "",
-        customaryUrl: "", //原图片路径
+        customaryUrl: this.imageUrl, //原图片路径
         laterUrl: "", //裁剪后图片路径
         attachType: "photo" //附件类型
       },
       fileName: "" //本机文件地址
     };
   },
+  props:['imageUrl'],
   methods: {
     //控制弹出层关闭
     handleClose() {
@@ -146,6 +147,11 @@ export default {
               that.options.autoCropWidth = this.width;
               that.options.autoCropHeight = this.height;
             } 
+            else{
+              that.options.autoCropWidth = 200;
+              that.options.autoCropHeight = 200;
+
+            }
         }
         // 转化为base64
         // reader.readAsDataURL(file)
