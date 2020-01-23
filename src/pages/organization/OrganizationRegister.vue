@@ -66,15 +66,15 @@
         <el-form-item label="企业名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="企业注册号" prop="name">
+        <el-form-item label="企业注册号" prop="tax_id">
           <el-input v-model="form.tax_id"></el-input>
         </el-form-item>
-        <el-form-item label="企业类型" prop="name">
+        <el-form-item label="企业类型" prop="institution_type">
           <el-input v-model="form.institution_type"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="成立时间" prop="name">
+            <el-form-item label="成立时间" prop="establish_time">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
@@ -84,11 +84,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="省份" prop="name">
+            <el-form-item label="省份" prop="province_id">
               <el-select
-                v-model="form.address.province_id"
+                v-model="form.province_id"
                 placeholder="请选择省份"
-                @change="getCityList(form.address.province_id)"
+                @change="getCityList(form.province_id)"
               >
                 <el-option
                   v-for="province in provinceList"
@@ -100,8 +100,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="城市" prop="name">
-              <el-select v-model="form.address.city_id" placeholder="请选择城市">
+            <el-form-item label="城市" prop="city_id">
+              <el-select v-model="form.city_id" placeholder="请选择城市">
                 <el-option
                   v-for="city in cityList"
                   :label="city.name"
@@ -112,22 +112,22 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="详细地址" prop="name">
-          <el-input v-model="form.address.details"></el-input>
+        <el-form-item label="详细地址" prop="details">
+          <el-input v-model="form.details"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="法人" prop="name">
+            <el-form-item label="法人" prop="legal_person">
               <el-input v-model="form.legal_person"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系电话" prop="name">
+            <el-form-item label="联系电话" prop="phone">
               <el-input v-model="form.phone"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="核准时间" prop="name">
+            <el-form-item label="核准时间" prop="approval_time">
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
@@ -139,8 +139,20 @@
         </el-row>
         <el-row>
           <el-col :span="16">
-            <el-form-item label="营业期限" prop="name">
-              <el-col :span="11">
+            <el-form-item label="营业期限" prop="timeRange">
+              <el-date-picker
+                style="width:100%"
+                unlink-panels
+                v-model="form.timeRange"
+                value-format="timestamp"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :clearable="false"
+                :editable="false"
+              ></el-date-picker>
+              <!-- <el-col :span="11">
                 <el-date-picker
                   type="date"
                   placeholder="选择日期"
@@ -158,29 +170,29 @@
                   v-model="form.business_license_end_time"
                   style="width: 100%;"
                 ></el-date-picker>
-              </el-col>
+              </el-col>-->
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="注册资金" prop="name">
-              <el-input v-model="form.registered_money" type="number"></el-input>
+            <el-form-item label="注册资金" prop="registered_money">
+              <el-input v-model="form.registered_money"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="登记机关" prop="name">
+        <el-form-item label="登记机关" prop="registration_authority">
           <el-input v-model="form.registration_authority"></el-input>
         </el-form-item>
-        <el-form-item label="经营范围" prop="name">
+        <el-form-item label="经营范围" prop="business_scope">
           <el-input type="textarea" v-model="form.business_scope"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="联系人" prop="name">
+            <el-form-item label="联系人" prop="contact_man">
               <el-input v-model="form.contact_man"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="phone">
+            <el-form-item label="手机号码" prop="contact_number">
               <el-input v-model="form.contact_number"></el-input>
             </el-form-item>
           </el-col>
@@ -252,6 +264,7 @@ import {
   enrollInstitutions,
   institutionsFilesUpload
 } from "../../api/institutions";
+import rules from "./registerValidate";
 
 export default {
   name: "OrganizationRegister",
@@ -259,14 +272,6 @@ export default {
     this.getProvinceList();
   },
   data() {
-    let checkPhone = (rule, value, callback) => {
-      const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
-      if (reg.test(value)) {
-        callback();
-      } else {
-        return callback(new Error("手机格式有误"));
-      }
-    };
     return {
       active: 1,
       form: {
@@ -277,6 +282,7 @@ export default {
         establish_time: "",
         registered_money: "",
         business_license: "",
+        timeRange: [],
         business_license_start_time: "",
         business_license_end_time: "",
         approval_time: "",
@@ -287,23 +293,14 @@ export default {
         taxpayer_distinguish: "",
         invoice_phone: "",
         logo: "",
-        address: {
-          province_id: "",
-          city_id: "",
-          details: ""
-        },
+        province_id: "",
+        city_id: "",
+        details: "",
         files: []
       },
       provinceList: [],
       cityList: [],
-
-      rules: {
-        phone: [
-          { required: true, message: "电话不能为空", trigger: "blur" },
-          { validator: checkPhone, trigger: "blur" }
-        ],
-        name: [{ required: true, message: "名字不能为空", trigger: "blur" }]
-      },
+      rules: rules,
       licenceLoading: false,
       isModalOpened: false,
       previews: {},
@@ -322,7 +319,7 @@ export default {
       this.provinceList = result.address;
     },
     async getCityList(provinceId) {
-      this.form.address.city_id = "";
+      this.form.city_id = "";
       const result = await getAddressById({
         target: 3,
         parent: provinceId
@@ -330,38 +327,56 @@ export default {
       this.cityList = result.address;
     },
     async enrollInstitutionsMsg(status) {
-      const data = {
-        ...this.form.address,
-        country_id: 1
-      };
-      saveAddress(data).then(res => {
-        const addressId = res.id;
-        const data = {
-          ...this.form,
-          address_id: addressId,
-          registered_money: parseInt(this.form.registered_money),
-          business_license_start_time:
-            new Date(this.form.business_license_start_time).getTime() / 1000,
-          establish_time: new Date(this.form.establish_time).getTime() / 1000,
-          business_license_end_time:
-            new Date(this.form.business_license_end_time).getTime() / 1000,
-          approval_time: new Date(this.form.approval_time).getTime() / 1000,
-          status
-        };
-        enrollInstitutions(data)
-          .then(res => {
-            const formData = new FormData();
-            formData.append("files", this.form.files);
-            institutionsFilesUpload(res.id, this.form.files);
-          })
-          .then(() => {
-            this.$alert("请耐心等待审核通过", "申请成功", {
-              confirmButtonText: "确定",
-              callback: () => {
-                this.navigateToIndex();
-              }
-            });
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const { province_id, city_id, details } = this.form;
+          const data = {
+            province_id,
+            city_id,
+            details,
+            country_id: 1
+          };
+          saveAddress(data).then(res => {
+            const addressId = res.id;
+            const {
+              timeRange: [
+                business_license_start_time,
+                business_license_end_time
+              ]
+            } = this.form;
+            const data = {
+              ...this.form,
+              address_id: addressId,
+              registered_money: parseInt(this.form.registered_money),
+              business_license_start_time: business_license_start_time / 1000,
+              establish_time:
+                new Date(this.form.establish_time).getTime() / 1000,
+              business_license_end_time: business_license_end_time / 1000,
+              approval_time: new Date(this.form.approval_time).getTime() / 1000,
+              status
+            };
+            enrollInstitutions(data)
+              .then(res => {
+                const formData = new FormData();
+                formData.append("files", this.form.files);
+                institutionsFilesUpload(res.id, this.form.files);
+              })
+              .then(() => {
+                this.$alert("请耐心等待审核通过", "申请成功", {
+                  confirmButtonText: "确定",
+                  callback: () => {
+                    this.navigateToIndex();
+                  }
+                });
+              });
           });
+        } else {
+          this.$message({
+            type: "error",
+            isSingle: true,
+            message: "请按要求完成表格"
+          });
+        }
       });
     },
     async handleAvatarUpload({ file }) {
@@ -383,7 +398,8 @@ export default {
           name,
           person,
           reg_num,
-          valid_period
+          valid_period,
+          type
         }
       } = await this.$http.post(
         "/api/institutions/enroll/distinguish/license",
@@ -392,21 +408,22 @@ export default {
           headers: { "Content-Type": "multipart/form-data" }
         }
       );
-      this.licenceLoading = false;
-      this.form.address.details = address;
+      this.form.details = address;
       this.form.business_scope = business;
       this.form.registered_money = capital * 10000;
+      this.form.approval_time = establish_date * 1000;
       this.form.establish_time = establish_date * 1000;
-      this.form.business_license_start_time = establish_date * 1000;
-      this.form.business_license_end_time = valid_period * 1000;
+      this.form.timeRange = [establish_date * 1000, valid_period * 1000];
       this.form.name = name;
       this.form.legal_person = person;
       this.form.tax_id = reg_num;
+      this.form.institution_type = type;
       this.$message({
         type: "success",
         isSingle: true,
         message: "营业执照上传成功，请手动补充余下信息"
       });
+      this.licenceLoading = false;
     },
     getPreImageInfo() {
       return new Promise(async resolve => {
