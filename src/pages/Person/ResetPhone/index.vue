@@ -40,10 +40,10 @@
  
           <el-form-item
             label="短信验证码"
-            prop="SMS_code"
+            prop="code"
           >
             <el-input
-              v-model="form.phone"
+              v-model="form.code"
               style="margin-bottom:20px"
             ><el-button slot="append" type="primary">点击获取验证码</el-button></el-input>
           </el-form-item>
@@ -88,18 +88,10 @@ export default {
       } else {
         return callback(new Error('手机格式有误'));
       }
-        
     };   
-
-    
-    
     return {
-      
-
-
       form:{
       },
-
       rules: {
         password : [
           {required : true , message : "密码不能为空" , trigger: "blur" },
@@ -109,7 +101,7 @@ export default {
           {validator : checkPhone , trigger : 'blur'},
 
         ],
-        SMS_code : [
+        code : [
           {required : true , message : "短信验证码不能为空" , trigger : "blur"}
         ]
       } 
