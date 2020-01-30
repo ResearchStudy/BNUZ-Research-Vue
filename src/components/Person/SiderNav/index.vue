@@ -15,7 +15,10 @@
         <el-menu-item index="/person/reset-pwd">修改密码</el-menu-item>
         <el-menu-item index="/person/reset-phone">修改手机号</el-menu-item>
         <el-menu-item index="/person/address">修改联系地址</el-menu-item>
+        <el-menu-item index="/person/settled">入驻审核</el-menu-item>
+        
         <el-menu-item index="1-5">第三方账号绑定</el-menu-item>
+
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">
