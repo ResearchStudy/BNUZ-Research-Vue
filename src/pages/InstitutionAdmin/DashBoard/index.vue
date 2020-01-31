@@ -359,9 +359,11 @@ export default {
             tax_id,
             details
           });
-          this.$message({
-            type: "success",
-            message: "修改成功"
+          this.$alert("请等待系统管理员审核", "提交成功", {
+            confirmButtonText: "确定",
+            callback: () => {
+              this.$router.go(0);
+            }
           });
         } else {
           this.$message({
