@@ -1,23 +1,26 @@
 <template>
-  <div class="tabs-manager__container">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+  <div class="tags-manager__container">
+    <el-breadcrumb separator-class="el-icon-arrow-right" style="height:15px">
       <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
       <el-breadcrumb-item>TAG管理</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="tabs-manager__wrap">
-      <div class="tabs-manager__header">
+    <div class="tags-manager__wrap">
+      <div class="tags-manager__header">
         <el-button type="danger" @click="handleMultiDeleteTag">批量删除</el-button>
         <el-button type="primary" @click="handleAddClick">添加TAG</el-button>
       </div>
-      <div class="tabs-manager__table">
+      <div class="tags-manager__table">
         <el-table
+          v-loading="isLoading"
+          element-loading-text="数据加载中..."
           border
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
-          style="width: 100%"
+          style="width: 100%;"
           @selection-change="handleSelectionChange"
+          height="calc(100vh - 245px)"
         >
           <el-table-column type="selection" width="60" align="center"></el-table-column>
           <el-table-column prop="id" label="ID" width="140" align="center" show-overflow-tooltip>
@@ -35,12 +38,28 @@
           <el-table-column prop="author" label="添加者" align="center" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
-              <el-button @click="handleDeleteTag(scope.row.id)" type="text" size="small">移除</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该标签吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    @click="handleDeleteTag(scope.row.id,scope.$index)"
+                    type="text"
+                    size="small"
+                  >确定</el-button>
+                </div>
+                <el-button slot="reference" size="mini" type="danger">删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="tabs-manager__pagination">
+      <div class="tags-manager__pagination">
         <div class="pagination__info">共{{totalTagsCount}}条记录，共{{totalPage}}页，当前显示第{{currentPage}}页</div>
         <el-pagination
           class="pagination__container"
@@ -61,6 +80,7 @@ export default {
   name: "TagsManager",
   data() {
     return {
+      isLoading: true,
       totalTagsCount: 0,
       totalPage: 0,
       currentPage: 1,
@@ -70,7 +90,7 @@ export default {
     };
   },
   async mounted() {
-    await this.getTagsList();
+    this.getTagsList();
   },
   methods: {
     async getTagsList() {
@@ -79,6 +99,7 @@ export default {
       } = await this.$http.get("/api/tags/list");
       this.tableData = tags;
       this.setCurrentTableData();
+      this.isLoading = false;
     },
     async handleAddClick() {
       this.$prompt("请输入标签名", "创建标签", {
@@ -96,7 +117,7 @@ export default {
           isOverPage && this.handleCurrentPageChange(this.currentPage + 1);
           this.$message({
             type: "success",
-            message: "添加成功！",
+            message: "添加成功！"
           });
         })
         .catch(() => {});
@@ -122,18 +143,33 @@ export default {
     },
     handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
+      this.isLoading = true;
       this.setCurrentTableData();
+      this.isLoading = false;
     },
 
-    async handleDeleteTag(id) {
-      await this.$http.delete(`/api/tags/${id}`);
-      await this.getTagsList();
-      this.$message({
-        type: "success",
-        message: "删除成功！",
-        isSingle: true
-      });
-      this.handleCurrentPageChange(this.currentPage);
+    async handleDeleteTag(id, index) {
+      this.closePopover(index);
+      try {
+        await this.$http.delete(`/api/tags/${id}`);
+        await this.getTagsList();
+        this.$message({
+          type: "success",
+          message: "删除成功！",
+          isSingle: true
+        });
+        this.handleCurrentPageChange(this.currentPage);
+      } catch (e) {
+        this.$message({
+          type: "error",
+          message: "你没有权限哦",
+          isSingle: true
+        });
+      }
+    },
+
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
     },
 
     async handleMultiDeleteTag() {
@@ -149,8 +185,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tabs-manager {
+.tags-manager {
   &__container {
+    height: calc(100vh - 100px);
   }
   &__wrap {
     margin-top: 20px;
@@ -166,11 +203,13 @@ export default {
   }
   &__pagination {
     display: flex;
-    margin-top: 20px;
+    height: 30px;
+    margin: 20px 0 10px 0;
     .pagination {
       &__info {
         color: #333;
       }
+
       &__container {
         margin-left: auto;
       }
