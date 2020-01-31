@@ -9,7 +9,10 @@
       top="5vh"
     >
       <div class="cropper__container">
-        <el-row type="flex" justify="space-between">
+        <el-row
+          type="flex"
+          justify="space-between"
+        >
           <el-col :span="16">
             <vueCropper
               style="width:100%;height:400px"
@@ -27,31 +30,58 @@
           <el-col :span="7">
             <div class="cropper__wrap">
               <div class="cropper__title">裁剪预览</div>
-              <div :style="previews.div" class="cropper__preview">
-                <img :src="previews.url" :style="previews.img" />
+              <div
+                :style="previews.div"
+                class="cropper__preview"
+              >
+                <img
+                  :src="previews.url"
+                  :style="previews.img"
+                />
               </div>
             </div>
           </el-col>
         </el-row>
         <el-row style="margin-top:20px">
-          <el-button type="primary" @click="handleImageCut">确认</el-button>
-          <el-button type="primary" @click="hanldeModalClose">取消</el-button>
+          <el-button
+            type="primary"
+            @click="handleImageCut"
+          >确认</el-button>
+          <el-button
+            type="primary"
+            @click="hanldeModalClose"
+          >取消</el-button>
         </el-row>
       </div>
     </el-dialog>
-        <el-breadcrumb separator-class="el-icon-arrow-right">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/person/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>账号中心</el-breadcrumb-item>
       <el-breadcrumb-item>入驻审核</el-breadcrumb-item>
       <el-breadcrumb-item>{{form.name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div style="margin-top: 20px; width:70%; margin-left: 15%">
-      <el-form ref="form" :model="form" label-width="130px" :rules="rules" label-suffix=":">
-        <el-divider content-position="center" class="form__title">
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="130px"
+        :rules="rules"
+        label-suffix=":"
+      >
+        <el-divider
+          content-position="center"
+          class="form__title"
+        >
           <span>基本资料</span>
         </el-divider>
-        <el-form-item label="上传营业执照" class="business-licence">
-          <el-tooltip content="上传营业执照, 以自动填写表格信息" placement="top">
+        <el-form-item
+          label="上传营业执照"
+          class="business-licence"
+        >
+          <el-tooltip
+            content="上传营业执照, 以自动填写表格信息"
+            placement="top"
+          >
             <i class="el-icon-info"></i>
           </el-tooltip>
           <el-upload
@@ -65,23 +95,42 @@
             element-loading-text="图片上传中"
             element-loading-background="rgba(0, 0, 0, 0.8)"
           >
-            <img v-if="form.business_license" :src="form.business_license" class="avatar" />
-            <i v-if="!form.business_license" class="el-icon-plus avatar-uploader-icon"></i>
+            <img
+              v-if="form.business_license"
+              :src="form.business_license"
+              class="avatar"
+            />
+            <i
+              v-if="!form.business_license"
+              class="el-icon-plus avatar-uploader-icon"
+            ></i>
           </el-upload>
           <span style="color:#fa4b2a">营业执照大小不能大于2M</span>
         </el-form-item>
-        <el-form-item label="企业名称" prop="name">
+        <el-form-item
+          label="企业名称"
+          prop="name"
+        >
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="企业注册号" prop="tax_id">
+        <el-form-item
+          label="企业注册号"
+          prop="tax_id"
+        >
           <el-input v-model="form.tax_id"></el-input>
         </el-form-item>
-        <el-form-item label="企业类型" prop="institution_type">
+        <el-form-item
+          label="企业类型"
+          prop="institution_type"
+        >
           <el-input v-model="form.institution_type"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="成立时间" prop="establish_time">
+            <el-form-item
+              label="成立时间"
+              prop="establish_time"
+            >
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
@@ -91,7 +140,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="省份" prop="province_id">
+            <el-form-item
+              label="省份"
+              prop="province_id"
+            >
               <el-select
                 v-model="form.province_id"
                 placeholder="请选择省份"
@@ -107,8 +159,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="城市" prop="city_id">
-              <el-select v-model="form.city_id" placeholder="请选择城市">
+            <el-form-item
+              label="城市"
+              prop="city_id"
+            >
+              <el-select
+                v-model="form.city_id"
+                placeholder="请选择城市"
+              >
                 <el-option
                   v-for="city in cityList"
                   :label="city.name"
@@ -119,22 +177,34 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="详细地址" prop="details">
+        <el-form-item
+          label="详细地址"
+          prop="details"
+        >
           <el-input v-model="form.details"></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="法人" prop="legal_person">
+            <el-form-item
+              label="法人"
+              prop="legal_person"
+            >
               <el-input v-model="form.legal_person"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系电话" prop="phone">
+            <el-form-item
+              label="联系电话"
+              prop="phone"
+            >
               <el-input v-model="form.phone"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="核准时间" prop="approval_time">
+            <el-form-item
+              label="核准时间"
+              prop="approval_time"
+            >
               <el-date-picker
                 type="date"
                 placeholder="选择日期"
@@ -146,7 +216,10 @@
         </el-row>
         <el-row>
           <el-col :span="16">
-            <el-form-item label="营业期限" prop="timeRange">
+            <el-form-item
+              label="营业期限"
+              prop="timeRange"
+            >
               <el-date-picker
                 style="width:100%"
                 unlink-panels
@@ -162,33 +235,52 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="注册资金" prop="registered_money">
+            <el-form-item
+              label="注册资金"
+              prop="registered_money"
+            >
               <el-input v-model="form.registered_money"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="登记机关" prop="registration_authority">
+        <el-form-item
+          label="登记机关"
+          prop="registration_authority"
+        >
           <el-input v-model="form.registration_authority"></el-input>
         </el-form-item>
-        <el-form-item label="经营范围" prop="business_scope">
-          <el-input type="textarea" v-model="form.business_scope"></el-input>
+        <el-form-item
+          label="经营范围"
+          prop="business_scope"
+        >
+          <el-input
+            type="textarea"
+            v-model="form.business_scope"
+          ></el-input>
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="联系人" prop="contact_man">
+            <el-form-item
+              label="联系人"
+              prop="contact_man"
+            >
               <el-input v-model="form.contact_man"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="手机号码" prop="contact_number">
+            <el-form-item
+              label="手机号码"
+              prop="contact_number"
+            >
               <el-input v-model="form.contact_number"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <p
-          style="text-align: center;font-size: 20px;color:red;font-weight: bold"
-        >注：以上信息均为必填项且应与机构在当地工商部门登记的保持一致，机构需确保信息真实有效！</p>
-        <el-form-item label="更多开票信息" prop="hasInvoice">
+        <p style="text-align: center;font-size: 20px;color:red;font-weight: bold">注：以上信息均为必填项且应与机构在当地工商部门登记的保持一致，机构需确保信息真实有效！</p>
+        <el-form-item
+          label="更多开票信息"
+          prop="hasInvoice"
+        >
           <el-switch v-model="form.hasInvoice"></el-switch>
         </el-form-item>
         <div v-if="form.hasInvoice">
@@ -202,7 +294,10 @@
             <el-input v-model="form.invoice_phone"></el-input>
           </el-form-item>
         </div>
-        <el-divider content-position="center" class="form__title">
+        <el-divider
+          content-position="center"
+          class="form__title"
+        >
           <span>附件信息</span>
         </el-divider>
         <el-form-item label="上传机构封面">
@@ -214,13 +309,23 @@
             :http-request="handleAvatarUpload"
             accept=".jpg, .jpeg, .png"
           >
-            <img v-if="form.logo" :src="form.logo" class="avatar" />
-            <i v-if="!form.logo" class="el-icon-plus avatar-uploader-icon"></i>
+            <img
+              v-if="form.logo"
+              :src="form.logo"
+              class="avatar"
+            />
+            <i
+              v-if="!form.logo"
+              class="el-icon-plus avatar-uploader-icon"
+            ></i>
           </el-upload>
           <span style="color:#fa4b2a">封面大小不能大于2M</span>
         </el-form-item>
         <el-form-item label="其他补充说明文件">
-          <el-tooltip content="支持扩展名：.rar .zip .doc .docx .pdf .jpg..." placement="top">
+          <el-tooltip
+            content="支持扩展名：.rar .zip .doc .docx .pdf .jpg..."
+            placement="top"
+          >
             <i class="el-icon-info"></i>
           </el-tooltip>
           <el-upload
@@ -238,12 +343,18 @@
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="enrollInstitutionsMsg(1)">提交审核</el-button>
-          <el-button type="primary" @click="enrollInstitutionsMsg(2)">保存</el-button>
+          <el-button
+            type="primary"
+            @click="enrollInstitutionsMsg(1)"
+          >提交审核</el-button>
+          <el-button
+            type="primary"
+            @click="enrollInstitutionsMsg(7)"
+          >保存</el-button>
         </el-form-item>
       </el-form>
     </div>
-    
+
   </div>
 </template>
 
@@ -251,7 +362,8 @@
 import { getAddressById, saveAddress } from "@/api/address";
 import {
   enrollInstitutions,
-  institutionsFilesUpload
+  institutionsFilesUpload,
+  modiftyEnroll
 } from "@/api/institutions";
 import rules from "@/pages/organization/registerValidate";
 
@@ -259,10 +371,9 @@ export default {
   name: "OrganizationRegister",
   mounted() {
     this.getProvinceList();
-    const {id} = this.$route.params;
+    const { id } = this.$route.params;
     this.id = id;
     this.getEnroll();
-    
   },
   data() {
     return {
@@ -295,6 +406,7 @@ export default {
       provinceList: [],
       cityList: [],
       rules: rules,
+      isUploaded : false,
       licenceLoading: false,
       isModalOpened: false,
       previews: {},
@@ -302,21 +414,56 @@ export default {
     };
   },
   methods: {
-    async getEnroll(){
-        const {data} = await this.$http.get("/api/institutions/enroll/"+this.id);
-        const {institution_details} = data;
-        
-        this.form = institution_details;
-        this.form.city_id = institution_details.address.city_name;
-        this.form.province_id = institution_details.address.province_name;
-        this.form.logo = "/api/resources/"+this.form.logo; 
-        this.form.business_license = "/api/resources/"+this.form.business_license;
-        this.form.details = institution_details.address.details;
-        this.form.establish_time = this.form.establish_time * 1000;
-        this.form.approval_time = this.form.approval_time * 1000;
-        this.form.timeRange = [institution_details.business_license_start_time * 1000,institution_details.business_license_ent_time*1000]
-        
-
+    async getEnroll() {
+      const { data } = await this.$http.get(
+        "/api/institutions/enroll/" + this.id
+      );
+      const { institution_details } = data;
+      await this.getProvinceList();
+      const provinceId = this.provinceList.filter(
+        province => province.name === institution_details.address.province_name
+      )[0].id;
+      await this.getCityList(provinceId);
+      const cityId = this.cityList.filter(
+        city => city.name === institution_details.address.city_name
+      )[0].id;
+      this.previews.province_id = provinceId;
+      this.previews.city_id = cityId;
+      this.previews.details = institution_details.address.details,
+      console.log(institution_details.business_license)
+      this.form = {
+          name: institution_details.name,
+          tax_id: institution_details.tax_id,
+          institution_type: institution_details.institution_type,
+          legal_person: institution_details.legal_person,
+          establish_time: institution_details.establish_time * 1000,
+          registered_money: institution_details.registered_money,
+          business_license:
+            "/api/resources/" + institution_details.business_license,
+          business_license_start_time:
+            institution_details.business_license_start_time * 1000,
+          business_license_end_time:
+            institution_details.business_license_end_time * 1000,
+          approval_time: institution_details.approval_time * 1000,
+          registration_authority: institution_details.registration_authority,
+          business_scope: institution_details.business_scope,
+          invoice_rise: institution_details.invoice_rise,
+          taxpayer_distinguish: institution_details.taxpayer_distinguish,
+          invoice_phone: institution_details.invoice_phone,
+          logo: "/api/resources/" + institution_details.logo,
+          province_id: provinceId,
+          city_id: cityId,
+          contact_man: institution_details.contact_man,
+          contact_number: institution_details.contact_number,
+          details: institution_details.address.details,
+          phone: institution_details.phone,
+          timeRange: [
+            institution_details.business_license_start_time * 1000,
+            institution_details.business_license_ent_time * 1000
+          ],
+          
+        };
+        this.preImageUrl = await this.getPreImageInfo();
     },
     navigateToIndex() {
       this.$router.push({ path: "/" });
@@ -336,6 +483,24 @@ export default {
       });
       this.cityList = result.address;
     },
+    getPreImageInfo() {
+      return new Promise(async resolve => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.src = this.form.logo;
+
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+          const res = canvas.toDataURL("image/jpeg");
+          resolve(res);
+        };
+      });
+    },
     async enrollInstitutionsMsg(status) {
       this.$refs["form"].validate(valid => {
         if (valid) {
@@ -346,8 +511,12 @@ export default {
             details,
             country_id: 1
           };
+         
+          this.form.logo = this.isUploaded ? this.form.logo : this.preImageUrl
+          
           saveAddress(data).then(res => {
             const addressId = res.id;
+          
             const {
               timeRange: [
                 business_license_start_time,
@@ -363,8 +532,27 @@ export default {
                 new Date(this.form.establish_time).getTime() / 1000,
               business_license_end_time: business_license_end_time / 1000,
               approval_time: new Date(this.form.approval_time).getTime() / 1000,
-              status
+              status,
             };
+            if (status === 7) {
+              console.log(this.form.city_id)
+              modiftyEnroll(data)
+                .then(res => {
+                  const formData = new FormData();
+                  formData.append("files", this.form.files);
+                  institutionsFilesUpload(res.id, this.form.files);
+                  console.log("haohaohaohahooooo")
+                })
+                .then(() => {
+                  this.$alert("修改成功", {
+                    confirmButtonText: "确定",
+                    callback: () => {
+                      this.navigateToIndex();
+                    }
+                  });
+                });
+            }
+            else{
             enrollInstitutions(data)
               .then(res => {
                 const formData = new FormData();
@@ -379,7 +567,8 @@ export default {
                   }
                 });
               });
-          });
+          }
+          })    
         } else {
           this.$message({
             type: "error",
@@ -390,6 +579,7 @@ export default {
       });
     },
     async handleAvatarUpload({ file }) {
+      this.isUploaded = true;
       this.form.logo = await this.getImageInfo(file);
       this.isModalOpened = true;
     },
@@ -434,24 +624,6 @@ export default {
         message: "营业执照上传成功，请手动补充余下信息"
       });
       this.licenceLoading = false;
-    },
-    getPreImageInfo() {
-      return new Promise(async resolve => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        const img = new Image();
-        img.src = this.institutionDetails.imageUrl;
-
-        img.onload = () => {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.fillStyle = "#fff";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          const res = canvas.toDataURL("image/jpeg");
-          resolve(res);
-        };
-      });
     },
     getImageInfo(file) {
       return new Promise(async resolve => {
@@ -500,7 +672,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .label {
   font-weight: bold;
   font-size: 15px;
