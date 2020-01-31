@@ -38,7 +38,23 @@
           <el-table-column prop="author" label="添加者" align="center" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
-              <el-button @click="handleDeleteTag(scope.row.id)" type="text" size="small">移除</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该标签吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    @click="handleDeleteTag(scope.row.id,scope.$index)"
+                    type="text"
+                    size="small"
+                  >确定</el-button>
+                </div>
+                <el-button slot="reference" size="mini" type="danger">删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -132,7 +148,8 @@ export default {
       this.isLoading = false;
     },
 
-    async handleDeleteTag(id) {
+    async handleDeleteTag(id, index) {
+      this.closePopover(index);
       await this.$http.delete(`/api/tags/${id}`);
       await this.getTagsList();
       this.$message({
@@ -141,6 +158,10 @@ export default {
         isSingle: true
       });
       this.handleCurrentPageChange(this.currentPage);
+    },
+
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
     },
 
     async handleMultiDeleteTag() {
