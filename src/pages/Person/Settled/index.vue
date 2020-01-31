@@ -80,7 +80,7 @@
             width="200"
             align="center"
             show-overflow-tooltip
-          ><template slot-scope="scope">{{scope.row.status === 1 ? '已提交':'暂存'}}</template>
+          ><template slot-scope="scope">{{scope.row.status === 1 ? '已提交' : '暂存'}}</template>
           </el-table-column>
           <el-table-column
             prop="institution_details.registered_money"
@@ -97,6 +97,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                :disabled="scope.row.status === 1"
                 type="primary"
                 @click="handleEdit(scope.row.id)"
               >编辑</el-button>

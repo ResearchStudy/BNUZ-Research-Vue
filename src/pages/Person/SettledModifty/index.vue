@@ -410,7 +410,7 @@ export default {
       licenceLoading: false,
       isModalOpened: false,
       previews: {},
-      preImageUrl: ""
+      preImageUrl: "",
     };
   },
   methods: {
@@ -463,7 +463,10 @@ export default {
           ],
           
         };
-        this.preImageUrl = await this.getPreImageInfo();
+        const logo = this.form.logo
+        const licence = this.form.business_license
+        this.form.logo = await this.getPreImageInfo(logo)
+        this.form.business_license = await this.getPreImageInfo(licence);
     },
     navigateToIndex() {
       this.$router.push({ path: "/" });
@@ -483,12 +486,12 @@ export default {
       });
       this.cityList = result.address;
     },
-    getPreImageInfo() {
+    getPreImageInfo(url) {
       return new Promise(async resolve => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const img = new Image();
-        img.src = this.form.logo;
+        img.src = url;
 
         img.onload = () => {
           canvas.width = img.width;
@@ -511,9 +514,6 @@ export default {
             details,
             country_id: 1
           };
-         
-          this.form.logo = this.isUploaded ? this.form.logo : this.preImageUrl
-          
           saveAddress(data).then(res => {
             const addressId = res.id;
           
@@ -535,22 +535,20 @@ export default {
               status,
             };
             if (status === 7) {
-              console.log(this.form.city_id)
-              modiftyEnroll(data)
+               modiftyEnroll(data)
                 .then(res => {
                   const formData = new FormData();
                   formData.append("files", this.form.files);
                   institutionsFilesUpload(res.id, this.form.files);
-                  console.log("haohaohaohahooooo")
-                })
-                .then(() => {
-                  this.$alert("修改成功", {
-                    confirmButtonText: "确定",
-                    callback: () => {
-                      this.navigateToIndex();
-                    }
-                  });
+                  
                 });
+                this.$alert("入驻信息修改成功", "提交成功", {
+                  confirmButtonText: "确定",
+                  callback: () => {
+                    this.$router.push({ path: "/person/settled" });
+                  }
+                });
+ 
             }
             else{
             enrollInstitutions(data)
