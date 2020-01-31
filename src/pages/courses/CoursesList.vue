@@ -107,13 +107,15 @@
               >28天以上</el-tag>
             </div>
           </div>
-          <div style="display: flex;justify-content: start">
-            <div class="tag-item" style="color: #409eff">标签 :</div>
-            <div v-for="tag in tagList" class="tag-item" :key="tag.id">
-              <el-tag
-                :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'"
-                @click="searchByTag(tag.id)"
-              >{{tag.name}}</el-tag>
+          <div style="display: flex;">
+            <div class="tag-item" style="color: #409eff;flex-shrink: 0">标签 :</div>
+            <div style="display:flex;flex-wrap:wrap">
+              <div v-for="tag in tagList" class="tag-item" :key="tag.id">
+                <el-tag
+                  :effect="tags.indexOf(tag.id) !== -1 ? 'dark' : 'plain'"
+                  @click="searchByTag(tag.id)"
+                >{{tag.name}}</el-tag>
+              </div>
             </div>
           </div>
           <div style="display: inline-flex; align-items: center">
