@@ -80,7 +80,7 @@
             width="200"
             align="center"
             show-overflow-tooltip
-          ><template slot-scope="scope">{{scope.row.adpot?'已通过':'审核中'}}</template>
+          ><template slot-scope="scope">{{scope.row.status === 1 ? '已提交':'暂存'}}</template>
           </el-table-column>
           <el-table-column
             prop="institution_details.registered_money"
@@ -158,7 +158,8 @@ export default {
       currentPage: 0,
       currentTableData: [],
       tableData: [],
-      multipleSelection: []
+      multipleSelection: [],
+      status:1,
     };
   },
   async mounted() {
@@ -175,6 +176,7 @@ export default {
         adpot: "",
         name: ""
       });
+      console.log(enrolls)
       const idList = enrolls.map(enroll => enroll.id);
       const { data: settledList } = await this.$http.post(
         "/api/institutions/enroll/_mget",

@@ -64,3 +64,12 @@ export function mGetInstitutionList(data) {
     })
 }
 
+export function modiftyEnroll(data) {
+    return request({
+        url: `${prefix}/enroll/modify`,
+        method: 'put',
+        data: data
+    })
+}
+
+
