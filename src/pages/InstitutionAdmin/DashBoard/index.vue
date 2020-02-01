@@ -187,12 +187,33 @@
                 :http-request="handleAvatarUpload"
                 accept=".png, .jpg, .jpeg"
               >
+                <img v-if="institutionDetails.logo" :src="institutionDetails.logo" class="avatar" />
+                <i v-if="!institutionDetails.logo" class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
+          <el-form-item label="营业执照" class="business-licence">
+            <div class="content">
+              <el-upload
+                class="avatar-uploader"
+                action="#"
+                :show-file-list="false"
+                :before-upload="beforeAvatarUpload"
+                :http-request="handleBusinessLicenceUpload"
+                accept=".jpg, .jpeg, .png"
+                v-loading="licenceLoading"
+                element-loading-text="图片上传中"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+              >
                 <img
-                  v-if="institutionDetails.imageUrl"
-                  :src="institutionDetails.imageUrl"
+                  v-if="institutionDetails.business_licence"
+                  :src="institutionDetails.business_licence"
                   class="avatar"
                 />
-                <i v-if="!institutionDetails.imageUrl" class="el-icon-plus avatar-uploader-icon"></i>
+                <i
+                  v-if="!institutionDetails.business_licence"
+                  class="el-icon-plus avatar-uploader-icon"
+                ></i>
               </el-upload>
             </div>
           </el-form-item>
@@ -233,18 +254,22 @@ export default {
     return {
       institutionId: -1,
       isMore: false,
-      isUploaded: false,
+      isLogoUploaded: false,
+      isLicenceUploaded: false,
       institutionDetails: {},
       provinceList: [],
       cityList: [],
       addressList: [],
       preProvinceId: -1,
       preCityId: -1,
-      preImageUrl: "",
+      preLogoUrl: "",
+      preLicenceUrl: "",
       preDetails: "",
       rules: ruleList,
       isModalOpened: false,
-      previews: {}
+      previews: {},
+      licenceLoading: false,
+      cutType: ""
     };
   },
   async mounted() {
@@ -261,6 +286,7 @@ export default {
         business_license_start_time,
         business_license_ent_time,
         logo,
+        business_license,
         address: { details, province_name, city_name }
       } = institution_details;
       this.institutionId = id;
@@ -287,9 +313,13 @@ export default {
           business_license_start_time * 1000,
           business_license_ent_time * 1000
         ],
-        imageUrl: "/api/resources/" + logo
+        logo: "/api/resources/" + logo,
+        business_licence: business_license
+          ? "/api/resources/" + business_license
+          : ""
       };
-      this.preImageUrl = await this.getPreImageInfo();
+      this.preLogoUrl = await this.getPreImageInfo("logo");
+      this.preLicenceUrl = await this.getPreImageInfo("licence");
     },
     handleSaveClick(formName) {
       this.$refs[formName].validate(async valid => {
@@ -313,7 +343,6 @@ export default {
             province_id,
             city_id,
             details,
-            imageUrl,
             tax_id
           } = this.institutionDetails;
 
@@ -335,7 +364,14 @@ export default {
           }
 
           const logoInfo = {
-            logo: this.isUploaded ? imageUrl : this.preImageUrl
+            logo: this.isLogoUploaded
+              ? this.institutionDetails.logo
+              : this.preLogoUrl
+          };
+          const licenceInfo = {
+            business_license: this.isLicenceUploaded
+              ? this.institutionDetails.business_licence
+              : this.preLicenceUrl
           };
 
           await this.$http.put(`/api/institutions/${this.institutionId}`, {
@@ -355,10 +391,33 @@ export default {
             business_scope,
             province_id,
             city_id,
-            ...logoInfo,
             tax_id,
-            details
+            details,
+            ...logoInfo,
+            ...licenceInfo
           });
+          // console.log({
+          //   name,
+          //   invoice_rise,
+          //   taxpayer_distinguish,
+          //   phone,
+          //   address_id: this.institutionDetails.address_id,
+          //   approval_time: approval_time / 1000,
+          //   business_license_start_time: business_license_start_time / 1000,
+          //   business_license_ent_time: business_license_ent_time / 1000,
+          //   institution_type,
+          //   establish_time: establish_time / 1000,
+          //   legal_person,
+          //   registered_money: parseFloat(registered_money),
+          //   registration_authority,
+          //   business_scope,
+          //   province_id,
+          //   city_id,
+          //   tax_id,
+          //   details,
+          //   ...logoInfo,
+          //   ...licenceInfo
+          // });
           this.$alert("请等待系统管理员审核", "提交成功", {
             confirmButtonText: "确定",
             callback: () => {
@@ -396,17 +455,29 @@ export default {
       await this.getCityList(provinceId);
       this.institutionDetails.city_id = this.cityList[0].id;
     },
+    async handleBusinessLicenceUpload({ file }) {
+      this.cutType = "licence";
+      this.isModalOpened = true;
+      this.licenceLoading = true;
+      const licenseImage = await this.getImageInfo(file);
+      this.institutionDetails.imageUrl = licenseImage;
+      this.licenceLoading = false;
+    },
     async handleAvatarUpload({ file }) {
-      this.isUploaded = true;
+      this.cutType = "logo";
+      this.isLogoUploaded = true;
       this.institutionDetails.imageUrl = await this.getImageInfo(file);
       this.isModalOpened = true;
     },
-    getPreImageInfo() {
+    getPreImageInfo(imgType) {
       return new Promise(async resolve => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const img = new Image();
-        img.src = this.institutionDetails.imageUrl;
+        img.src =
+          imgType === "logo"
+            ? this.institutionDetails.logo
+            : this.institutionDetails.business_licence;
 
         img.onload = () => {
           canvas.width = img.width;
@@ -448,16 +519,28 @@ export default {
       return (isJPG || isPNG) && isLt2M;
     },
     hanldeModalClose() {
+      if (this.cutType === "logo")
+        this.institutionDetails.logo = this.preLogoUrl;
+      if (this.cutType === "licence")
+        this.institutionDetails.business_licence = this.preLicenceUrl;
+
       this.isModalOpened = false;
-      this.institutionDetails.imageUrl = this.preImageUrl;
     },
     generatePreviews(data) {
       this.previews = data;
     },
     handleImageCut() {
       this.$refs.cropper.getCropData(data => {
-        this.institutionDetails.imageUrl = data;
-        this.preImageUrl = data;
+        if (this.cutType === "licence") {
+          this.institutionDetails.business_licence = data;
+          this.preLicenceUrl = data;
+          this.isLicenceUploaded = true;
+        } else if (this.cutType === "logo") {
+          this.institutionDetails.logo = data;
+          this.preLogoUrl = data;
+          this.isLogoUploaded = true;
+        }
+        this.cutType = "";
         this.isModalOpened = false;
       });
     }
@@ -534,6 +617,37 @@ export default {
     overflow: hidden;
     border: 1px solid #cccccc;
     background: #cccccc;
+  }
+}
+.business-licence {
+  /deep/ .avatar-uploader {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    width: 302px;
+    height: 222px;
+  }
+
+  /deep/ .el-loading-spinner {
+    margin-top: 0;
+    transform: translateY(-40%);
+  }
+
+  /deep/ .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 300px;
+    height: 220px;
+    line-height: 220px;
+    text-align: center;
+  }
+
+  /deep/ .avatar {
+    width: 300px;
+    height: 220px;
+    display: block;
   }
 }
 </style>
