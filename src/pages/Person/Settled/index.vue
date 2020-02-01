@@ -6,34 +6,15 @@
       <el-breadcrumb-item>入驻审核</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="settled__wrap">
-      <div class="settled__header">
-
-        <div
-          class="search-input"
-          style="width:400px"
-        >
-
-          <el-input
-            placeholder="请输入要搜索的入驻"
-            v-model="searchValue"
-            @change="handleSearchChange"
-            @clear="handleClearClick"
-            clearable
-          ><i
-              slot="prefix"
-              class="el-input__icon el-icon-search"
-            ></i>
-          </el-input>
-        </div>
-      </div>
       <div class="settled__table">
         <el-table
+          v-loading="Loading"
           ref="multipleTable"
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          height="calc(100vh - 255px)"
+          height="calc(100vh - 200px)"
         >
           <el-table-column
             prop="type"
@@ -61,7 +42,7 @@
           <el-table-column
             prop="institution_details.institution_type"
             label="机构类型"
-            width="200"
+            width="150"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
@@ -75,17 +56,25 @@
           ><template slot-scope="scope">{{new Date(scope.row.create_time*1000).toLocaleString()}}</template>
           </el-table-column>
           <el-table-column
-            prop="adpot"
-            label="审核状态"
-            width="200"
+            prop="status"
+            label="编辑状态"
+            width="150"
             align="center"
             show-overflow-tooltip
           ><template slot-scope="scope">{{scope.row.status === 1 ? '已提交' : '暂存'}}</template>
           </el-table-column>
           <el-table-column
+            prop="status"
+            label="审核状态"
+            width="150"
+            align="center"
+            show-overflow-tooltip
+          ><template slot-scope="scope">{{(scope.row.status === 2) ? '' : (!scope.row.handle) ? '等待处理' : scope.row.handle ? '已通过' : '未通过'}}</template>
+          </el-table-column>
+          <el-table-column
             prop="institution_details.registered_money"
             label="入驻金额"
-            width="200"
+            width="150"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
@@ -107,7 +96,7 @@
                 trigger="click"
                 :ref="`popover-${scope.$index}`"
               >
-                <p>确认删除该申请吗？</p>
+                <p>确认取消入驻吗？</p>
                 <div style="text-align: right; margin: 0;">
                   <el-button
                     size="mini"
@@ -122,7 +111,7 @@
                 </div>
                 <el-button
                   slot="reference"
-                  :disabled="scope.row.start_time< new Date().getTime()/1000"
+                  :disabled="scope.row.status === 1"
                   size="mini"
                   type="danger"
                 >删除</el-button>
@@ -160,7 +149,7 @@ export default {
       currentTableData: [],
       tableData: [],
       multipleSelection: [],
-      status:1,
+      status:-1
     };
   },
   async mounted() {
@@ -203,10 +192,12 @@ export default {
       this.totalTagsCount = this.tableData.length;
       this.currentTableData = this.tableData.slice(start, end);
     },
-
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
     async handleDeleteCourse(id, index) {
       this.closePopover(index);
-      await this.getPreEntryList();
+      await this.getSettledList();
       this.$message({
         type: "success",
         message: "删除成功！",
@@ -217,7 +208,7 @@ export default {
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
       this.Loading = true;
-      await this.getPreEntryList();
+      await this.getSettledList();
       this.Loading = false;
     },
 
