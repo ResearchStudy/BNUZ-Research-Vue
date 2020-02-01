@@ -19,7 +19,9 @@
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
         <el-form-item label="详细地址">
-          <div class="content">{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
+          <div
+            class="content"
+          >{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
           <div class="content">{{institutionDetails.legal_person}}</div>
@@ -48,10 +50,17 @@
             class="content"
           >{{new Date(institutionDetails.approval_time *1000).toLocaleDateString()}}</div>
         </el-form-item>
-        <el-form-item label="营业执照">
+        <el-form-item label="头像">
           <div
             class="logo"
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
+          ></div>
+        </el-form-item>
+        <el-form-item label="营业执照">
+          <div
+            class="licence"
+            v-if="institutionDetails.logo"
+            :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.business_license})`}"
           ></div>
         </el-form-item>
         <!-- <el-form-item>
@@ -59,7 +68,7 @@
             <el-button type="primary" @click="handleAdoptClick(true)">通过审核</el-button>
             <el-button type="danger" @click="handleAdoptClick(false)">拒绝审核</el-button>
           </div>
-        </el-form-item> -->
+        </el-form-item>-->
       </el-form>
     </div>
   </div>
@@ -130,6 +139,16 @@ export default {
     }
 
     .logo {
+      width: 200px;
+      height: 200px;
+      margin-top: 13px;
+      margin-left: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .licence {
       width: 50%;
       height: 300px;
       margin-top: 13px;
