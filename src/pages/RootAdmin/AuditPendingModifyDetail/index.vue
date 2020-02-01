@@ -50,10 +50,16 @@
             class="content"
           >{{new Date(institutionDetails.approval_time *1000).toLocaleDateString()}}</div>
         </el-form-item>
-        <el-form-item label="营业执照">
+        <el-form-item label="头像">
           <div
             class="logo"
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
+          ></div>
+        </el-form-item>
+        <el-form-item label="营业执照">
+          <div
+            class="licence"
+            :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.business_license})`}"
           ></div>
         </el-form-item>
         <el-form-item>
@@ -131,6 +137,16 @@ export default {
     }
 
     .logo {
+      width: 200px;
+      height: 200px;
+      margin-top: 13px;
+      margin-left: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .licence {
       width: 50%;
       height: 300px;
       margin-top: 13px;
