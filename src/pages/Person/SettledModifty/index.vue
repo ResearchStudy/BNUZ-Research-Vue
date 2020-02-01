@@ -349,7 +349,7 @@
           >提交审核</el-button>
           <el-button
             type="primary"
-            @click="enrollInstitutionsMsg(7)"
+            @click="enrollInstitutionsMsg(2)"
           >保存</el-button>
         </el-form-item>
       </el-form>
@@ -361,7 +361,6 @@
 <script>
 import { getAddressById, saveAddress } from "@/api/address";
 import {
-  enrollInstitutions,
   institutionsFilesUpload,
   modiftyEnroll
 } from "@/api/institutions";
@@ -406,11 +405,11 @@ export default {
       provinceList: [],
       cityList: [],
       rules: rules,
-      isUploaded : false,
+      isUploaded: false,
       licenceLoading: false,
       isModalOpened: false,
       previews: {},
-      preImageUrl: "",
+      preImageUrl: ""
     };
   },
   methods: {
@@ -429,44 +428,43 @@ export default {
       )[0].id;
       this.previews.province_id = provinceId;
       this.previews.city_id = cityId;
-      this.previews.details = institution_details.address.details,
-      console.log(institution_details.business_license)
+      (this.previews.details = institution_details.address.details),
+        console.log(institution_details.business_license);
       this.form = {
-          name: institution_details.name,
-          tax_id: institution_details.tax_id,
-          institution_type: institution_details.institution_type,
-          legal_person: institution_details.legal_person,
-          establish_time: institution_details.establish_time * 1000,
-          registered_money: institution_details.registered_money,
-          business_license:
-            "/api/resources/" + institution_details.business_license,
-          business_license_start_time:
-            institution_details.business_license_start_time * 1000,
-          business_license_end_time:
-            institution_details.business_license_end_time * 1000,
-          approval_time: institution_details.approval_time * 1000,
-          registration_authority: institution_details.registration_authority,
-          business_scope: institution_details.business_scope,
-          invoice_rise: institution_details.invoice_rise,
-          taxpayer_distinguish: institution_details.taxpayer_distinguish,
-          invoice_phone: institution_details.invoice_phone,
-          logo: "/api/resources/" + institution_details.logo,
-          province_id: provinceId,
-          city_id: cityId,
-          contact_man: institution_details.contact_man,
-          contact_number: institution_details.contact_number,
-          details: institution_details.address.details,
-          phone: institution_details.phone,
-          timeRange: [
-            institution_details.business_license_start_time * 1000,
-            institution_details.business_license_ent_time * 1000
-          ],
-          
-        };
-        const logo = this.form.logo
-        const licence = this.form.business_license
-        this.form.logo = await this.getPreImageInfo(logo)
-        this.form.business_license = await this.getPreImageInfo(licence);
+        name: institution_details.name,
+        tax_id: institution_details.tax_id,
+        institution_type: institution_details.institution_type,
+        legal_person: institution_details.legal_person,
+        establish_time: institution_details.establish_time * 1000,
+        registered_money: institution_details.registered_money,
+        business_license:
+          "/api/resources/" + institution_details.business_license,
+        business_license_start_time:
+          institution_details.business_license_start_time * 1000,
+        business_license_end_time:
+          institution_details.business_license_end_time * 1000,
+        approval_time: institution_details.approval_time * 1000,
+        registration_authority: institution_details.registration_authority,
+        business_scope: institution_details.business_scope,
+        invoice_rise: institution_details.invoice_rise,
+        taxpayer_distinguish: institution_details.taxpayer_distinguish,
+        invoice_phone: institution_details.invoice_phone,
+        logo: "/api/resources/" + institution_details.logo,
+        province_id: provinceId,
+        city_id: cityId,
+        contact_man: institution_details.contact_man,
+        contact_number: institution_details.contact_number,
+        details: institution_details.address.details,
+        phone: institution_details.phone,
+        timeRange: [
+          institution_details.business_license_start_time * 1000,
+          institution_details.business_license_ent_time * 1000
+        ]
+      };
+      const logo = this.form.logo;
+      const licence = this.form.business_license;
+      this.form.logo = await this.getPreImageInfo(logo);
+      this.form.business_license = await this.getPreImageInfo(licence);
     },
     navigateToIndex() {
       this.$router.push({ path: "/" });
@@ -516,7 +514,7 @@ export default {
           };
           saveAddress(data).then(res => {
             const addressId = res.id;
-          
+
             const {
               timeRange: [
                 business_license_start_time,
@@ -532,41 +530,30 @@ export default {
                 new Date(this.form.establish_time).getTime() / 1000,
               business_license_end_time: business_license_end_time / 1000,
               approval_time: new Date(this.form.approval_time).getTime() / 1000,
-              status,
+              status
             };
-            if (status === 7) {
-               modiftyEnroll(data)
-                .then(res => {
-                  const formData = new FormData();
-                  formData.append("files", this.form.files);
-                  institutionsFilesUpload(res.id, this.form.files);
-                  
-                });
-                this.$alert("入驻信息修改成功", "提交成功", {
-                  confirmButtonText: "确定",
-                  callback: () => {
-                    this.$router.push({ path: "/person/settled" });
-                  }
-                });
- 
-            }
-            else{
-            enrollInstitutions(data)
-              .then(res => {
-                const formData = new FormData();
-                formData.append("files", this.form.files);
-                institutionsFilesUpload(res.id, this.form.files);
-              })
-              .then(() => {
-                this.$alert("请耐心等待审核通过", "申请成功", {
-                  confirmButtonText: "确定",
-                  callback: () => {
-                    this.navigateToIndex();
-                  }
-                });
+
+            modiftyEnroll(data).then(res => {
+              const formData = new FormData();
+              formData.append("files", this.form.files);
+              institutionsFilesUpload(res.id, this.form.files);
+            });
+            if (status === 2) {
+              this.$alert("入驻信息修改成功", "提交成功", {
+                confirmButtonText: "确定",
+                callback: () => {
+                  this.$router.push({ path: "/person/settled" });
+                }
               });
-          }
-          })    
+            } else {
+              this.$alert("入驻申请提交成功", "提交成功", {
+                confirmButtonText: "确定",
+                callback: () => {
+                  this.$router.push({ path: "/person/settled" });
+                }
+              });
+            }
+          });
         } else {
           this.$message({
             type: "error",
