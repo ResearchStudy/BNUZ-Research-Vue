@@ -20,7 +20,6 @@
           <div class="content">{{institutionDetails.institution_type}}</div>
         </el-form-item>
 
-
         <el-form-item label="详细地址" v-if="institutionDetails.address">
           <div class="content">{{details}}</div>
         </el-form-item>
@@ -53,11 +52,17 @@
           >{{new Date(institutionDetails.approval_time *1000).toLocaleDateString()}}</div>
         </el-form-item>
         <el-divider></el-divider>
-        <el-form-item label="营业执照">
+        <el-form-item label="头像">
           <div
             class="logo"
-            v-if="institutionDetails.logo"
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.logo})`}"
+          ></div>
+        </el-form-item>
+        <el-form-item label="营业执照">
+          <div
+            class="licence"
+            v-if="institutionDetails.logo"
+            :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.business_license})`}"
           ></div>
         </el-form-item>
         <el-divider></el-divider>
@@ -155,6 +160,16 @@ export default {
     }
 
     .logo {
+      width: 200px;
+      height: 200px;
+      margin-top: 13px;
+      margin-left: 30px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .licence {
       width: 50%;
       height: 300px;
       margin-top: 13px;
