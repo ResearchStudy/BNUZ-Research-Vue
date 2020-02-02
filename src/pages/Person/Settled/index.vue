@@ -69,7 +69,7 @@
             width="150"
             align="center"
             show-overflow-tooltip
-          ><template slot-scope="scope">{{(scope.row.status === 2) ? '' : (!scope.row.handle) ? '等待处理' : scope.row.handle ? '已通过' : '未通过'}}</template>
+          ><template slot-scope="scope">{{(scope.row.status === 2) ? '' : (!scope.row.handle) ? '等待处理' : scope.row.adopt ? '已通过' : '未通过'}}</template>
           </el-table-column>
           <el-table-column
             prop="institution_details.registered_money"
@@ -86,7 +86,7 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                :disabled="scope.row.status === 1"
+                :disabled="(!scope.row.handle && scope.row.status === 1) || scope.row.adopt"
                 type="primary"
                 @click="handleEdit(scope.row.id)"
               >编辑</el-button>
@@ -111,7 +111,7 @@
                 </div>
                 <el-button
                   slot="reference"
-                  :disabled="scope.row.status === 1"
+                  :disabled="(!scope.row.handle && scope.row.status === 1) || scope.row.adopt"
                   size="mini"
                   type="danger"
                 >删除</el-button>

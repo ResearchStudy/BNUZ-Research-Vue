@@ -360,10 +360,7 @@
 
 <script>
 import { getAddressById, saveAddress } from "@/api/address";
-import {
-  institutionsFilesUpload,
-  modiftyEnroll
-} from "@/api/institutions";
+import { institutionsFilesUpload, modiftyEnroll } from "@/api/institutions";
 import rules from "@/pages/organization/registerValidate";
 
 export default {
@@ -539,14 +536,13 @@ export default {
               institutionsFilesUpload(res.id, this.form.files);
             });
             if (status === 2) {
-              this.$alert("入驻信息修改成功", "提交成功", {
-                confirmButtonText: "确定",
-                callback: () => {
-                  this.$router.push({ path: "/person/settled" });
-                }
+              this.$message({
+                message: "保存成功",
+                type: "success"
               });
+              this.$router.push({ path: "/person/settled"});
             } else {
-              this.$alert("入驻申请提交成功", "提交成功", {
+              this.$alert("请耐心等待审核通过", "提交成功", {
                 confirmButtonText: "确定",
                 callback: () => {
                   this.$router.push({ path: "/person/settled" });

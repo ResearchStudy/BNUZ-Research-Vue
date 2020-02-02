@@ -307,7 +307,7 @@ export default {
         });        
       }
 
-      // this.$router.push({ path: "/institution-admin/informationManager" });
+      this.$router.push({ path: "/institution-admin/informationManager" });
     },
     hanldeModalClose() {
       this.isModalOpened = false;
