@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 78%;margin-left: 11%;margin-top: 0">
-    <div style="width: 97%;margin-left: 1.2%">
+  <div style="width: 1100px;margin:0 auto">
+    <div style="width: 100%">
       <div
         class="search-group"
         style="border: 1px solid #f2f2f2;padding: 15px 30px; background: #F6F6F8"
@@ -175,12 +175,11 @@
     </div>
 
     <div style="margin-top: 5px;background-color: #ffffff" v-show="displayType === 'card'">
-      <el-row>
+      <div class="card__container">
         <el-col
-          :span="6"
           v-for="course in coursesList"
           :key="course.id"
-          style="padding: 0px; cursor: pointer"
+          class="card__wrap"
           @click.native="detail(course.id)"
         >
           <card
@@ -190,7 +189,7 @@
             :tag-name="course.tagName"
           />
         </el-col>
-      </el-row>
+      </div>
     </div>
 
     <div class="search-group" v-show="displayType === 'list'">
@@ -253,7 +252,7 @@ export default {
       tags: [],
       travel: "",
       page: 1,
-      limit: 9,
+      limit: 12,
       total: 0
     };
   },
@@ -261,7 +260,7 @@ export default {
     const params = this.$route.params;
     this.getTags();
     this.getAllCountry();
-    this.getCoursesList({ page: 1, limit: 9, ...params });
+    this.getCoursesList({ page: 1, limit: 12, ...params });
   },
   methods: {
     async getTags() {
@@ -371,11 +370,28 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .search-group {
   margin-top: 30px;
 }
 .tag-item {
   padding: 10px;
+}
+
+.card {
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 1100px;
+  }
+
+  &__wrap {
+    cursor: pointer;
+    width: 23%;
+    padding: 0;
+    margin: 20px 0;
+    box-shadow: 4px 8px 12px -4px #999;
+  }
 }
 </style>
