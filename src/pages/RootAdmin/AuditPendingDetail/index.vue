@@ -74,7 +74,7 @@
         <el-form-item>
           <div class="content">
             <el-button type="primary" @click="handleAdoptClick(true)">通过审核</el-button>
-            <el-button type="danger" @click="handleAdoptClick(false)">拒绝审核</el-button>
+            <el-button type="danger" @click="handleAdoptClick(false)">退回</el-button>
           </div>
         </el-form-item>
       </el-form>
