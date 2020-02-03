@@ -174,7 +174,10 @@
       </div>
     </div>
 
-    <div style="margin-top: 5px;background-color: #ffffff" v-show="displayType === 'card'">
+    <div
+      style="margin-top: 5px;background-color: #ffffff"
+      v-show="displayType === 'card'"
+    >
       <div class="card__container">
         <el-col
           v-for="course in coursesList"
@@ -362,9 +365,9 @@ export default {
       this.limit = limit;
       this.getCoursesList({ page: this.page, limit });
     },
-    handleCurrentChange(page) {
+    async handleCurrentChange(page) {
       this.page = page;
-      this.getInstitutionList({ page, limit: this.limit });
+      await this.getCoursesList({ page, limit: this.limit });
     }
   }
 };
