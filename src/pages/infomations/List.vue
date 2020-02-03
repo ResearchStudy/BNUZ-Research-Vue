@@ -1,44 +1,30 @@
 <template>
-  <div>
-    <div class="search-group" style="width: 50%;margin-left: 25%">
+  <div class="information__container">
+    <div class="search-group">
       <el-input placeholder="请输入内容" v-model="title" style="width: 80%;padding-right: 10px"></el-input>
-
       <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
     </div>
-
-    <div class="search-group" style="margin-top: 20px;width: 65%;margin-left: 17%">
+    <div>
       <div
         v-for="information in informationList"
         :key="information.id"
         style="cursor: pointer"
         @click="navigateToInformation(information.id)"
       >
-        <div
-          style="display: flex;padding: 5px 15px;border: 1px solid #f2f2f2;box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);margin-bottom: 10px"
-        >
-          <div style="width: 300px;height: 150px">
-            <img
-              :src="information.src"
-              alt
-              style="width: 300px;height: 150px"
+        <div class="information__wrap">
+          <div class="cover__container">
+            <div
+              class="cover"
+              :style="`background-image:url(${information.cover})`"
               v-if="information.cover.length !== 0"
             />
-            <img
-              src="../../assets/img/default-news.jpg"
-              alt
-              style="width: 300px;height: 150px"
-              v-else
-            />
+            <div class="cover cover--default" src="../../assets/img/default-news.jpg" v-else />
           </div>
+
           <div style="width: 100%;padding-left: 30px">
-            <h3>{{information.title}}</h3>
-            <div style="font-size: 15px">{{information.abstract}}</div>
-            <!--
-          <div style="display: flex;justify-content: space-between;margin-top: 60px;">
-            <div style="display: flex;align-items: center"><img src="../../assets/img/label.png" alt="label"> {{information.informationType}}</div>
-            <div>{{information.createDate}}</div>
-          </div>
-            -->
+            <div class="title">{{information.title}}</div>
+            <div class="content">{{information.abstract}}</div>
+            <div class="time">{{new Date(information.create_time*1000).toLocaleString()}}</div>
           </div>
         </div>
       </div>
@@ -96,13 +82,10 @@ export default {
         return {
           ...item,
           createDate,
+          cover: item.cover.length !== 0 ? "/api/resources/" + item.cover : ""
           // informationType: informationType.filter(
           //   t => t.id === item.information_type
           // )[0].name,
-          src:
-            item.cover.length === 0
-              ? "../../assets/img/default-news.jpg"
-              : `/api/resources/${item.cover}`
         };
       });
       this.informationList = temp;
@@ -136,10 +119,79 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .search-group {
-  width: 80%;
-  margin-left: 10%;
-  margin-top: 30px;
+}
+
+.information {
+  &__container {
+    width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__wrap {
+    display: flex;
+    padding: 40px 20px;
+    border-bottom: 1px dashed rgba(51, 51, 51, 0.3);
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+      background: #f7f7f7;
+    }
+
+    .cover__container {
+      overflow: hidden;
+      min-width: 280px;
+      height: 150px;
+
+      .cover {
+        height: 150px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: all 0.5s ease-in-out;
+
+        &:hover {
+          transform: scale(1.1, 1.1);
+        }
+
+        &--default {
+          background-image: url(../../assets/img/default-news.jpg);
+        }
+      }
+    }
+
+    .title {
+      overflow: hidden;
+      height: 30px;
+      font-size: 22px;
+      font-weight: bold;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: #1890ff;
+      }
+    }
+
+    .content {
+      overflow: hidden;
+      display: -webkit-box;
+      height: 65px;
+      margin: 10px 0 15px 0;
+      color: #666;
+      font-size: 16px;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .time {
+      height: 30px;
+      color: #888;
+      font-size: 14px;
+      line-height: 44px;
+    }
+  }
 }
 </style>
