@@ -61,7 +61,7 @@
             width="150"
             align="center"
             show-overflow-tooltip
-          ><template slot-scope="scope">{{scope.row.status === 1 ? '已提交' : '暂存'}}</template>
+          ><template slot-scope="scope">{{(!scope.row.adopt && scope.row.handle && scope.row.status === 1) ? "" : scope.row.status === 1 ? '已提交' : '暂存'}}</template>
           </el-table-column>
           <el-table-column
             prop="status"
