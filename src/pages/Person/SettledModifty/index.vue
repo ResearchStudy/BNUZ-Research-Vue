@@ -346,10 +346,12 @@
           <el-button
             type="primary"
             @click="enrollInstitutionsMsg(1)"
+            v-loading.fullscreen.lock="fullscreenLoading"
           >提交审核</el-button>
           <el-button
             type="primary"
             @click="enrollInstitutionsMsg(2)"
+            v-loading.fullscreen.lock="fullscreenLoading"
           >保存</el-button>
         </el-form-item>
       </el-form>
@@ -360,7 +362,7 @@
 
 <script>
 import { getAddressById, saveAddress } from "@/api/address";
-import { institutionsFilesUpload, modiftyEnroll } from "@/api/institutions";
+import { institutionsFilesUpload } from "@/api/institutions";
 import rules from "@/pages/organization/registerValidate";
 
 export default {
@@ -375,6 +377,7 @@ export default {
     return {
       id: -1,
       active: 1,
+      fullscreenLoading :false,
       form: {
         name: "",
         tax_id: "",
@@ -529,12 +532,9 @@ export default {
               approval_time: new Date(this.form.approval_time).getTime() / 1000,
               status
             };
-
-            modiftyEnroll(data).then(res => {
-              const formData = new FormData();
-              formData.append("files", this.form.files);
-              institutionsFilesUpload(res.id, this.form.files);
-            });
+            this.fullscreenLoading = true;
+            this.modifyEnroll(data)
+            this.fullscreenLoading = false
             if (status === 2) {
               this.$message({
                 message: "保存成功",
@@ -558,6 +558,13 @@ export default {
           });
         }
       });
+    },
+    async modifyEnroll(data){
+        await this.$http.put('/api/institutions/enroll/modify',data).then(res => {
+          const formData = new FormData();
+          formData.append("files", this.form.files);
+          institutionsFilesUpload(res.id, this.form.files);
+        })
     },
     async handleAvatarUpload({ file }) {
       this.isUploaded = true;
