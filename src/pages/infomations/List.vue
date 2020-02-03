@@ -1,8 +1,8 @@
 <template>
   <div class="information__container">
     <div class="search-group">
-      <el-input placeholder="请输入内容" v-model="title" style="width: 80%;padding-right: 10px"></el-input>
-      <el-button type="primary" icon="el-icon-search" style="margin-left: 10px" @click="search">搜索</el-button>
+      <el-input placeholder="请输入内容" v-model="title"></el-input>
+      <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
     </div>
     <div>
       <div
@@ -121,6 +121,9 @@ export default {
 
 <style lang="scss" scoped>
 .search-group {
+  display: flex;
+  width: 70%;
+  margin: 40px auto 0 auto;
 }
 
 .information {
