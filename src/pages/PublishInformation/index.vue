@@ -38,7 +38,6 @@
         </el-row>
       </div>
     </el-dialog>
-    <v-header></v-header>
     <div style="width: 80%;margin-left: 10%">
       <div>
         <h1 style="font-size:25px" align="center">发布资讯</h1>
@@ -240,7 +239,7 @@ export default {
             message: "保存成功",
             type: "success"
           });
-        //this.$router.push({path: '/insitution-admin/informationManager'})
+        this.$router.push({ path: "/institution-admin/informationManager" });
       });
     },
 
@@ -253,11 +252,14 @@ export default {
         this.fullscreenLoading = true;
         saveInformation(this.form).then(() => {
           this.fullscreenLoading = false;
-          this.$message({
-            message: "发布成功",
-            type: "success"
+          this.$alert("请等待系统管理员审核", "发布成功", {
+            confirmButtonText: "确定",
+            callback: () => {
+              this.$router.push({
+                path: "/institution-admin/informationManager"
+              });
+            }
           });
-          this.$router.push({ path: "/institution-admin/informationManager" });
         });
       } else {
         //当保存后，再点击立即发布
@@ -268,10 +270,12 @@ export default {
         submitInformation(this.form, this.id).then(() => {
           this.fullscreenLoading = false;
           this.$message({
-            message: "发布成功",
+            message: "保存成功",
             type: "success"
           });
-          this.$router.push({ path: "/institution-admin/informationManager" });
+          this.$router.push({
+            path: "/institution-admin/informationManager"
+          });
         });
       }
     },
