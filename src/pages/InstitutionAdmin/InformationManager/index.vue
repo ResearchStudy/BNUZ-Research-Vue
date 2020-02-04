@@ -85,7 +85,12 @@
 
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button :disabled="scope.row.status !== 16" size="mini" type="primary" @click="handleUpdateClick(scope.row.id)">编辑</el-button>
+              <el-button
+                :disabled="scope.row.status !== 16"
+                size="mini"
+                type="primary"
+                @click="handleUpdateClick(scope.row.id)"
+              >编辑</el-button>
               <el-button size="mini" type="danger" @click="handleDeleteInformation(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -133,10 +138,7 @@ export default {
       } = await this.$http.get("/api/information/list", {
         limit: "10",
         page: this.currentPage + "",
-        title: "",
-        attribute: "",
-        status: "",
-        information_type: ""
+        me: "1"
       });
 
       const idList = informations.map(infors => infors.id);
