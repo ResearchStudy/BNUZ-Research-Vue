@@ -9,6 +9,8 @@ import AuditFinishList from '@/pages/RootAdmin/AuditFinishList/index'
 import AuditFinishDetail from '@/pages/RootAdmin/AuditFinishDetail/index'
 import AccountsManager from '@/pages/RootAdmin/AccountsManager/index'
 import AccountsDetail from '@/pages/RootAdmin/AccountsDetail/index'
+import InformationList from '@/pages/RootAdmin/InformationList/index'
+import InformationDetail from '@/pages/RootAdmin/InformationDetail/index'
 
 const adminRoutes = [
   {
@@ -24,6 +26,8 @@ const adminRoutes = [
       { path: 'audit-finish-list/:id', component: AuditFinishDetail },
       { path: 'accounts', component: AccountsManager },
       { path: 'accounts-detail/:id', component: AccountsDetail },
+      { path: 'information-list/', component: InformationList },
+      { path: 'information-list/:id', component: InformationDetail },
     ]
   }
 ]
