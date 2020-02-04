@@ -69,25 +69,21 @@ export default {
   methods: {
     async getInformationList(params) {
       const result = await getInformationList(params);
-      // const ids = result.informations.map((item) => item.id);
       this.page = result.page;
       this.limit = result.limit;
       this.total = result.total;
-      // const informations = await mGetInformationList({ids});
-      const temp = result.informations.map(item => {
-        const date = new Date(item.create_time * 1000);
-        const month = date.getMonth() + 1 > 12 ? 1 : date.getMonth() + 1;
-        const createDate =
-          date.getFullYear() + "年" + month + "月" + date.getDate() + "日";
-        return {
-          ...item,
-          createDate,
-          cover: item.cover.length !== 0 ? "/api/resources/" + item.cover : ""
-          // informationType: informationType.filter(
-          //   t => t.id === item.information_type
-          // )[0].name,
-        };
-      });
+      const temp = result.informations
+        .map(item => {
+          const date = new Date(item.create_time * 1000);
+          const month = date.getMonth() + 1 > 12 ? 1 : date.getMonth() + 1;
+          const createDate =
+            date.getFullYear() + "年" + month + "月" + date.getDate() + "日";
+          return {
+            ...item,
+            createDate,
+            cover: item.cover.length !== 0 ? "/api/resources/" + item.cover : ""
+          };
+        });
       this.informationList = temp;
     },
     handleSizeChange(limit) {
@@ -122,13 +118,13 @@ export default {
 <style lang="scss" scoped>
 .search-group {
   display: flex;
-  width: 70%;
+  width: 100%;
   margin: 40px auto 0 auto;
 }
 
 .information {
   &__container {
-    width: 1000px;
+    width: 900px;
     margin: 0 auto;
   }
 
@@ -144,7 +140,7 @@ export default {
 
     .cover__container {
       overflow: hidden;
-      min-width: 280px;
+      min-width: 260px;
       height: 150px;
 
       .cover {
@@ -166,7 +162,7 @@ export default {
     .title {
       overflow: hidden;
       height: 30px;
-      font-size: 22px;
+      font-size: 18px;
       font-weight: bold;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -183,7 +179,7 @@ export default {
       height: 65px;
       margin: 10px 0 15px 0;
       color: #666;
-      font-size: 16px;
+      font-size: 14px;
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 3;
