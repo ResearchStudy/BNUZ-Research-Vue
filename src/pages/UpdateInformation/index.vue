@@ -264,7 +264,7 @@ export default {
         });
       } else {
         this.$message({
-          message: "发布成功",
+          message: "提交成功",
           type: "success"
         });
       }
