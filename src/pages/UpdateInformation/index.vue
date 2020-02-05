@@ -8,10 +8,7 @@
       top="5vh"
     >
       <div class="cropper__container">
-        <el-row
-          type="flex"
-          justify="space-between"
-        >
+        <el-row type="flex" justify="space-between">
           <el-col :span="16">
             <vueCropper
               style="width:100%;height:400px"
@@ -29,27 +26,15 @@
           <el-col :span="7">
             <div class="cropper__wrap">
               <div class="cropper__title">裁剪预览</div>
-              <div
-                :style="previews.div"
-                class="cropper__preview"
-              >
-                <img
-                  :src="previews.url"
-                  :style="previews.img"
-                />
+              <div :style="previews.div" class="cropper__preview">
+                <img :src="previews.url" :style="previews.img" />
               </div>
             </div>
           </el-col>
         </el-row>
         <el-row style="margin-top:20px">
-          <el-button
-            type="primary"
-            @click="handleImageCut"
-          >确认</el-button>
-          <el-button
-            type="primary"
-            @click="hanldeModalClose"
-          >取消</el-button>
+          <el-button type="primary" @click="handleImageCut">确认</el-button>
+          <el-button type="primary" @click="hanldeModalClose">取消</el-button>
         </el-row>
       </div>
     </el-dialog>
@@ -58,11 +43,7 @@
         <h1 align="center">修改资讯</h1>
         <el-divider></el-divider>
       </div>
-      <el-form
-        :model="info"
-        ref="form"
-        label-width="80px"
-      >
+      <el-form :model="info" ref="form" label-width="80px">
         <el-form-item label="标题">
           <el-input v-model="info.title"></el-input>
         </el-form-item>
@@ -70,10 +51,7 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="类型">
-              <el-select
-                v-model="info.information_type"
-                placeholder="请选择"
-              >
+              <el-select v-model="info.information_type" placeholder="请选择">
                 <el-option
                   v-for="item in information_type"
                   :key="item.value"
@@ -110,34 +88,18 @@
             :http-request="handleAvatarUpload"
             accept=".jpg, .jpeg, .png"
           >
-            <img
-              v-if="info.src"
-              :src="info.src"
-              class="avatar"
-            />
-            <i
-              v-else
-              class="el-icon-plus base-data_avatar-uploader-icon"
-            ></i>
+            <img v-if="info.src" :src="info.src" class="avatar" />
+            <i v-else class="el-icon-plus base-data_avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
 
         <el-form-item label="摘要">
-          <el-input
-            type="textarea"
-            :rows="2"
-            placeholder="请输入内容"
-            v-model="info.abstract"
-          ></el-input>
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="info.abstract"></el-input>
         </el-form-item>
 
         <el-form-item label="详情">
           <div>
-            <quill-editor
-              v-model="info.content"
-              ref="myQuillEditor"
-              class="warrper"
-            ></quill-editor>
+            <quill-editor v-model="info.content" ref="myQuillEditor" class="warrper"></quill-editor>
           </div>
         </el-form-item>
         <el-form-item>
@@ -151,7 +113,7 @@
               @click="submit(1)"
               type="primary"
               v-loading.fullscreen.lock="fullscreenLoading"
-            >发布</el-button>
+            >提交审核</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -300,11 +262,11 @@ export default {
           message: "保存成功",
           type: "success"
         });
-      }else{
+      } else {
         this.$message({
           message: "发布成功",
           type: "success"
-        });        
+        });
       }
 
       this.$router.push({ path: "/institution-admin/informationManager" });
