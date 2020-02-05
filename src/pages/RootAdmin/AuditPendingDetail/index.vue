@@ -65,6 +65,15 @@
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.business_license})`}"
           ></div>
         </el-form-item>
+        <el-form-item label="发票抬头">
+          <div class="content">{{institutionDetails.invoice_rise}}</div>
+        </el-form-item>
+        <el-form-item label="纳税人识别号">
+          <div class="content">{{institutionDetails.taxpayer_distinguish}}</div>
+        </el-form-item>
+        <el-form-item label="开票备注">
+          <div class="content">{{institutionDetails.remarks || '无'}}</div>
+        </el-form-item>
         <el-divider></el-divider>
         <el-form-item label="附件列表">
           <div class="content">
