@@ -82,16 +82,31 @@
           <el-table-column prop="abstract" label="摘要" align="center" show-overflow-tooltip>
             <template slot-scope="scope">{{scope.row.abstract}}</template>
           </el-table-column>
-
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button
-                :disabled="scope.row.status !== 16"
+                :disabled="!(scope.row.status===16 || scope.row.status===4)"
                 size="mini"
                 type="primary"
                 @click="handleUpdateClick(scope.row.id)"
               >编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDeleteInformation(scope.row.id)">删除</el-button>
+              <el-popover
+                placement="top"
+                width="160"
+                trigger="click"
+                :ref="`popover-${scope.$index}`"
+              >
+                <p>确认删除该课程吗？</p>
+                <div style="text-align: right; margin: 0;">
+                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleDeleteInformation(scope.row.id,scope.$index)"
+                  >确定</el-button>
+                </div>
+                <el-button slot="reference" size="mini" type="danger">删除</el-button>
+              </el-popover>
             </template>
           </el-table-column>
         </el-table>
@@ -141,16 +156,7 @@ export default {
         me: "1"
       });
 
-      const idList = informations.map(infors => infors.id);
-
-      const { data: informationList } = await this.$http.post(
-        "/api/information/_mget",
-        {
-          ids: idList
-        }
-      );
-
-      this.currentTableData = informationList;
+      this.currentTableData = informations;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
       this.isLoading = false;
@@ -227,7 +233,8 @@ export default {
       });
     },
 
-    async handleDeleteInformation(id) {
+    async handleDeleteInformation(id, index) {
+      this.closePopover(index);
       await this.$http.delete(`/api/information/${id}`);
       await this.getInformationList();
       this.$message({
@@ -236,6 +243,9 @@ export default {
         isSingle: true
       });
       this.handleCurrentPageChange(this.currentPage);
+    },
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
     }
   }
 };
