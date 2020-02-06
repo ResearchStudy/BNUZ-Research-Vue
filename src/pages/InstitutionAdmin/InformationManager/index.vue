@@ -105,7 +105,12 @@
                     @click="handleDeleteInformation(scope.row.id,scope.$index)"
                   >确定</el-button>
                 </div>
-                <el-button slot="reference" size="mini" type="danger">删除</el-button>
+                <el-button
+                  :disabled="scope.row.status===1"
+                  slot="reference"
+                  size="mini"
+                  type="danger"
+                >删除</el-button>
               </el-popover>
             </template>
           </el-table-column>
