@@ -21,7 +21,7 @@
         <el-form-item label="详细地址">
           <div
             class="content"
-          >{{institutionDetails.address.country_name}} {{institutionDetails.address.province_name}} {{institutionDetails.address.city_name}} {{institutionDetails.address.details}}</div>
+          >{{institutionDetails.address&&institutionDetails.address.country_name}} {{institutionDetails.address&&institutionDetails.address.province_name}} {{institutionDetails.address&&institutionDetails.address.city_name}} {{institutionDetails.address&&institutionDetails.address.details}}</div>
         </el-form-item>
         <el-form-item label="法定代表人">
           <div class="content">{{institutionDetails.legal_person}}</div>
@@ -62,6 +62,22 @@
             :style="{backgroundImage:`url(${'/api/resources/'+institutionDetails.business_license})`}"
           ></div>
         </el-form-item>
+        <el-form-item label="发票抬头">
+          <div class="content">{{institutionDetails.invoice_rise}}</div>
+        </el-form-item>
+        <el-form-item label="纳税人识别号">
+          <div class="content">{{institutionDetails.taxpayer_distinguish}}</div>
+        </el-form-item>
+        <el-form-item label="开票备注">
+          <div class="content">{{institutionDetails.remarks || '无'}}</div>
+        </el-form-item>
+        <el-divider></el-divider>
+        <el-form-item label="附件列表">
+          <div class="content">
+            <enclousure-list v-if="resources &&resources.length>0" :resources="resources"></enclousure-list>
+            <div v-else>无</div>
+          </div>
+        </el-form-item>
         <el-form-item>
           <div class="content">
             <el-button type="primary" @click="handleAdoptClick(true)">通过审核</el-button>
@@ -74,12 +90,15 @@
 </template>
 
 <script>
+import EnclousureList from "@/components/EnclosureList";
 export default {
   name: "AuditPendingModifyDetail",
+  components: { EnclousureList },
   data() {
     return {
       id: -1,
-      institutionDetails: {}
+      institutionDetails: {},
+      resources: []
     };
   },
   async mounted() {
@@ -93,6 +112,7 @@ export default {
         ids: [this.id]
       });
       this.institutionDetails = data[0];
+      this.resources = data.resources;
     },
     async handleAdoptClick(isAdopted) {
       await this.$http.post(`/api/institutions/modify/handle/${this.id}`, {

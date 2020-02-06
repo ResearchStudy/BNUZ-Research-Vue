@@ -233,6 +233,11 @@
                 <el-input v-model="institutionDetails.taxpayer_distinguish"></el-input>
               </div>
             </el-form-item>
+            <el-form-item label="备注信息" prop="remarks">
+              <div class="content">
+                <el-input v-model="institutionDetails.remarks"></el-input>
+              </div>
+            </el-form-item>
           </div>
           <el-form-item>
             <div class="content">
@@ -343,7 +348,8 @@ export default {
             province_id,
             city_id,
             details,
-            tax_id
+            tax_id,
+            remarks
           } = this.institutionDetails;
 
           const isAddressChange =
@@ -393,6 +399,7 @@ export default {
             city_id,
             tax_id,
             details,
+            remarks,
             ...logoInfo,
             ...licenceInfo
           });
