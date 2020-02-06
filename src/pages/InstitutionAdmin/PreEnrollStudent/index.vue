@@ -99,19 +99,16 @@ export default {
       } = await this.$http.get("/api/courses/list", {
         limit: "10",
         page: this.currentPage + "",
-        title: "",
-        attribute: "",
-        status: "",
-        course_type: ""
+        me: 1
       });
 
-      const idList = courses.map(infors => infors.id);
+      // const idList = courses.map(infors => infors.id);
 
-      const { data: courseList } = await this.$http.post("/api/courses/_mget", {
-        ids: idList
-      });
+      // const { data: courseList } = await this.$http.post("/api/courses/_mget", {
+      //   ids: idList
+      // });
 
-      this.currentTableData = courseList;
+      this.currentTableData = courses;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
       this.isLoading = false;
