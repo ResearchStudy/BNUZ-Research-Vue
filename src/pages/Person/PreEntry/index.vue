@@ -6,20 +6,6 @@
       <el-breadcrumb-item>预报名课程</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="pre-entry__wrap">
-      <div class="pre-entry__header">
-
-        <div class="search-input" style="width:400px">
-
-          <el-input
-            placeholder="请输入要搜索的课程"
-            v-model="searchValue"
-            @change="handleSearchChange"
-            @clear="handleClearClick"
-            clearable
-          ><i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </el-input>
-        </div>
-      </div>
       <div class="pre-entry__table">
         <el-table
           v-loading="Loading"
@@ -29,7 +15,7 @@
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          height="calc(100vh - 255px)"
+          height="calc(100vh - 200px)"
         >
           <el-table-column
             prop="course_title"
@@ -143,7 +129,6 @@ export default {
       console.log(this.userId);
 
       const { data: data } = await this.$http.get("/api/accounts/dashboard");
-      
       const { course_pre_enroll } = data;
       this.currentTableData = course_pre_enroll;
       this.totalTagsCount = course_pre_enroll.length;
@@ -162,6 +147,9 @@ export default {
       this.currentTableData = this.tableData.slice(start, end);
     },
 
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
 
     async handleDeleteCourse(id, index) {
       this.closePopover(index);
@@ -182,27 +170,7 @@ export default {
 
     closePopover(index) {
       this.$refs[`popover-${index}`].doClose();
-    },
-
- 
-    handleSearchChange(val) {
-      this.searchValue = val;
-      if (this.searchValue === "") {
-        const start = (this.currentPage - 1) * 10;
-        const end = (start + 1) * 10;
-        this.currentTableData = this.tableData.slice(start, end);
-        this.totalPage = Math.ceil(this.tableData.length / 10);
-        this.totalTagsCount = this.tableData.length;
-        return;
-      }
-
-      this.currentTableData = this.tableData.filter(
-        item => item.name === this.searchValue
-      );
-      this.currentPage = Math.ceil(this.currentTableData.length / 10) || 1;
-      this.totalPage = Math.ceil(this.currentTableData.length / 10);
-      this.totalTagsCount = this.currentTableData.length;
-    },
+    }
   }
 };
 </script>

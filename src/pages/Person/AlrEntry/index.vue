@@ -1,25 +1,26 @@
 <template>
-  <div class="pre-entry__container">
+  <div class="alr-entry__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/person/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>课程中心</el-breadcrumb-item>
       <el-breadcrumb-item>已报名课程</el-breadcrumb-item>
     </el-breadcrumb>
-    <div class="pre-entry__wrap">
-      <div class="pre-entry__header">
-        
-        <div class="search-input" style="width:400px">
-          <el-input
-            placeholder="请输入要搜索的课程"
-            v-model="searchValue"
-            @change="handleSearchChange"
-            @clear="handleClearClick"
-            clearable
-          ><i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </el-input>
-        </div>
+    <div class="alr-entry__wrap">
+      <div class="alr-entry_header">
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            <el-button type="primary" size="medium">
+              {{custom}}<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="is_pay">已付款</el-dropdown-item>
+            <el-dropdown-item command="is_not_pay">未付款</el-dropdown-item>
+            <el-dropdown-item command="is_refund">已退款</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
-      <div class="pre-entry__table">
+      <div class="alr-entry__table">
         <el-table
           v-loading="Loading"
           element-loading-text="数据加载中..."
@@ -28,23 +29,23 @@
           tooltip-effect="dark"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          height="calc(100vh - 255px)"
+          height="calc(100vh - 200px)"
         >
           <el-table-column
-            prop="name"
+            prop="course_title"
             label="课程名字"
             width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
           <el-table-column
-            prop="introduction"
+            prop="course_description"
             label="简要介绍"
             width="200"
             align="center"
             show-overflow-tooltip
           ></el-table-column>
-        
+
           <el-table-column
             prop="create_time"
             label="开始时间"
@@ -68,13 +69,17 @@
             align="center"
             show-overflow-tooltip
           ></el-table-column>
-          <el-table-column label="操作" width="200" align="center">
+          <el-table-column
+            label="操作"
+            width="200"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="primary"
-                @click="handlePayFor(scope.row.id)"
-              >售后</el-button>
+                @click="handleView(scope.row.id)"
+              >查看</el-button>
               <el-popover
                 placement="top"
                 width="160"
@@ -83,7 +88,11 @@
               >
                 <p>确认删除该课程吗？</p>
                 <div style="text-align: right; margin: 0;">
-                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
+                  <el-button
+                    size="mini"
+                    type="text"
+                    @click="closePopover(scope.$index)"
+                  >取消</el-button>
                   <el-button
                     type="primary"
                     size="mini"
@@ -101,7 +110,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="pre-entry__pagination">
+      <div class="alr-entry__pagination">
         <div class="pagination__info">共{{totalTagsCount}}条记录，共{{totalPage}}页，当前显示第{{currentPage}}页</div>
         <el-pagination
           class="pagination__container"
@@ -119,157 +128,113 @@
 
 <script>
 export default {
-  name: "AlrEntry",
+  name: "PreEntry",
   data() {
     return {
-      searchValue: "",
+      custom: "",
       userId: "",
+      Loading: true,
+      searchValue: "",
       totalTagsCount: 0,
       totalPage: 0,
       currentPage: 0,
       currentTableData: [],
       tableData: [],
+      is_pay : {},
+      is_not_pay : {},
+      is_refund : {},
       multipleSelection: []
     };
   },
-  mounted() {
-    this.tableData = [
-      {
-        id: 1,
-        name: "北师珠",
-        introduction: "这是一个很长的介绍，一点都不简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 2,
-        name: "北理工",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 3,
-        name: "吉珠",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 4,
-        name: "中大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 5,
-        name: "北师大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 6,
-        name: "北师珠",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 7,
-        name: "北大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 8,
-        name: "清华",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 9,
-        name: "交大",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 10,
-        name: "华农",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      },
-      {
-        id: 11,
-        name: "哈佛",
-        introduction: "这是一个很长的介绍，一点都简短",
-        StartTime: "2019-12-14",
-        EndTime: "2019-12-14",
-        price: "10000",
-      }
-    ];
-    this.totalPage = Math.ceil(this.tableData.length / 10);
-    this.totalTagsCount = this.tableData.length;
-    this.currentPage = 1;
-    this.currentTableData = this.tableData.slice(0, 10);
+  async mounted() {
+    await this.getPreEntryList();
   },
   methods: {
-
-
-    handleCurrentPageChange(currentPage) {
-      const start = (currentPage - 1) * 10;
-      const end = (start + 1) * 10;
-      this.currentPage = currentPage;
-      this.currentTableData = this.tableData.slice(start, end);
+    async getPreEntryList() {
+      this.userId = this.$store.getters.userInfo.id;
+      const { data: data } = await this.$http.get("/api/accounts/dashboard");
+      const { course_enroll } = data;
+      const { is_pay, is_not_pay, is_refund } = course_enroll;
+      console.log(course_enroll)
+      this.is_pay = is_pay;
+      this.is_not_pay = is_not_pay;
+      this.is_refund = is_refund;
+      this.currentTableData = is_pay;
+      this.totalTagsCount = is_pay.length;
+      this.totalPage = Math.ceil(is_pay.length / 10);
+      this.custom = "已付款"
+      this.Loading = false;
     },
-
-    handleClearClick() {
-      this.searchValue = "";
-      const start = (this.currentPage - 1) * 10;
-      const end = (start + 1) * 10;
-      this.currentTableData = this.tableData.slice(start, end);
+    generate(command){
+      const List = {
+        is_not_pay: "未付款",
+        is_pay: "已付款",
+        is_refund: "已退款",
+      };
+      return List[command];
     },
-
-    handleSearchChange(val) {
-      this.searchValue = val;
-      if (this.searchValue === "") {
-        const start = (this.currentPage - 1) * 10;
-        const end = (start + 1) * 10;
-        this.currentTableData = this.tableData.slice(start, end);
-        this.totalPage = Math.ceil(this.tableData.length / 10);
-        this.totalTagsCount = this.tableData.length;
-        return;
+    handleCommand(command){
+      this.custom = this.generate(command)
+      if(command === "is_pay"){
+        this.currentTableData = this.is_pay;
       }
-
-      this.currentTableData = this.tableData.filter(
-        item => item.name === this.searchValue
-      );
-      
-      this.currentPage = Math.ceil(this.currentTableData.length / 10) || 1;
-      this.totalPage = Math.ceil(this.currentTableData.length / 10);
+      else if(command === "is_not_pay"){
+        this.currentTableData = this.is_not_pay;
+      }
+      else{
+        this.currentTableData = this.is_refund;
+      }
       this.totalTagsCount = this.currentTableData.length;
+      this.totalPage = Math.ceil(this.totalTagsCount / 10);
+      this.Loading = false;
     },
+    handleView(){
+
+    },
+    setCurrentTableData() {
+      const start = (this.currentPage - 1) * 10;
+      const end = this.currentPage * 10;
+      this.totalPage = Math.ceil(this.tableData.length / 10);
+      this.totalTagsCount = this.tableData.length;
+      this.currentTableData = this.tableData.slice(start, end);
+    },
+
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+
+    async handleDeleteCourse(id, index) {
+      this.closePopover(index);
+      await this.getPreEntryList();
+      this.$message({
+        type: "success",
+        message: "删除成功！",
+        isSingle: true
+      });
+      this.handleCurrentPageChange(this.currentPage);
+    },
+    async handleCurrentPageChange(currentPage) {
+      this.currentPage = currentPage;
+      this.Loading = true;
+      await this.getPreEntryList();
+      this.Loading = false;
+    },
+
+    closePopover(index) {
+      this.$refs[`popover-${index}`].doClose();
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.pre-entry {
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+  font-size:14px!important
+}
+
+.alr-entry {
   &__container {
     height: calc(100vh - 100px);
   }
