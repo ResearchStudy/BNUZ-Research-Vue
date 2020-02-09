@@ -143,15 +143,15 @@ export default {
 
       rules: {
         email: [
-          { required: true, message: "邮箱不能为空", trigger: "blur" },
+          { required: true, message: "邮箱不能为空", trigger: ["blur","change"] },
           { validator: checkEmail, trigger: "blur" }
         ],
         phone: [
-          { required: true, message: "电话不能为空", trigger: "blur" },
+          { required: true, message: "电话不能为空", trigger: ["blur","change"] },
           { validator: checkPhone, trigger: "blur" }
         ],
-        name: [{ required: true, message: "名字不能为空", trigger: "blur" }],
-        nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }]
+        name: [{ required: true, message: "名字不能为空", trigger: ["blur","change"] }],
+        nickname: [{ required: true, message: "昵称不能为空", trigger: ["blur","change"] }]
       }
     };
   },

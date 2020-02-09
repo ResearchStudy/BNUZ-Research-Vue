@@ -94,15 +94,15 @@ export default {
       },
       rules: {
         password : [
-          {required : true , message : "密码不能为空" , trigger: "blur" },
+          {required : true , message : "密码不能为空" , trigger: ["blur","change"] },
         ],
         phone : [
-          { required: true, message: "电话不能为空", trigger: "blur" },
-          {validator : checkPhone , trigger : 'blur'},
+          { required: true, message: "电话不能为空", trigger: ["blur","change"] },
+          {validator : checkPhone , trigger : ['blur' , 'change']},
 
         ],
         code : [
-          {required : true , message : "短信验证码不能为空" , trigger : "blur"}
+          {required : true , message : "短信验证码不能为空" , trigger : ["blur",'change']}
         ]
       } 
      
