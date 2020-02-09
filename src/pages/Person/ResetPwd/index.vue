@@ -93,13 +93,13 @@ export default {
       rules: {
         oldPass: [{ required: true, message: "请输入原密码", trigger: "blur" }],
         newPass: [
-          { required: true, message: "请设置新密码", trigger: "blur" },
-          { validator: validateNewPassword, trigger: "blur" },
-          { min: 8, max: 32, message: "长度在8到32之间", trigger: "blur" }
+          { required: true, message: "请设置新密码", trigger: ["blur","change"] },
+          { validator: validateNewPassword, trigger: ["blur","change"] },
+          { min: 8, max: 32, message: "长度在8到32之间", trigger: ["blur","change"] }
         ],
         checkPass: [
-          { required: true, message: "请确认新密码", trigger: "blur" },
-          { validator: validateNewPassword2, trigger: "blur" }
+          { required: true, message: "请确认新密码", trigger: ["blur","change"] },
+          { validator: validateNewPassword2, trigger: ["blur","change"] }
         ]
       }
     };
