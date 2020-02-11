@@ -214,12 +214,14 @@ export default {
       this.informationList = informationList.informations
         .filter(({ status }) => status === 2)
         .slice(0, 8);
-      const carouseMap = this.coursesList.map(item => {
-        return {
-          id: item.id,
-          src: `/api/resources/${item.cover}`
-        };
-      });
+      const carouseMap = this.coursesList
+        .filter(item => item.cover)
+        .map(item => {
+          return {
+            id: item.id,
+            src: `/api/resources/${item.cover}`
+          };
+        });
       this.carouselList = carouseMap;
     },
     scroll(isLeft) {
