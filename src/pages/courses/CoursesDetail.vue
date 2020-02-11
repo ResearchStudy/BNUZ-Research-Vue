@@ -238,6 +238,11 @@ export default {
         !localStorage.getItem("id") ||
         localStorage.getItem("id").length === 0
       ) {
+        this.$message({
+          message: "请先登录",
+          type: "error",
+          isSingle: true
+        });
         this.$router.push({ path: "/login" });
       } else {
         this.$http
