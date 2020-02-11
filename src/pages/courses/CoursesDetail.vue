@@ -264,8 +264,12 @@ export default {
     },
     preEnrollSubmit() {
       this.enroll.age = parseInt(this.enroll.age);
-      preEnroll(this.$route.params.id, this.enroll).then(res => {
-        console.log(res);
+      preEnroll(this.$route.params.id, this.enroll).then(() => {
+        this.$message({
+          message: "预报名成功",
+          type: "success",
+          isSingle: true
+        });
         this.dialogFormVisible = false;
       });
     },
