@@ -1,6 +1,7 @@
 <template>
   <div class="settled__container">
-    <el-breadcrumb separator-class="el-icon-arrow-right">
+    <el-breadcrumb separator-class="el-icon-arrow-right"
+    style="margin-top:2px">
       <el-breadcrumb-item :to="{ path: '/person/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>账号中心</el-breadcrumb-item>
       <el-breadcrumb-item>入驻审核</el-breadcrumb-item>
