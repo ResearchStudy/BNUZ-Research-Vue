@@ -54,7 +54,7 @@
                 };
                 login(loginInfo).then((res) => {
                     localStorage.setItem("id", res.id)
-                    this.$router.go(-1)
+                    this.$router.push({path: "/"})
                 })
             },
             dispatchSubmit() {
