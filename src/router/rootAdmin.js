@@ -12,6 +12,7 @@ import AccountsDetail from '@/pages/RootAdmin/AccountsDetail/index'
 import InformationList from '@/pages/RootAdmin/InformationList/index'
 import InformationDetail from '@/pages/RootAdmin/InformationDetail/index'
 import CourseList from '@/pages/RootAdmin/CourseList/index'
+import CourseDetail from '@/pages/RootAdmin/CoursesDetail/index'
 
 const adminRoutes = [
   {
@@ -30,6 +31,7 @@ const adminRoutes = [
       { path: 'information-list/', component: InformationList },
       { path: 'information-list/:id', component: InformationDetail },
       { path: 'course-list', component : CourseList},
+      { path: 'course-list/:id', component : CourseDetail},
     ]
   }
 ]
