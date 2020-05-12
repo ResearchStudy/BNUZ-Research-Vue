@@ -1,7 +1,7 @@
 <template>
   <div class="course-detail__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
       <el-breadcrumb-item>课程详情</el-breadcrumb-item>
       <el-breadcrumb-item>{{courseDetails.sub_title}}</el-breadcrumb-item>
@@ -23,7 +23,7 @@
           ></div>
         </el-form-item>
         <el-form-item label="课程类型">
-          <div class="content">{{tags[courseDetails.course_type + 1]}}</div>
+          <div class="content">{{tags[courseDetails.course_type - 1]}}</div>
         </el-form-item>
         <el-form-item label="课程标签">
           <div class="content">{{courseDetails.tags.toString()}}</div>
@@ -44,10 +44,10 @@
           <div class="content">{{new Date(courseDetails.start_time*1000).toLocaleString()}} - {{new Date(courseDetails.end_time*1000).toLocaleString()}}</div>
         </el-form-item>
         <el-form-item label="课程详情">
-          <div class="content" style="white-space: pre-line;" v-html="courseDetails.details"></div>
+          <div class="content"  v-html="courseDetails.details"></div>
         </el-form-item>
         <el-form-item label="行程安排">
-          <div class="content" style="max-width:100% !important;white-space: pre-wrap;" v-html="courseDetails.scheduling"></div>
+          <div class="content"  v-html="courseDetails.scheduling"></div>
         </el-form-item>
         <el-divider></el-divider>
         <el-form-item>
@@ -63,6 +63,7 @@
 
 <script>
 
+
 export default {
   name: "InformationDetail",
   data() {
@@ -70,7 +71,7 @@ export default {
       id: -1,
       courseDetails: {},
       resources: [],
-      tags : ["知识科普" , "自然观赏" , " 体验考察" , " 励志拓展" , "文化康乐"],
+      tags : ["知识科普型" , "自然观赏型" , " 体验考察型" , " 励志拓展型" , "文化康乐型"],
     };
   },
   async mounted() {
@@ -86,8 +87,10 @@ export default {
       console.log(data)
       this.resources = data.resources;
     },
+    //原接口（api/courses/{${this.id}/examine}
     async handleAdoptClick(isAdopted) {
-      await this.$http.post(`/api/courses/${this.id}/examine`, {
+      await this.$http.post(`/api/courses/examine`, {
+        id : this.id,
         adopt: isAdopted,
         reply: "没有回复哦"
       });
