@@ -1,7 +1,7 @@
 <template>
   <div class="course-list__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
       <el-breadcrumb-item>课程列表</el-breadcrumb-item>
     </el-breadcrumb>
@@ -28,6 +28,7 @@
           :data="currentTableData"
           tooltip-effect="dark"
           style="width: 100%"
+          border
           @selection-change="handleSelectionChange"
           height="calc(100vh - 245px)"
         >
@@ -42,7 +43,7 @@
             <template slot-scope="scope">
               <router-link
                 class="router-link"
-                :to="`/root-admin/course-list/${scope.row.id}`"
+                :to="`/root-admin/course-details/${scope.row.id}`"
               >{{scope.row.sub_title}}</router-link>
             </template>
           </el-table-column>
@@ -83,7 +84,7 @@
                 size="mini"
                 type="danger"
                 @click="handleAdoptClick(scope.row.id, false)"
-              >不通过</el-button>
+              >退回</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -132,7 +133,7 @@ export default {
         status: "1",
         me: "1"
       });
-      console.log(courses)
+      
       this.currentTableData = courses;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
@@ -187,8 +188,11 @@ export default {
       const end = (start + 1) * 10;
       this.currentTableData = this.tableData.slice(start, end);
     },
+    
+    //原接口(/api/courses/${id}/examine)
     async handleAdoptClick(id, isAdopted) {
-      await this.$http.post(`/api/information/${id}/examine`, {
+      await this.$http.post(`/api/courses/examine`, {
+        id : id,
         adopt: isAdopted,
         reply: "没有回复哦"
       });
