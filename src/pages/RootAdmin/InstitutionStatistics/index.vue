@@ -262,30 +262,36 @@ export default {
       import("@/vendor/Export2Excel.js").then(moudle => {
         const tHeader = [
           "机构名称",
+          "机构类型",
           "省份",
           "城市",
-          "注册资金",
-          "注册时间",
-          "申请时间",
-          "机构简介",
-          "审核状态"
+          "法人",
+          "核准时间",
+          "注册金额",
+          "联系方式",
+          "经营范围"
         ];
         const filterVal = [
           "name",
+          "institution_type",
           "province",
           "city",
+          "legal_person",
+          "approval_time",
           "register_money",
-          "applyTime",
-          "description",
-          "status"
+          "contact_number",
+          "business_scope"
         ];
         const list = this.currentTableData;
+        list.forEach(item => {
+          item.approval_time = new Date(item.approval_time*1000).toLocaleDateString()
+        })
         const data = this.formatJson(filterVal, list);
         moudle
           .export_json_to_excel({
             header: tHeader,
             data,
-            filename: this.filename === "" ? "系统日志" : this.filename,
+            filename: this.filename === "" ? "机构统计" : this.filename,
             autoWidth: this.autoWidth,
             bookType: this.bookType
           })
