@@ -10,6 +10,8 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import VueCropper from 'vue-cropper'
+require('./mock/index.js')
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
