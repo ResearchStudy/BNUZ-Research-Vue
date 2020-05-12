@@ -16,7 +16,6 @@ import CourseDetail from '@/pages/RootAdmin/CoursesDetail/index'
 import Log from '@/pages/RootAdmin/Log/index'
 import CourseStatistics from '@/pages/RootAdmin/CourseStatistics/index'
 import InstitutionStatistics from '@/pages/RootAdmin/InstitutionStatistics/index'
-import InstitutionMap from '@/pages/RootAdmin/InstitutionMap/index'
 const adminRoutes = [
   {
     path: '/root-admin', component: Index, children: [
@@ -38,7 +37,6 @@ const adminRoutes = [
       { path : 'log' , component : Log},
       { path : 'course-statistics' , component : CourseStatistics},
       { path : 'institution-statistics' , component : InstitutionStatistics},
-      { path : 'institution-map' , component : InstitutionMap},
      
     ]
   }

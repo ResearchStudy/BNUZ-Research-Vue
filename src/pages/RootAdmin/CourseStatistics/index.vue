@@ -63,7 +63,7 @@
         >
           <el-table-column
             prop="id"
-            label="课程Id"
+            label="课程ID"
             width="80"
             align="center"
             show-overflow-tooltip
@@ -326,6 +326,7 @@ export default {
       this.handleCurrentPageChange(this.currentPage);
     },
     excelDow() {
+      
       import("@/vendor/Export2Excel.js").then(moudle => {
         const tHeader = [
           "课程ID",
@@ -333,19 +334,28 @@ export default {
           "课程类型",
           "所属机构",
           "课程介绍",
-          "课程状态",
-          "更新时间",
+          "价格",
+          "适合人群",
+          "行程天数",
+          "开始时间",
         ];
         const filterVal = [
           "id",
           "sub_title",
           "course_type",
-          "institution_name",
+          "institution_id",
           "description",
-          "status",
-          "update_time"
+          "price",
+          "suitable_for_crowd",
+          "travel_days",
+          "start_time"
         ];
+      
         const list = this.currentTableData;
+        list.forEach(item => {
+          item.course_type = this.TypeOfCourse(item.course_type)
+          item.start_time = new Date(item.start_time*1000).toLocaleDateString()
+        })
         const data = this.formatJson(filterVal, list);
         moudle
           .export_json_to_excel({
