@@ -43,21 +43,30 @@
         <i class="el-icon-pie-chart"></i>
         <span>统计中心</span>
       </template>
-      <el-menu-item-group></el-menu-item-group>
+      <el-menu-item-group>
+        <el-menu-item index="/root-admin/institution-statistics">机构统计</el-menu-item>
+        <el-menu-item index="/root-admin/course-statistics">课程统计</el-menu-item>
+        <el-menu-item index="5-1">订单统计</el-menu-item>
+      </el-menu-item-group>
     </el-submenu>
     <el-submenu index="5">
       <template slot="title">
         <i class="el-icon-setting"></i>
         <span>系统管理</span>
       </template>
-      <el-menu-item-group></el-menu-item-group>
+      <el-menu-item-group>
+        <el-menu-item index="/root-admin/log">系统日志</el-menu-item>
+        <el-menu-item index="/root-admin/password">修改密码</el-menu-item>
+      </el-menu-item-group>
     </el-submenu>
     <el-submenu index="6">
       <template slot="title">
         <i class="el-icon-s-data"></i>
         <span>数据管理</span>
       </template>
-      <el-menu-item-group></el-menu-item-group>
+      <el-menu-item-group>
+        <el-menu-item index="6-1">数据库管理</el-menu-item>
+      </el-menu-item-group>
     </el-submenu>
   </el-menu>
 </template>
