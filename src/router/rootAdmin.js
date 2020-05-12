@@ -13,7 +13,10 @@ import InformationList from '@/pages/RootAdmin/InformationList/index'
 import InformationDetail from '@/pages/RootAdmin/InformationDetail/index'
 import CourseList from '@/pages/RootAdmin/CourseList/index'
 import CourseDetail from '@/pages/RootAdmin/CoursesDetail/index'
-
+import Log from '@/pages/RootAdmin/Log/index'
+import CourseStatistics from '@/pages/RootAdmin/CourseStatistics/index'
+import InstitutionStatistics from '@/pages/RootAdmin/InstitutionStatistics/index'
+import InstitutionMap from '@/pages/RootAdmin/InstitutionMap/index'
 const adminRoutes = [
   {
     path: '/root-admin', component: Index, children: [
@@ -31,7 +34,12 @@ const adminRoutes = [
       { path: 'information-list/', component: InformationList },
       { path: 'information-list/:id', component: InformationDetail },
       { path: 'course-list', component : CourseList},
-      { path: 'course-list/:id', component : CourseDetail},
+      { path: 'course-details/:id', component : CourseDetail},
+      { path : 'log' , component : Log},
+      { path : 'course-statistics' , component : CourseStatistics},
+      { path : 'institution-statistics' , component : InstitutionStatistics},
+      { path : 'institution-map' , component : InstitutionMap},
+     
     ]
   }
 ]
