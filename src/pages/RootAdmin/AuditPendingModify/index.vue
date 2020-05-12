@@ -1,7 +1,7 @@
 <template>
   <div class="audit-pending-modify__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
       <el-breadcrumb-item>待审核修改</el-breadcrumb-item>
     </el-breadcrumb>

@@ -1,7 +1,7 @@
 <template>
   <div class="audit-finish-list__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>机构管理</el-breadcrumb-item>
       <el-breadcrumb-item>已审核机构</el-breadcrumb-item>
     </el-breadcrumb>
@@ -131,6 +131,7 @@ export default {
         adopt: true,
         name: ""
       });
+      console.log(enrolls)
       const idList = enrolls.map(auditFinish => auditFinish.id);
       const { data: auditFinishList } = await this.$http.post(
         "/api/institutions/enroll/_mget",
