@@ -39,7 +39,7 @@
       </div>
     </el-dialog>
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/admin/home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>账户中心</el-breadcrumb-item>
       <el-breadcrumb-item>基本资料</el-breadcrumb-item>
     </el-breadcrumb>
