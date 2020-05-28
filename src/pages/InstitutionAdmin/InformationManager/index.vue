@@ -1,7 +1,7 @@
 <template>
   <div class="audit-pending-list__container">
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/institution-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容中心</el-breadcrumb-item>
       <el-breadcrumb-item>资讯管理</el-breadcrumb-item>
     </el-breadcrumb>

@@ -1,7 +1,7 @@
 <template>
   <div class="tags-manager__container">
     <el-breadcrumb separator-class="el-icon-arrow-right" style="height:15px">
-      <el-breadcrumb-item :to="{ path: '/root-admin/dashboard' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/institution-admin/dashboard' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>内容管理</el-breadcrumb-item>
       <el-breadcrumb-item>TAG管理</el-breadcrumb-item>
     </el-breadcrumb>
