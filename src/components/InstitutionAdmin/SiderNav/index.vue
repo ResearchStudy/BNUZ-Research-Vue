@@ -26,12 +26,8 @@
       </template>
       <el-menu-item-group>
         <el-menu-item index="/institution-admin/course-list">课程管理</el-menu-item>
-
-
         <el-menu-item index="/institution-admin/informationManager">资讯管理</el-menu-item>
-        <el-menu-item index="2-5">附件管理</el-menu-item>
         <el-menu-item index="/institution-admin/tags">标签管理</el-menu-item>
-        <el-menu-item index="2-5">课程评论管理</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
     <el-submenu index="3">
