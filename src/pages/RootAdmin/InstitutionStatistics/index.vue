@@ -7,6 +7,13 @@
     </el-breadcrumb>
     <div class="institution-statistics__wrap">
       <div class="institution-statistics__header">
+        <el-button
+          type="primary"
+          icon="el-icon-back"
+          circle
+          @click="changeMap"
+          style="margin-right:10px"
+        ></el-button>
         <el-input
           type="text"
           placeholder="请输入搜索内容"
@@ -27,29 +34,33 @@
             :value="province.id"
           ></el-option>
         </el-select>
-          <el-select
-            v-model="city_id"
-            placeholder="请选择城市"
-            clearable
-            class="width"
-          >
-            <el-option
-              v-for="city in cityList"
-              :label="city.name"
-              :key="city.id"
-              :value="city.id"
-            ></el-option>
-          </el-select>
+        <el-select
+          v-model="city_id"
+          placeholder="请选择城市"
+          clearable
+          class="width"
+        >
+          <el-option
+            v-for="city in cityList"
+            :label="city.name"
+            :key="city.id"
+            :value="city.id"
+          ></el-option>
+
+        </el-select>
         <el-button
           type="primary"
           icon="el-icon-search"
+          class="button"
           @click="handleSearchChange()"
         >搜索</el-button>
         <el-button
           type="primary"
+          class='button'
           icon="el-icon-circle-plus-outline"
           @click="excelDow"
         >导出</el-button>
+
       </div>
       <div class="institution-statistics__table">
         <el-table
@@ -187,9 +198,9 @@ export default {
       multipleSelection: [],
       name: "",
       province_id: "",
-      city_id : "",
+      city_id: "",
       provinceList: [],
-      cityList: [],
+      cityList: []
     };
   },
   async mounted() {
@@ -197,6 +208,9 @@ export default {
     await this.getProvinceList();
   },
   methods: {
+    changeMap() {
+      this.$router.push( '/root-admin/institution-map')
+    },
     async getProvinceList() {
       const result = await getAddressById({ target: 2 });
       this.provinceList = result.address;
@@ -211,24 +225,22 @@ export default {
     },
     async getInstitutionList() {
       const {
-        data : {institutions , total}
+        data : {institutions, total } 
       } = await this.$http.get("/api/institutions/list", {
         limit: "10",
         page: this.currentPage + "",
         name: this.name,
         city: this.city_id,
-        province: this.province_id,
-        
+        province: this.province_id
       });
-      console.log(institutions)
       const idList = institutions.map(item => item.id);
       const { data: institutionList } = await this.$http.post(
         "/api/institutions/_mget",
         {
-          ids: idList
+          ids : idList
         }
       );
-      console.log(institutionList)
+      
       this.currentTableData = institutionList;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
@@ -248,9 +260,9 @@ export default {
       this.isLoading = false;
     },
     async handleSearchChange() {
-      this.isLoading = true
-      await this.getInstitutionList()
-      this.isLoading = false
+      this.isLoading = true;
+      await this.getInstitutionList();
+      this.isLoading = false;
     },
     handleClearClick() {
       this.searchValue = "";
@@ -284,8 +296,10 @@ export default {
         ];
         const list = this.currentTableData;
         list.forEach(item => {
-          item.approval_time = new Date(item.approval_time*1000).toLocaleDateString()
-        })
+          item.approval_time = new Date(
+            item.approval_time * 1000
+          ).toLocaleDateString();
+        });
         const data = this.formatJson(filterVal, list);
         moudle
           .export_json_to_excel({
@@ -324,9 +338,10 @@ export default {
     background: #fff;
 
     margin-bottom: 20px;
-    .el-button {
+    .button{
       padding: 11px 20px;
     }
+    
   }
 
   &__wrap {

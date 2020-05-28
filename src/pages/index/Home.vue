@@ -330,7 +330,7 @@ export default {
   margin: 0;
 }
 
-/deep/ .el-carousel__button {
+.el-carousel__button {
   display: block;
   opacity: 0.48;
   width: 10px;
@@ -365,13 +365,13 @@ export default {
   display: block;
 }
 
-/deep/ .el-link--inner {
+.el-link--inner {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
 }
-/deep/ .el-link {
+.el-link {
   width: 100%;
   text-align: left;
 }
