@@ -43,7 +43,7 @@
         <h1 align="center">修改资讯</h1>
         <el-divider></el-divider>
       </div>
-      <el-form :model="info" ref="form" label-width="80px">
+      <el-form :model="info" ref="info" label-width="80px">
         <el-form-item label="标题">
           <el-input v-model="info.title"></el-input>
         </el-form-item>
@@ -153,7 +153,7 @@ export default {
       ],
       isModalOpened: false,
       previews: {},
-      preImageUrl: ""
+      preImageUrl: "/img/default-news.e0ced3d8.jpg"
     };
   },
 
@@ -165,22 +165,16 @@ export default {
     async getInformationInfo() {
       const infomation = await getInformationById(this.$route.params.id);
       const { cover, create_time } = infomation;
-      this.imageUrl = `/api/resources/${cover}`;
-      this.preImageUrl = await this.getPreImageInfo();
+      if(cover !== ""){
+        this.imageUrl = `/api/resources/${cover}`;
+        this.preImageUrl = await this.getPreImageInfo();
+      }
       this.info = {
         ...infomation,
         src: this.preImageUrl,
         createTime: new Date(create_time * 1000)
       };
-      // this.info.startTime =
-      //   new Date(this.info.start_time * 1000).getMonth() + 1 > 12
-      //     ? 1
-      //     : new Date(this.info.start_time * 1000).getMonth() + 1;
-      // this.info.endTime =
-      //   new Date(this.info.end_time * 1000).getMonth() + 1 > 12
-      //     ? 1
-      //     : new Date(this.info.end_time * 1000).getMonth() + 1;
-      // this.info.createTime = new Date(this.info.create_time * 1000);
+     
     },
 
     async handleAvatarUpload({ file }) {
