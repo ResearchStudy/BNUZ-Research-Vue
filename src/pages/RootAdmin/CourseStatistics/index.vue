@@ -7,6 +7,13 @@
     </el-breadcrumb>
     <div class="course-statistics__wrap">
       <div class="course-statistics__header">
+        <el-button
+          type="primary"
+          icon="el-icon-back"
+          circle
+          @click="changeMap"
+          style="margin-right:10px"
+        ></el-button>
         <el-input
           type="text"
           placeholder="请输入搜索内容"
@@ -42,10 +49,12 @@
         <el-button
           type="primary"
           icon="el-icon-search"
+          class="button"
           @click="handleSearchChange()"
         >搜索</el-button>
         <el-button
           type="primary"
+          class="button"
           icon="el-icon-circle-plus-outline"
           @click="excelDow"
         >导出</el-button>
@@ -72,7 +81,7 @@
           </el-table-column>
 
           <el-table-column
-            prop="sub_title"
+            prop="title"
             label="课程名称"
             min-width="200"
             align="center"
@@ -82,7 +91,7 @@
               <router-link
                 class="router-link"
                 :to="`/courses/${scope.row.id}`"
-              >{{scope.row.sub_title}}</router-link>
+              >{{scope.row.title}}</router-link>
             </template>
           </el-table-column>
           <el-table-column
@@ -101,7 +110,7 @@
             align="center"
             show-overflow-tooltip
           >
-            <template slot-scope="scope">{{scope.row.institution_id}}</template>
+            <template slot-scope="scope">{{scope.row.institution_name}}</template>
           </el-table-column>
           <el-table-column
             prop="description"
@@ -121,7 +130,7 @@
           >
             <template slot-scope="scope">{{StatusOfCourse(scope.row.status)}}</template>
           </el-table-column> -->
-           <el-table-column
+          <el-table-column
             prop="price"
             label="价格"
             width="120"
@@ -130,7 +139,7 @@
           >
             <template slot-scope="scope">{{scope.row.price}}</template>
           </el-table-column>
-           <el-table-column
+          <el-table-column
             prop="suitable_for_crowd"
             label="适合人群"
             width="120"
@@ -139,7 +148,7 @@
           >
             <template slot-scope="scope">{{scope.row.suitable_for_crowd}}</template>
           </el-table-column>
-           <el-table-column
+          <el-table-column
             prop="travel_days"
             label="形程天数"
             width="120"
@@ -157,27 +166,6 @@
           >
             <template slot-scope="scope">{{new Date(scope.row.start_time*1000).toLocaleDateString()}}</template>
           </el-table-column>
-          <!-- <el-table-column label="操作" width="140" align="center">
-            <template slot-scope="scope">
-              <el-popover
-                placement="top"
-                width="160"
-                trigger="click"
-                :ref="`popover-${scope.$index}`"
-              >
-                <p>确认删除该标签吗？</p>
-                <div style="text-align: right; margin: 0;">
-                  <el-button size="mini" type="text" @click="closePopover(scope.$index)">取消</el-button>
-                  <el-button
-                    @click="handleDeleteCourse(scope.row.id,scope.$index)"
-                    type="text"
-                    size="small"
-                  >确定</el-button>
-                </div>
-                <el-button slot="reference" size="mini" type="danger">删除</el-button>
-              </el-popover>
-            </template>
-          </el-table-column> -->
         </el-table>
       </div>
       <div class="course-statistics__pagination">
@@ -224,8 +212,14 @@ export default {
         { key: 2, label: "进行中" },
         { key: 3, label: "已结束" }
       ],
-      Type : ["知识科普型" , "自然观赏型" , "体验考察型" , "励志拓展型" , "文化康乐型"],
-      Status : ["未开始" , "进行中" , "已结束"],
+      Type: [
+        "知识科普型",
+        "自然观赏型",
+        "体验考察型",
+        "励志拓展型",
+        "文化康乐型"
+      ],
+      Status: ["未开始", "进行中", "已结束"]
     };
   },
 
@@ -233,23 +227,26 @@ export default {
     this.getCourseList();
   },
   methods: {
-    TypeOfCourse(val){
-        if(val <= 2){
-            return this.Type[val - 1]
-        }
-        if(val === 4){
-          return this.Type[2]
-        }
-        if(val === 8){
-          return this.Type[3]
-        }
-        return this.Type[4]
+    changeMap() {
+      this.$router.push( '/root-admin/course-charts')
     },
-    StatusOfCourse(val){
-        if(val){
-            return this.Status[val - 1]
-        }
-        return ""
+    TypeOfCourse(val) {
+      if (val <= 2) {
+        return this.Type[val - 1];
+      }
+      if (val === 4) {
+        return this.Type[2];
+      }
+      if (val === 8) {
+        return this.Type[3];
+      }
+      return this.Type[4];
+    },
+    StatusOfCourse(val) {
+      if (val) {
+        return this.Status[val - 1];
+      }
+      return "";
     },
     async getCourseList() {
       const {
@@ -260,15 +257,10 @@ export default {
         course_type: this.type,
         status: this.status,
         title: this.title,
-        me: "1",
+        me: "1"
       });
-      
-      const ids = courses.map(item => item.id);
-    //   console.log(ids);
-      const {data : courseList} = await this.$http.post("/api/courses/_mget", { ids });
-      console.log(courseList)
-      this.currentTableData = courseList;
-      console.log(this.currentTableData)
+      console.log(courses) 
+      this.currentTableData = courses;
       this.totalTagsCount = total;
       this.totalPage = Math.ceil(total / 10);
       this.isLoading = false;
@@ -280,18 +272,6 @@ export default {
       this.totalTagsCount = this.tableData.length;
       this.currentTableData = this.tableData.slice(start, end);
     },
-    // toggleSelection(rows) {
-    //   if (rows) {
-    //     rows.forEach(row => {
-    //       this.$refs.multipleTable.toggleRowSelection(row);
-    //     });
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
-    // handleSelectionChange(val) {
-    //   this.multipleSelection = val;
-    // },
     async handleCurrentPageChange(currentPage) {
       this.currentPage = currentPage;
       this.isLoading = true;
@@ -312,21 +292,7 @@ export default {
     closePopover(index) {
       this.$refs[`popover-${index}`].doClose();
     },
-
-    //原接口(/api/courses/${id}/examine)
-    async handleDeleteCourse(id, index) {
-      this.closePopover(index);
-      await this.$http.delete(`/api/courses/${id}`);
-      await this.getCourseList();
-      this.$message({
-        type: "success",
-        message: "删除成功！",
-        isSingle: true
-      });
-      this.handleCurrentPageChange(this.currentPage);
-    },
     excelDow() {
-      
       import("@/vendor/Export2Excel.js").then(moudle => {
         const tHeader = [
           "课程ID",
@@ -337,31 +303,33 @@ export default {
           "价格",
           "适合人群",
           "行程天数",
-          "开始时间",
+          "开始时间"
         ];
         const filterVal = [
           "id",
-          "sub_title",
+          "title",
           "course_type",
-          "institution_id",
+          "institution_name",
           "description",
           "price",
           "suitable_for_crowd",
           "travel_days",
           "start_time"
         ];
-      
+
         const list = this.currentTableData;
         list.forEach(item => {
-          item.course_type = this.TypeOfCourse(item.course_type)
-          item.start_time = new Date(item.start_time*1000).toLocaleDateString()
-        })
+          item.course_type = this.TypeOfCourse(item.course_type);
+          item.start_time = new Date(
+            item.start_time * 1000
+          ).toLocaleDateString();
+        });
         const data = this.formatJson(filterVal, list);
         moudle
           .export_json_to_excel({
             header: tHeader,
             data,
-            filename: this.course_type === "" ? "课程统计" : this.filename,
+            filename: "机构统计",
             autoWidth: this.autoWidth,
             bookType: this.bookType
           })
@@ -373,26 +341,6 @@ export default {
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
     }
-    // async handleMultiAdoptClick(isAdopted) {
-    //   const handleIdList = this.multipleSelection.map(
-    //     selection => selection.id
-    //   );
-    //   await Promise.all(
-    //     handleIdList.map(async id => {
-    //       await this.$http.post(`/api/information/${id}/examine`, {
-    //         adopt: isAdopted,
-    //         reply: "没有回复哦",
-    //         ids: handleIdList
-    //       });
-    //     })
-    //   );
-    //   await this.getCourseList();
-    //   this.$message({
-    //     type: "success",
-    //     message: "处理成功！",
-    //     isSingle: true
-    //   });
-    // }
   }
 };
 </script>
@@ -413,8 +361,8 @@ export default {
     padding-bottom: 10px;
     background: #fff;
 
-    margin-bottom: 10px;
-    .el-button {
+    margin-bottom: 20px;
+    .button{
       padding: 11px 20px;
     }
   }

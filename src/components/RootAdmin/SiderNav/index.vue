@@ -44,8 +44,8 @@
         <span>统计中心</span>
       </template>
       <el-menu-item-group>
-        <el-menu-item index="/root-admin/institution-statistics">机构统计</el-menu-item>
-        <el-menu-item index="/root-admin/course-statistics">课程统计</el-menu-item>
+        <el-menu-item index="/root-admin/institution-map">机构统计</el-menu-item>
+        <el-menu-item index="/root-admin/course-charts">课程统计</el-menu-item>
         <el-menu-item index="5-1">订单统计</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
