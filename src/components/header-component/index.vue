@@ -12,6 +12,11 @@
       </div>
     </div>
     <div class="right" style="margin-right: 10px">
+      <button
+        style="margin-right: 30px"
+        v-if="role === 8"
+        @click="$router.push({path: '/institution-admin/course-publish'})"
+      >我要发布</button>
       <button v-if="!isRegisted" style="margin-right: 30px" @click="checkRegister()">入驻合作</button>
       <button style="margin-right: 17px" @click="navigateTo('/register')" v-if="!isLogin">注册</button>
       <button @click="navigateTo('/login')" v-if="!isLogin">登录</button>
@@ -27,22 +32,62 @@
           <el-dropdown-item @click.native="navigateToPre" v-if="isUser">个人空间</el-dropdown-item>
           <el-dropdown-item @click.native="navigateToAdmin">个人设置</el-dropdown-item>
           <el-dropdown-item @click.native="navigateToPass">修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="dialogVisible = true" v-if="role === 99">备份/还原</el-dropdown-item>
           <el-dropdown-item @click.native="logout()" class="layout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <el-dialog
+      title="备份还原"
+      width="40%"
+      :visible.sync="dialogVisible"
+      :modal="false"
+      :close-on-click-modal="false"
+    >
+      <el-table
+        :data="tableData"
+        style="width: 100%;font-size:16px;"
+        height="300px"
+        size="mini"
+        v-loading="tableLoading"
+        element-tableLoading-text="拼命加载中"
+        :show-header="false"
+      >
+        <el-table-column prop="title"  align="center">
+          <template slot-scope="scope">{{scope.row.name}}</template>
+        </el-table-column>
+        <el-table-column fixed="right"  width="180">
+          <template slot-scope="scope">
+            <el-button @click="handleRestore(scope.row.id)" class="btn-backup" type="primary" size="mini">还原</el-button>
+            <el-button
+              @click="handleDelete(scope.row.id)"
+              type="danger"
+              :disabled="scope.row.name=='系统默认备份'?true:false"
+              size="mini"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialogVisible = false">取消</el-button>
+        <el-button size="small" class="btn-backup" type="primary" @click="handleBackup" :loading="backupLoading">备份</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import HeaderLink from "@/components/header-component/HeaderLink";
-
 export default {
   name: "Header",
   components: { HeaderLink },
   data() {
     return {
       id: "",
+      tableData: [{ name: "系统默认备份" }],
+      dialogVisible: false,
+      backupLoading: false,
+      tableLoading: false,
       titleArr: [
         {
           name: "首页",
@@ -79,6 +124,9 @@ export default {
   methods: {
     navigateTo(path) {
       this.$router.push({ path: path });
+    },
+    dialogShow() {
+      this.backupVisible = true;
     },
     checkRegister() {
       if (
@@ -158,6 +206,9 @@ export default {
     },
     logout() {
       this.$router.push({ path: "/logout" });
+    },
+    handleBackup() {
+      this.backupLoading = false;
     }
   },
 
@@ -200,6 +251,11 @@ export default {
   justify-content: space-between;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
   z-index: 999;
+}
+.btn-backup {
+    color: #FFF;
+    background-color: #14889A;
+    border-color: #14889A;
 }
 .left,
 .right {
