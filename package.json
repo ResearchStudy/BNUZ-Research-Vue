@@ -14,7 +14,7 @@
     "element-ui": "^2.13.0",
     "file-saver": "^2.0.2",
     "mockjs": "^1.1.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "sass-loader": "^8.0.0",
     "vue": "^2.6.10",
     "vue-count-to": "^1.0.13",
